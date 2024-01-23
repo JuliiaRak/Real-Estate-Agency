@@ -4,6 +4,8 @@ import com.solvd.domain.RealEstate;
 import com.solvd.persistence.repositories.RealEstateRepository;
 import com.solvd.service.RealEstateService;
 
+import java.util.List;
+
 public class RealEstateServiceImpl implements RealEstateService {
     private final RealEstateRepository realEstateRepository;
 
@@ -19,5 +21,15 @@ public class RealEstateServiceImpl implements RealEstateService {
     @Override
     public void deleteById(long realEstateId) {
         realEstateRepository.deleteById(realEstateId);
+    }
+
+    @Override
+    public RealEstate findById(long realEstateId) {
+        return realEstateRepository.findById(realEstateId);
+    }
+
+    @Override
+    public List<RealEstate> getAll() {
+        return realEstateRepository.getAll();
     }
 }

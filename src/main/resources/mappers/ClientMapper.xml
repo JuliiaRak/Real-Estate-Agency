@@ -11,6 +11,16 @@
         DELETE FROM clients c WHERE c.id = #{id}
     </delete>
 
+    <select id="findById">
+        SELECT c.id, c.first_name, c.last_name, c.email, c.phone_number, c.reg_date
+        FROM clients c WHERE c.id = #{id}
+    </select>
+
+    <select id="getAll" resultMap="ClientResultMap">
+        SELECT c.id, c.first_name, c.last_name, c.email, c.phone_number, c.reg_date
+        FROM clients c
+    </select>
+
     <resultMap id="ClientResultMap" type="com.solvd.domain.Client" autoMapping="false">
         <id column="id" property="id"/>
         <result column="first_name" property="firstName"/>
@@ -18,6 +28,14 @@
         <result column="email" property="email"/>
         <result column="phone_number" property="phoneNumber"/>
         <result column="reg_date" property="registrationDate"/>
-        <collection property="realEstates" resultMap="com.solvd.persistence.repositories.RealEstateRepository.RealEstateResultMap"/>
+    </resultMap>
+
+    <resultMap id="ClientResultMapForRealEstate" type="com.solvd.domain.Client" autoMapping="false">
+        <id column="seller_id" property="id"/>
+        <result column="first_name" property="firstName"/>
+        <result column="last_name" property="lastName"/>
+        <result column="email" property="email"/>
+        <result column="phone_number" property="phoneNumber"/>
+        <result column="reg_date" property="registrationDate"/>
     </resultMap>
 </mapper>

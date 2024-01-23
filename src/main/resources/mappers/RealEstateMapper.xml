@@ -12,6 +12,25 @@
         DELETE FROM real_estates re WHERE re.id = #{realEstateId}
     </delete>
 
+    <select id="findById" resultMap="RealEstateResultMap">
+        SELECT re.id, re.price, re.is_available, re.real_estate_description, re.real_estate_type, re.metrics, re.rooms,
+        a.id AS address_id, a.country, a.region, a.city, a.street, a.building, a.apartment,
+        c.id AS seller_id, c.first_name, c.last_name, c.email, c.phone_number, c.reg_date
+        FROM real_estates re
+        LEFT JOIN addresses a ON re.address_id = a.id
+        LEFT JOIN clients c ON re.seller_id = c.id
+        WHERE re.id = #{realEstateId}
+    </select>
+
+    <select id="getAll" resultMap="RealEstateResultMap">
+        SELECT re.id, re.price, re.is_available, re.real_estate_description, re.real_estate_type, re.metrics, re.rooms,
+            a.id AS address_id, a.country, a.region, a.city, a.street, a.building, a.apartment,
+            c.id AS seller_id, c.first_name, c.last_name, c.email, c.phone_number, c.reg_date
+        FROM real_estates re
+        LEFT JOIN addresses a ON re.address_id = a.id
+        LEFT JOIN clients c ON re.seller_id = c.id
+    </select>
+
     <resultMap id="RealEstateResultMap" type="com.solvd.domain.RealEstate" autoMapping="false">
         <id column="id" property="id"/>
         <result column="price" property="price"/>
@@ -20,11 +39,7 @@
         <result column="real_estate_type" property="realEstateType"/>
         <result column="metrics" property="metrics"/>
         <result column="rooms" property="rooms"/>
-        <association property="address" resultMap="com.solvd.persistence.repositories.AddressRepository.AddressResultMap">
-            <id column="address_id" property="id"/>
-        </association>
-        <association property="seller" resultMap="com.solvd.persistence.repositories.ClientRepository.ClientResultMap">
-            <id column="seller_id" property="id"/>
-        </association>
+        <association property="address" resultMap="com.solvd.persistence.repositories.AddressRepository.AddressResultMapForRealEstate"/>
+        <association property="seller" resultMap="com.solvd.persistence.repositories.ClientRepository.ClientResultMapForRealEstate"/>
     </resultMap>
 </mapper>

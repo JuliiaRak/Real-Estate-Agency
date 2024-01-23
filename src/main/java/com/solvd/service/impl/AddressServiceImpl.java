@@ -4,6 +4,8 @@ import com.solvd.domain.Address;
 import com.solvd.persistence.repositories.AddressRepository;
 import com.solvd.service.AddressService;
 
+import java.util.List;
+
 public class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
 
@@ -19,5 +21,15 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public void deleteById(long id) {
         addressRepository.deleteById(id);
+    }
+
+    @Override
+    public Address findById(long id) {
+        return addressRepository.findById(id);
+    }
+
+    @Override
+    public List<Address> getAll() {
+        return addressRepository.getAll();
     }
 }

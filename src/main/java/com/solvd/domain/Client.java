@@ -11,7 +11,6 @@ public class Client {
     private String email;
     private String phoneNumber;
     private Date registrationDate;
-    private List<RealEstate> realEstates;
 
     public long getId() {
         return id;
@@ -61,14 +60,6 @@ public class Client {
         this.registrationDate = registrationDate;
     }
 
-    public List<RealEstate> getRealEstates() {
-        return realEstates;
-    }
-
-    public void setRealEstates(List<RealEstate> realEstates) {
-        this.realEstates = realEstates;
-    }
-
     @Override
     public String toString() {
         return "Client{" +
@@ -78,7 +69,6 @@ public class Client {
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", registrationDate=" + registrationDate +
-                ", realEstates=" + realEstates +
                 '}';
     }
 
@@ -87,11 +77,11 @@ public class Client {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
-        return id == client.id && Objects.equals(firstName, client.firstName) && Objects.equals(lastName, client.lastName) && Objects.equals(email, client.email) && Objects.equals(phoneNumber, client.phoneNumber) && Objects.equals(registrationDate, client.registrationDate) && Objects.equals(realEstates, client.realEstates);
+        return id == client.id && Objects.equals(firstName, client.firstName) && Objects.equals(lastName, client.lastName) && Objects.equals(email, client.email) && Objects.equals(phoneNumber, client.phoneNumber) && Objects.equals(registrationDate, client.registrationDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, email, phoneNumber, registrationDate, realEstates);
+        return Objects.hash(id, firstName, lastName, email, phoneNumber, registrationDate);
     }
 }

@@ -1,4 +1,4 @@
-package com.solvd.persistence.mybatisImpl;
+package com.solvd.persistence.repositories.mybatisImpl;
 
 import com.solvd.domain.Client;
 import com.solvd.persistence.Config;
@@ -6,6 +6,7 @@ import com.solvd.persistence.repositories.ClientRepository;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ClientRepositoryMybatisImpl implements ClientRepository {
     @Override
@@ -25,7 +26,7 @@ public class ClientRepositoryMybatisImpl implements ClientRepository {
     }
 
     @Override
-    public Client findById(long id) {
+    public Optional<Client> findById(long id) {
         try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
             ClientRepository clientRepository = sqlSession.getMapper(ClientRepository.class);
             return clientRepository.findById(id);

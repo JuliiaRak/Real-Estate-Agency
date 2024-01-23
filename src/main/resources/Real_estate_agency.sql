@@ -8,13 +8,6 @@ DROP TABLE IF EXISTS real_estates;
 DROP TABLE IF EXISTS addresses;
 DROP TABLE IF EXISTS clients;
 
-select * from real_estates;
-select * from addresses;
-select * from clients;
-DELETE FROM real_estates re WHERE re.id = 15;
-DELETE FROM addresses a WHERE a.id = 28;
-DELETE FROM clients c WHERE c.id = 33;
-
 CREATE TABLE IF NOT EXISTS clients (
 	id SERIAL PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,

@@ -20,13 +20,21 @@ import java.util.Date;
 public class RealEstateTest {
     public static void main(String[] args) {
         Client client = new Client();
+        Client client2 = new Client();
         client.setFirstName("Denys");
         client.setLastName("Kulikov");
         client.setEmail("dkulikov@gmail.com");
         client.setPhoneNumber("+111-11-111-11-11");
         client.setRegistrationDate(new Date());
 
+        client2.setFirstName("Ivan");
+        client2.setLastName("Kulikov");
+        client2.setEmail("ikulikov@gmail.com");
+        client2.setPhoneNumber("+222-22-222-22-22");
+        client2.setRegistrationDate(new Date());
+
         Address address = new Address();
+        Address address2 = new Address();
         address.setCountry("Ukraine");
         address.setRegion("central region");
         address.setCity("Kyiv");
@@ -55,10 +63,13 @@ public class RealEstateTest {
         RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
         RealEstateService realEstateService = new RealEstateServiceImpl(realEstateRepository);
         realEstateService.create(realEstate, client.getId(), address.getId());
-        System.out.println(realEstate);
+        System.out.println(realEstateService.findById(realEstate.getId()));
+        System.out.println(realEstateService.getAll());
 
         realEstateService.deleteById(realEstate.getId());
-        clientService.deleteById(client.getId());
         addressService.deleteById(address.getId());
+        addressService.deleteById(address2.getId());
+        clientService.deleteById(client.getId());
+        clientService.deleteById(client2.getId());
     }
 }

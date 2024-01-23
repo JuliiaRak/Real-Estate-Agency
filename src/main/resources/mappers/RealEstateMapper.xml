@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solvd.persistence.repositories.RealEstateRepository">
+    <insert id="create" keyColumn="id" keyProperty="realEstate.id" useGeneratedKeys="true">
+        INSERT INTO real_estates (price, is_available, real_estate_description, real_estate_type, metrics, rooms, seller_id, address_id)
+        VALUES (#{realEstate.price}, #{realEstate.isAvailable}, #{realEstate.realEstateDescription}, #{realEstate.realEstateType},
+        #{realEstate.metrics}, #{realEstate.rooms}, #{clientId}, #{addressId})
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM real_estates re WHERE re.id = #{realEstateId}
+    </delete>
+
+    <resultMap id="RealEstateResultMap" type="com.solvd.domain.RealEstate" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="price" property="price"/>
+        <result column="is_available" property="isAvailable"/>
+        <result column="real_estate_description" property="realEstateDescription"/>
+        <result column="real_estate_type" property="realEstateType"/>
+        <result column="metrics" property="metrics"/>
+        <result column="rooms" property="rooms"/>
+        <association property="address" resultMap="com.solvd.persistence.repositories.AddressRepository.AddressResultMap">
+            <id column="address_id" property="id"/>
+        </association>
+        <association property="seller" resultMap="com.solvd.persistence.repositories.ClientRepository.ClientResultMap">
+            <id column="seller_id" property="id"/>
+        </association>
+    </resultMap>
+</mapper>

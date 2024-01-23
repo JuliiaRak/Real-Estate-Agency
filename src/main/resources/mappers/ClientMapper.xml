@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solvd.persistence.repositories.ClientRepository">
+    <insert id="create" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO clients (first_name, last_name, email, phone_number, reg_date)
+        VALUES (#{firstName}, #{lastName}, #{email}, #{phoneNumber}, #{registrationDate})
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM clients c WHERE c.id = #{id}
+    </delete>
+
+    <resultMap id="ClientResultMap" type="com.solvd.domain.Client" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="first_name" property="firstName"/>
+        <result column="last_name" property="lastName"/>
+        <result column="email" property="email"/>
+        <result column="phone_number" property="phoneNumber"/>
+        <result column="reg_date" property="registrationDate"/>
+        <collection property="realEstates" resultMap="com.solvd.persistence.repositories.RealEstateRepository.RealEstateResultMap"/>
+    </resultMap>
+</mapper>

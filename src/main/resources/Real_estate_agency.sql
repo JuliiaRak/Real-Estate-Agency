@@ -1,22 +1,19 @@
-CREATE DATABASE IF NOT EXISTS real_estate_agency;
-USE real_estate_agency;
+DROP TABLE IF EXISTS meetings;
+DROP TABLE IF EXISTS employees;
+DROP TABLE IF EXISTS agreements;
+DROP TABLE IF EXISTS photo_links;
+DROP TABLE IF EXISTS real_estate_has_tags;
+DROP TABLE IF EXISTS tags;
+DROP TABLE IF EXISTS real_estates;
+DROP TABLE IF EXISTS addresses;
+DROP TABLE IF EXISTS clients;
 
-DROP TABLE meetings;
-DROP TABLE employees;
-DROP TABLE agreements;
-DROP TABLE photo_links;
-DROP TABLE real_estate_has_tags;
-DROP TABLE tags;
-DROP TABLE real_estates;
-DROP TABLE addresses;
-DROP TABLE clients;
-
+select * from real_estates;
 select * from addresses;
 select * from clients;
-select * from real_estates;
-DELETE FROM real_estates re WHERE re.id = 1;
-DELETE FROM addresses a WHERE a.id = 5;
-DELETE FROM clients c WHERE c.id = 7;
+DELETE FROM real_estates re WHERE re.id = 15;
+DELETE FROM addresses a WHERE a.id = 28;
+DELETE FROM clients c WHERE c.id = 33;
 
 CREATE TABLE IF NOT EXISTS clients (
 	id SERIAL PRIMARY KEY,

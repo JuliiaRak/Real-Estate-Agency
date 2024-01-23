@@ -3,16 +3,14 @@ package com.solvd.service.impl;
 import com.solvd.domain.Address;
 import com.solvd.persistence.repositories.AddressRepository;
 import com.solvd.service.AddressService;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
 
+@AllArgsConstructor
 public class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
-
-    public AddressServiceImpl(AddressRepository addressRepository) {
-        this.addressRepository = addressRepository;
-    }
 
     @Override
     public void create(Address address) {

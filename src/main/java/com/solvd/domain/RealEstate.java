@@ -1,8 +1,11 @@
 package com.solvd.domain;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Data
 public class RealEstate {
     private long id;
     private BigDecimal price;
@@ -13,78 +16,6 @@ public class RealEstate {
     private int rooms;
     private Address address;
     private Client seller;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public boolean isAvailable() {
-        return isAvailable;
-    }
-
-    public void setAvailable(boolean available) {
-        this.isAvailable = available;
-    }
-
-    public String getRealEstateDescription() {
-        return realEstateDescription;
-    }
-
-    public void setRealEstateDescription(String realEstateDescription) {
-        this.realEstateDescription = realEstateDescription;
-    }
-
-    public String getRealEstateType() {
-        return realEstateType;
-    }
-
-    public void setRealEstateType(String realEstateType) {
-        this.realEstateType = realEstateType;
-    }
-
-    public String getMetrics() {
-        return metrics;
-    }
-
-    public void setMetrics(String metrics) {
-        this.metrics = metrics;
-    }
-
-    public int getRooms() {
-        return rooms;
-    }
-
-    public void setRooms(int rooms) {
-        this.rooms = rooms;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public Client getSeller() {
-        return seller;
-    }
-
-    public void setSeller(Client seller) {
-        this.seller = seller;
-    }
 
     @Override
     public String toString() {

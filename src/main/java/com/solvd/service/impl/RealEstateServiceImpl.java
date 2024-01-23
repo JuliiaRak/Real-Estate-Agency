@@ -3,16 +3,14 @@ package com.solvd.service.impl;
 import com.solvd.domain.RealEstate;
 import com.solvd.persistence.repositories.RealEstateRepository;
 import com.solvd.service.RealEstateService;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
 
+@AllArgsConstructor
 public class RealEstateServiceImpl implements RealEstateService {
     private final RealEstateRepository realEstateRepository;
-
-    public RealEstateServiceImpl(RealEstateRepository realEstateRepository) {
-        this.realEstateRepository = realEstateRepository;
-    }
 
     @Override
     public void create(RealEstate realEstate, long clientId, long addressId) {

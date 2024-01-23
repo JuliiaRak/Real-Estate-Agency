@@ -5,6 +5,7 @@ import com.solvd.persistence.repositories.RealEstateRepository;
 import com.solvd.service.RealEstateService;
 
 import java.util.List;
+import java.util.Optional;
 
 public class RealEstateServiceImpl implements RealEstateService {
     private final RealEstateRepository realEstateRepository;
@@ -24,7 +25,7 @@ public class RealEstateServiceImpl implements RealEstateService {
     }
 
     @Override
-    public RealEstate findById(long realEstateId) {
+    public Optional<RealEstate> findById(long realEstateId) {
         return realEstateRepository.findById(realEstateId);
     }
 

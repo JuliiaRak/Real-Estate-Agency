@@ -1,4 +1,4 @@
-package com.solvd.persistence.mybatisImpl;
+package com.solvd.persistence.repositories.mybatisImpl;
 
 import com.solvd.domain.RealEstate;
 import com.solvd.persistence.Config;
@@ -6,6 +6,7 @@ import com.solvd.persistence.repositories.RealEstateRepository;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
+import java.util.Optional;
 
 public class RealEstateRepositoryMybatisImpl implements RealEstateRepository {
     @Override
@@ -25,7 +26,7 @@ public class RealEstateRepositoryMybatisImpl implements RealEstateRepository {
     }
 
     @Override
-    public RealEstate findById(long realEstateId) {
+    public Optional<RealEstate> findById(long realEstateId) {
         try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
             RealEstateRepository realEstateRepository = sqlSession.getMapper(RealEstateRepository.class);
             return realEstateRepository.findById(realEstateId);

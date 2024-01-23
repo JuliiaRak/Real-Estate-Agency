@@ -1,9 +1,9 @@
 import com.solvd.domain.Address;
 import com.solvd.domain.Client;
 import com.solvd.domain.RealEstate;
-import com.solvd.persistence.mybatisImpl.AddressRepositoryMybatisImpl;
-import com.solvd.persistence.mybatisImpl.ClientRepositoryMybatisImpl;
-import com.solvd.persistence.mybatisImpl.RealEstateRepositoryMybatisImpl;
+import com.solvd.persistence.repositories.mybatisImpl.AddressRepositoryMybatisImpl;
+import com.solvd.persistence.repositories.mybatisImpl.ClientRepositoryMybatisImpl;
+import com.solvd.persistence.repositories.mybatisImpl.RealEstateRepositoryMybatisImpl;
 import com.solvd.persistence.repositories.AddressRepository;
 import com.solvd.persistence.repositories.ClientRepository;
 import com.solvd.persistence.repositories.RealEstateRepository;

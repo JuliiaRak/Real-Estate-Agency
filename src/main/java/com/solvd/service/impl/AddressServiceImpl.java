@@ -5,6 +5,7 @@ import com.solvd.persistence.repositories.AddressRepository;
 import com.solvd.service.AddressService;
 
 import java.util.List;
+import java.util.Optional;
 
 public class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
@@ -24,7 +25,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public Address findById(long id) {
+    public Optional<Address> findById(long id) {
         return addressRepository.findById(id);
     }
 

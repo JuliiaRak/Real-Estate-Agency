@@ -106,11 +106,11 @@ public class RealEstate {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RealEstate that = (RealEstate) o;
-        return id == that.id && isAvailable == that.isAvailable && rooms == that.rooms && Objects.equals(price, that.price) && Objects.equals(realEstateDescription, that.realEstateDescription) && Objects.equals(realEstateType, that.realEstateType) && Objects.equals(metrics, that.metrics) && Objects.equals(address, that.address) && Objects.equals(seller, that.seller);
+        return id == that.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, price, isAvailable, realEstateDescription, realEstateType, metrics, rooms, address, seller);
+        return Objects.hash(id);
     }
 }

@@ -5,6 +5,7 @@ import com.solvd.persistence.repositories.ClientRepository;
 import com.solvd.service.ClientService;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
@@ -24,7 +25,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client findById(long id) {
+    public Optional<Client> findById(long id) {
         return clientRepository.findById(id);
     }
 

@@ -18,7 +18,8 @@ public class Config {
     private static final SqlSessionFactory SESSION_FACTORY;
 
     static {
-        try(FileInputStream fileInputStream = new FileInputStream("src/main/resources/config.properties")) {
+        try (FileInputStream fileInputStream = new FileInputStream("src/main/resources/config.properties");
+             InputStream inputStream = Resources.getResourceAsStream("mybatis-config.xml")) {
             Properties properties = new Properties();
             properties.load(fileInputStream);
 
@@ -27,11 +28,7 @@ public class Config {
             USERNAME = properties.getProperty("username");
             PASSWORD = properties.getProperty("password");
             POOL_SIZE = Integer.parseInt(properties.getProperty("poolSize"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
-        try (InputStream inputStream = Resources.getResourceAsStream("mybatis-config.xml")) {
             SESSION_FACTORY = new SqlSessionFactoryBuilder()
                     .build(inputStream);
         } catch (IOException e) {

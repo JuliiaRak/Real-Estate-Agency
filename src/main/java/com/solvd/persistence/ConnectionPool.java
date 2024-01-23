@@ -1,61 +1,49 @@
 package com.solvd.persistence;
 
+import com.solvd.domain.exceptions.CreateConnectionException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.IntStream;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ConnectionPool {
-    private static volatile ConnectionPool instance;
-    private static volatile List<Connection> connections;
-    private static final Integer MAX_CONNECTION_NUMBER = Config.POOL_SIZE;
+    private volatile static ConnectionPool instance;
+    private final Queue<Connection> connections = new ConcurrentLinkedQueue<>();
 
-    private ConnectionPool() {
+    private ConnectionPool(int size) {
+        for (int i = 0; i < size; i++) {
+            try {
+                connections.add(DriverManager.getConnection(Config.URL, Config.USERNAME, Config.PASSWORD));
+            } catch (SQLException e) {
+                throw new CreateConnectionException(e);
+            }
+        }
     }
 
-    public static ConnectionPool getInstance() {
+    public static synchronized ConnectionPool getInstance() {
         if (instance == null) {
-            synchronized (ConnectionPool.class) {
-                if (instance == null) {
-                    try {
-                        Class.forName(Config.DRIVER);
-                    } catch (ClassNotFoundException e) {
-                        throw new RuntimeException("Can't find a class", e);
-                    }
-                    instance = new ConnectionPool();
-                }
-
-                connections = new ArrayList<>();
-                IntStream.range(0, MAX_CONNECTION_NUMBER)
-                        .boxed()
-                        .forEach(i -> connections.add(createConnection()));
-                return instance;
-            }
+            instance = new ConnectionPool(Config.POOL_SIZE);
         }
         return instance;
     }
 
-    private static Connection createConnection() {
-        Connection connection;
-        try {
-            connection = DriverManager.getConnection(Config.URL, Config.USERNAME, Config.PASSWORD);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+    public synchronized Connection getConnection() {
+        Connection connection = connections.poll();
+        while (connection == null) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
+            }
+            connection = connections.poll();
         }
         return connection;
     }
 
-    public Connection getConnection() {
-        synchronized (this) {
-            Connection connection = connections
-                    .remove(connections.size() - 1);
-            return connection;
-        }
-    }
-
     public synchronized void releaseConnection(Connection connection) {
         connections.add(connection);
+        notify();
     }
 }

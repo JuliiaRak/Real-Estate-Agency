@@ -62,10 +62,10 @@ public class RealEstateTest {
         AddressService addressService = new AddressServiceImpl(addressRepository);
 
         RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
-        RealEstateService realEstateService = new RealEstateServiceImpl(realEstateRepository);
+        RealEstateService realEstateService = new RealEstateServiceImpl(realEstateRepository, addressService);
         realEstate.setSeller(client);
         realEstate.setAddress(address);
-        realEstateService.create(realEstate);
+        realEstateService.create(realEstate, client.getId());
 
         System.out.println(addressService.getById(address.getId()));
         address.setBuilding("3");

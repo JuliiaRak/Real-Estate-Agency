@@ -1,7 +1,6 @@
 package com.solvd.persistence.impl;
 
 import com.solvd.domain.RealEstate;
-import com.solvd.persistence.AddressRepository;
 import com.solvd.persistence.Config;
 import com.solvd.persistence.RealEstateRepository;
 import org.apache.ibatis.session.SqlSession;
@@ -11,12 +10,10 @@ import java.util.Optional;
 
 public class RealEstateRepositoryMybatisImpl implements RealEstateRepository {
     @Override
-    public void create(RealEstate realEstate) {
+    public void create(RealEstate realEstate, long clientId) {
         try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
-            AddressRepository addressRepository = sqlSession.getMapper(AddressRepository.class);
             RealEstateRepository realEstateRepository = sqlSession.getMapper(RealEstateRepository.class);
-            addressRepository.create(realEstate.getAddress());
-            realEstateRepository.create(realEstate);
+            realEstateRepository.create(realEstate, clientId);
         }
     }
 

@@ -13,8 +13,9 @@ public class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
 
     @Override
-    public void create(Address address) {
+    public Address create(Address address) {
         addressRepository.create(address);
+        return address;
     }
 
     @Override

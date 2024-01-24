@@ -8,7 +8,7 @@
     </insert>
 
     <sql id="clientSelect">
-        SELECT c.id AS client_id, c.first_name, c.last_name, c.email, c.phone_number, c.reg_date
+        SELECT c.id AS seller_id, c.first_name, c.last_name, c.email, c.phone_number, c.reg_date
         FROM clients c
     </sql>
 
@@ -39,7 +39,7 @@
     </select>
 
     <resultMap id="ClientResultMap" type="com.solvd.domain.Client" autoMapping="false">
-        <id column="client_id" property="id"/>
+        <id column="seller_id" property="id"/>
         <result column="first_name" property="firstName"/>
         <result column="last_name" property="lastName"/>
         <result column="email" property="email"/>

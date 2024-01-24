@@ -2,6 +2,7 @@ package com.solvd.service.impl;
 
 import com.solvd.domain.RealEstate;
 import com.solvd.persistence.RealEstateRepository;
+import com.solvd.service.AddressService;
 import com.solvd.service.RealEstateService;
 import lombok.AllArgsConstructor;
 
@@ -11,10 +12,12 @@ import java.util.Optional;
 @AllArgsConstructor
 public class RealEstateServiceImpl implements RealEstateService {
     private final RealEstateRepository realEstateRepository;
+    private final AddressService addressService;
 
     @Override
-    public void create(RealEstate realEstate) {
-        realEstateRepository.create(realEstate);
+    public void create(RealEstate realEstate, long clientId) {
+        realEstate.setAddress(addressService.create(realEstate.getAddress()));
+        realEstateRepository.create(realEstate, clientId);
     }
 
     @Override

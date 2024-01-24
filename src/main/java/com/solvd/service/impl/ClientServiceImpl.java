@@ -1,7 +1,7 @@
 package com.solvd.service.impl;
 
 import com.solvd.domain.Client;
-import com.solvd.persistence.ClientRepository;
+import com.solvd.persistence.repositories.ClientRepository;
 import com.solvd.service.ClientService;
 import lombok.AllArgsConstructor;
 

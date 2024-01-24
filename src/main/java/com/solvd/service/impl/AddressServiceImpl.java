@@ -1,7 +1,7 @@
 package com.solvd.service.impl;
 
 import com.solvd.domain.Address;
-import com.solvd.persistence.AddressRepository;
+import com.solvd.persistence.repositories.AddressRepository;
 import com.solvd.service.AddressService;
 import lombok.AllArgsConstructor;
 

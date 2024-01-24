@@ -10,11 +10,11 @@
 
     <sql id="realEstateSelect">
         SELECT
-        re.id, re.price, re.is_available, re.real_estate_description, re.real_estate_type, re.metrics, re.rooms,
-        a.id AS address_id, a.country, a.region, a.city, a.street, a.building, a.apartment,
-        c.id AS seller_id, c.first_name, c.last_name, c.email, c.phone_number, c.reg_date,
-        pl.*,
-        t.*
+            re.id, re.price, re.is_available, re.real_estate_description, re.real_estate_type, re.metrics, re.rooms,
+            a.id AS address_id, a.country, a.region, a.city, a.street, a.building, a.apartment,
+            c.id AS seller_id, c.first_name, c.last_name, c.email, c.phone_number, c.reg_date,
+            pl.*,
+            t.*
         FROM real_estates re
         LEFT JOIN addresses a ON re.address_id = a.id
         LEFT JOIN clients c ON re.seller_id = c.id

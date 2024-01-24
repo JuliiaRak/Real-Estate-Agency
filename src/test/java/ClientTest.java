@@ -26,6 +26,10 @@ public class ClientTest {
         ClientService clientService = new ClientServiceImpl(clientRepository);
         clientService.create(client);
         clientService.create(client2);
+
+        client.setEmail("dkulikov@ukr.net");
+        client.setPhoneNumber("+333-33-111-11-11");
+        clientService.update(client);
         System.out.println(clientService.getById(client.getId()));
         System.out.println(clientService.getAll());
 

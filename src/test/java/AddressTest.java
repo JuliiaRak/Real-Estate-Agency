@@ -28,6 +28,12 @@ public class AddressTest {
         addressService.create(address2);
         System.out.println(addressService.getById(address.getId()));
         System.out.println(addressService.getAll());
+
+        address.setBuilding("3");
+        address.setApartment("100");
+        addressService.update(address);
+        System.out.println(addressService.getById(address.getId()));
+
         addressService.deleteById(address.getId());
         addressService.deleteById(address2.getId());
     }

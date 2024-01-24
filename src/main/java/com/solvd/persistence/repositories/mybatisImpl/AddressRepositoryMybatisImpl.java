@@ -26,6 +26,14 @@ public class AddressRepositoryMybatisImpl implements AddressRepository {
     }
 
     @Override
+    public void update(Address address) {
+        try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
+            AddressRepository addressRepository = sqlSession.getMapper(AddressRepository.class);
+            addressRepository.update(address);
+        }
+    }
+
+    @Override
     public Optional<Address> findById(long id) {
         try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
             AddressRepository addressRepository = sqlSession.getMapper(AddressRepository.class);

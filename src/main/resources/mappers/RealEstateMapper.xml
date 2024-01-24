@@ -5,12 +5,12 @@
     <insert id="create" keyColumn="id" keyProperty="realEstate.id" useGeneratedKeys="true">
         INSERT INTO real_estates (price, is_available, real_estate_description, real_estate_type, metrics, rooms, seller_id, address_id)
         VALUES (#{realEstate.price}, #{realEstate.isAvailable}, #{realEstate.description}, #{realEstate.realEstateType},
-        #{realEstate.metrics}, #{realEstate.rooms}, #{clientId}, #{addressId})
+        #{realEstate.metrics}, #{realEstate.rooms}, #{clientId}, #{realEstate.address.id})
     </insert>
 
     <sql id="realEstateSelect">
         SELECT
-            re.id, re.price, re.is_available, re.real_estate_description, re.real_estate_type, re.metrics, re.rooms,
+            re.id AS real_estate_id, re.price, re.is_available, re.real_estate_description, re.real_estate_type, re.metrics, re.rooms,
             a.id AS address_id, a.country, a.region, a.city, a.street, a.building, a.apartment,
             c.id AS seller_id, c.first_name, c.last_name, c.email, c.phone_number, c.reg_date,
             pl.*,
@@ -50,7 +50,7 @@
     </select>
 
     <resultMap id="RealEstateResultMap" type="com.solvd.domain.RealEstate" autoMapping="false">
-        <id column="id" property="id"/>
+        <id column="real_estate_id" property="id"/>
         <result column="price" property="price"/>
         <result column="is_available" property="isAvailable"/>
         <result column="real_estate_description" property="description"/>
@@ -58,8 +58,8 @@
                 jdbcType="VARCHAR" />
         <result column="metrics" property="metrics"/>
         <result column="rooms" property="rooms"/>
-        <association property="address" resultMap="com.solvd.persistence.AddressRepository.AddressResultMapForRealEstate"/>
-        <association property="seller" resultMap="com.solvd.persistence.ClientRepository.ClientResultMapForRealEstate"/>
+        <association property="address" resultMap="com.solvd.persistence.AddressRepository.AddressResultMap"/>
+        <association property="seller" resultMap="com.solvd.persistence.ClientRepository.ClientResultMap"/>
         <collection property="photos" resultMap="com.solvd.persistence.PhotoRepository.PhotoResultMap"/>
         <collection property="tags" resultMap="com.solvd.persistence.TagRepository.TagResultMap"/>
     </resultMap>

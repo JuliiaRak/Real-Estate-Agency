@@ -22,18 +22,14 @@
     </delete>
 
     <sql id="agreementSelect">
-        SELECT ag.id, ag.agreement_date, ag.amount, ag.agreement_status, ag.duration,
-        real_estate_id, re.price, re.is_available, re.real_estate_description,
-        re.real_estate_type, re.metrics, re.rooms, re.seller_id, re.address_id
-        client_id,cl.first_name, cl.last_name, cl.email, cl.phone_number, cl.reg_date
-        FROM agreements ag
-        LEFT JOIN real_estates re ON re.id = ag.real_estate_id
-        LEFT JOIN clients cl ON cl.id = ag.client_id
+        SELECT id, agreement_date, amount, agreement_status, duration,
+        real_estate_id, client_id
+        FROM agreements
     </sql>
 
     <select id="findById" resultMap="AgreementResultMap">
         <include refid="agreementSelect"/>
-        <where>ag.id = #{id}</where>
+        <where>id = #{id}</where>
     </select>
 
     <select id="findAll" resultMap="AgreementResultMap">
@@ -47,9 +43,9 @@
         <result column="agreement_status" property="status"/>
         <result column="duration" property="duration"/>
         <association property="realEstate" column="real_estate_id"
-                     select="com.solvd.persistence.RealEstateRepository.findById"/>
+                     select="com.solvd.persistence.RealEstateRepository.findById" fetchType="eager"/>
         <association property="client" column="client_id"
-                    select="com.solvd.persistence.ClientRepository.findById"/>
+                    select="com.solvd.persistence.ClientRepository.findById" fetchType="eager"/>
     </resultMap>
 
 </mapper>

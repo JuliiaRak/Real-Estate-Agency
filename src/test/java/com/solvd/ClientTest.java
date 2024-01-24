@@ -35,6 +35,7 @@ public class ClientTest {
         System.out.println(clientService.getById(client.getId()));
         System.out.println(clientService.getAll());
 
+
         clientService.deleteById(client.getId());
         clientService.deleteById(client2.getId());
     }

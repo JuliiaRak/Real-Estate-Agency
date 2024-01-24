@@ -20,5 +20,7 @@
         <mapper resource="mappers/ClientMapper.xml"/>
         <mapper resource="mappers/AddressMapper.xml"/>
         <mapper resource="mappers/RealEstateMapper.xml"/>
+        <mapper resource="mappers/EmployeeMapper.xml"/>
+        <mapper resource="mappers/MeetingMapper.xml"/>
     </mappers>
 </configuration>

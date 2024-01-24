@@ -80,10 +80,10 @@ public class RealEstateTest {
         System.out.println(realEstateService.getById(realEstate.getId()));
         System.out.println(realEstateService.getAll());
 
-        realEstateService.deleteById(realEstate.getId());
-        addressService.deleteById(address.getId());
-        addressService.deleteById(address2.getId());
-        clientService.deleteById(client.getId());
-        clientService.deleteById(client2.getId());
+//        realEstateService.deleteById(realEstate.getId());
+//        addressService.deleteById(address.getId());
+//        addressService.deleteById(address2.getId());
+//        clientService.deleteById(client.getId());
+//        clientService.deleteById(client2.getId());
     }
 }

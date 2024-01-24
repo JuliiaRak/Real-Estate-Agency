@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS employees (
     last_name VARCHAR(150) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     phone_number VARCHAR(20) UNIQUE NOT NULL,
-    position VARCHAR(50),
+    employee_position VARCHAR(50),
     hire_date DATE NOT NULL,
     salary BIGINT UNSIGNED
 );

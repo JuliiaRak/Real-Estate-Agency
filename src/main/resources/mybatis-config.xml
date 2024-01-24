@@ -22,5 +22,7 @@
         <mapper resource="mappers/PhotoMapper.xml"/>
         <mapper resource="mappers/TagMapper.xml"/>
         <mapper resource="mappers/RealEstateMapper.xml"/>
+        <mapper resource="mappers/EmployeeMapper.xml"/>
+        <mapper resource="mappers/MeetingMapper.xml"/>
     </mappers>
 </configuration>

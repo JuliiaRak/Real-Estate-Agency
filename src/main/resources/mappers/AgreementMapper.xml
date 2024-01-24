@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solvd.persistence.AgreementRepository">
+
+    <insert id="create" keyColumn="id" keyProperty="agreement.id" useGeneratedKeys="true">
+        INSERT INTO agreements(agreement_date, amount, agreement_status, duration, real_estate_id, client_id)
+        VALUES(#{agreement.date}, #{agreement.amount}, #{agreement.status}, #{agreement.duration}, #{realEstateId},
+        #{clientId})
+    </insert>
+
+    <update id="update">
+        UPDATE agreements
+        SET agreement_date = #{date},
+        amount = #{amount},
+        agreement_status = #{status},
+        duration = #{duration}
+        WHERE id=#{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM agreements WHERE id = #{id}
+    </delete>
+
+    <sql id="agreementSelect">
+        SELECT id, agreement_date, amount, agreement_status, duration,
+        real_estate_id, client_id
+        FROM agreements
+    </sql>
+
+    <select id="findById" resultMap="AgreementResultMap">
+        <include refid="agreementSelect"/>
+        <where>id = #{id}</where>
+    </select>
+
+    <select id="findAll" resultMap="AgreementResultMap">
+        <include refid="agreementSelect"/>
+    </select>
+
+    <resultMap id="AgreementResultMap" type="com.solvd.domain.Agreement" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="agreement_date" property="date"/>
+        <result column="amount" property="amount"/>
+        <result column="agreement_status" property="status"/>
+        <result column="duration" property="duration"/>
+        <association property="realEstate" column="real_estate_id"
+                     select="com.solvd.persistence.RealEstateRepository.findById" fetchType="eager"/>
+        <association property="client" column="client_id"
+                    select="com.solvd.persistence.ClientRepository.findById" fetchType="eager"/>
+    </resultMap>
+
+</mapper>

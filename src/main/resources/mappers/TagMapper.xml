@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solvd.persistence.repositories.TagRepository">
+
+    <insert id="create" keyProperty="name">
+        INSERT INTO tags(tag_name) VALUES (#{name})
+    </insert>
+
+    <delete id="deleteByName">
+        DELETE FROM tags WHERE tag_name = #{name}
+    </delete>
+
+    <sql id="selectAll">
+        SELECT t.* FROM tags t
+    </sql>
+
+    <select id="findAllByRealEstateId" resultMap="TagResultMap">
+        <include refid="selectAll"/>
+        INNER JOIN real_estate_has_tags re_t ON re_t.tag_name = t.tag_name
+        WHERE re_t.real_estate_id = #{realEstateId}
+    </select>
+
+    <select id="findAll" resultMap="TagResultMap">
+        <include refid="selectAll"/>
+    </select>
+
+    <resultMap id="TagResultMap" type="com.solvd.domain.Tag">
+        <id column="tag_name" property="name"/>
+    </resultMap>
+</mapper>

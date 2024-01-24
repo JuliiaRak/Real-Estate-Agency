@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solvd.persistence.repositories.PhotoRepository">
+
+    <insert id="create" keyProperty="link">
+        INSERT INTO photo_links(link, real_estate_id) VALUES (#{photo.link}, #{realEstateId})
+    </insert>
+
+    <delete id="deleteByRealEstateId">
+        DELETE FROM photo_links WHERE real_estate_id = #{realEstateId}
+    </delete>
+
+    <sql id="selectAll">
+        SELECT * FROM photo_links
+    </sql>
+
+    <select id="findAllByRealEstateId" resultMap="PhotoResultMap">
+        <include refid="selectAll"/>
+        WHERE real_estate_id = #{realEstateId}
+    </select>
+
+    <select id="findAll" resultMap="PhotoResultMap">
+        <include refid="selectAll"/>
+    </select>
+
+    <resultMap id="PhotoResultMap" type="com.solvd.domain.Photo" autoMapping="false">
+        <id column="link" property="link"/>
+    </resultMap>
+</mapper>

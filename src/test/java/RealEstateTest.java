@@ -1,6 +1,7 @@
 import com.solvd.domain.Address;
 import com.solvd.domain.Client;
 import com.solvd.domain.RealEstate;
+import com.solvd.domain.enums.RealEstateType;
 import com.solvd.persistence.repositories.mybatisImpl.AddressRepositoryMybatisImpl;
 import com.solvd.persistence.repositories.mybatisImpl.ClientRepositoryMybatisImpl;
 import com.solvd.persistence.repositories.mybatisImpl.RealEstateRepositoryMybatisImpl;
@@ -45,8 +46,8 @@ public class RealEstateTest {
         RealEstate realEstate = new RealEstate();
         realEstate.setPrice(BigDecimal.valueOf(100000));
         realEstate.setAvailable(true);
-        realEstate.setRealEstateDescription("New apartmens");
-        realEstate.setRealEstateType("apartment");
+        realEstate.setDescription("New apartmens");
+        realEstate.setRealEstateType(RealEstateType.APARTMENT);
         realEstate.setMetrics("24 square meters");
         realEstate.setRooms(2);
 
@@ -63,7 +64,7 @@ public class RealEstateTest {
         RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
         RealEstateService realEstateService = new RealEstateServiceImpl(realEstateRepository);
         realEstateService.create(realEstate, client.getId(), address.getId());
-        System.out.println(realEstateService.findById(realEstate.getId()));
+        System.out.println(realEstateService.getById(realEstate.getId()));
         System.out.println(realEstateService.getAll());
 
         realEstateService.deleteById(realEstate.getId());

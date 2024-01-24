@@ -26,7 +26,7 @@ public class ClientTest {
         ClientService clientService = new ClientServiceImpl(clientRepository);
         clientService.create(client);
         clientService.create(client2);
-        System.out.println(clientService.findById(client.getId()));
+        System.out.println(clientService.getById(client.getId()));
         System.out.println(clientService.getAll());
 
         clientService.deleteById(client.getId());

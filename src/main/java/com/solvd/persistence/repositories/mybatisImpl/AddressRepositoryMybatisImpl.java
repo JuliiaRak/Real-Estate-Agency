@@ -35,10 +35,10 @@ public class AddressRepositoryMybatisImpl implements AddressRepository {
     }
 
     @Override
-    public List<Address> getAll() {
+    public List<Address> findAll() {
         try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
             AddressRepository addressRepository = sqlSession.getMapper(AddressRepository.class);
-            return addressRepository.getAll();
+            return addressRepository.findAll();
         }
     }
 }

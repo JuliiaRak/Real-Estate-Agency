@@ -34,10 +34,10 @@ public class RealEstateRepositoryMybatisImpl implements RealEstateRepository {
     }
 
     @Override
-    public List<RealEstate> getAll() {
+    public List<RealEstate> findAll() {
         try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
             RealEstateRepository realEstateRepository = sqlSession.getMapper(RealEstateRepository.class);
-            return realEstateRepository.getAll();
+            return realEstateRepository.findAll();
         }
     }
 }

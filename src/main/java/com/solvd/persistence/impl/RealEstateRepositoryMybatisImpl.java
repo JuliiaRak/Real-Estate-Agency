@@ -10,10 +10,10 @@ import java.util.Optional;
 
 public class RealEstateRepositoryMybatisImpl implements RealEstateRepository {
     @Override
-    public void create(RealEstate realEstate, long clientId, long addressId) {
+    public void create(RealEstate realEstate, long clientId) {
         try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
             RealEstateRepository realEstateRepository = sqlSession.getMapper(RealEstateRepository.class);
-            realEstateRepository.create(realEstate, clientId, addressId);
+            realEstateRepository.create(realEstate, clientId);
         }
     }
 

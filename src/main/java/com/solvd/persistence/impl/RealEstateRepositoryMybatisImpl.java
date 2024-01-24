@@ -3,7 +3,6 @@ package com.solvd.persistence.impl;
 import com.solvd.domain.RealEstate;
 import com.solvd.persistence.AddressRepository;
 import com.solvd.persistence.Config;
-import com.solvd.persistence.RealEstateAddressMapper;
 import com.solvd.persistence.RealEstateRepository;
 import org.apache.ibatis.session.SqlSession;
 

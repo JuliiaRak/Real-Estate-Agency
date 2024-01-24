@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solvd.persistence.AddressRepository">
+    <insert id="create" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO addresses (country, region, city, street, building, apartment)
+        VALUES (#{country}, #{region}, #{city}, #{street},
+        #{building}, #{apartment})
+    </insert>
+
+    <sql id="addressSelect">
+        SELECT a.id, a.country, a.region, a.city, a.street, a.building, a.apartment
+        FROM addresses a
+    </sql>
+    
+    <delete id="deleteById">
+        DELETE FROM addresses a
+        WHERE a.id = #{id};
+    </delete>
+
+    <update id="update">
+        UPDATE addresses
+        SET
+            country = #{country},
+            region = #{region},
+            city = #{city},
+            street = #{street},
+            building = #{building},
+            apartment = #{apartment}
+        WHERE
+        id = #{id}
+    </update>
+
+    <select id="findById">
+        <include refid="addressSelect"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="AddressResultMap">
+        <include refid="addressSelect"/>
+    </select>
+
+    <resultMap id="AddressResultMap" type="com.solvd.domain.Address" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="country" property="country"/>
+        <result column="region" property="region"/>
+        <result column="city" property="city"/>
+        <result column="street" property="street"/>
+        <result column="building" property="building"/>
+        <result column="apartment" property="apartment"/>
+    </resultMap>
+
+    <resultMap id="AddressResultMapForRealEstate" type="com.solvd.domain.Address" autoMapping="false">
+        <id column="address_id" property="id"/>
+        <result column="country" property="country"/>
+        <result column="region" property="region"/>
+        <result column="city" property="city"/>
+        <result column="street" property="street"/>
+        <result column="building" property="building"/>
+        <result column="apartment" property="apartment"/>
+    </resultMap>
+</mapper>

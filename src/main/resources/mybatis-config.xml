@@ -17,5 +17,8 @@
     </environments>
 
     <mappers>
+        <mapper resource="mappers/ClientMapper.xml"/>
+        <mapper resource="mappers/AddressMapper.xml"/>
+        <mapper resource="mappers/RealEstateMapper.xml"/>
     </mappers>
 </configuration>

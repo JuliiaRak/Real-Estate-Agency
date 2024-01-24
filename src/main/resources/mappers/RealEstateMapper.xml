@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solvd.persistence.RealEstateRepository">
+    <insert id="create" keyColumn="id" keyProperty="realEstate.id" useGeneratedKeys="true">
+        INSERT INTO real_estates (price, is_available, real_estate_description, real_estate_type, metrics, rooms, seller_id, address_id)
+        VALUES (#{realEstate.price}, #{realEstate.isAvailable}, #{realEstate.description}, #{realEstate.realEstateType},
+        #{realEstate.metrics}, #{realEstate.rooms}, #{clientId}, #{addressId})
+    </insert>
+
+    <sql id="realEstateSelect">
+        SELECT
+            re.id, re.price, re.is_available, re.real_estate_description, re.real_estate_type, re.metrics, re.rooms,
+            a.id AS address_id, a.country, a.region, a.city, a.street, a.building, a.apartment,
+            c.id AS seller_id, c.first_name, c.last_name, c.email, c.phone_number, c.reg_date
+        FROM real_estates re
+        LEFT JOIN addresses a ON re.address_id = a.id
+        LEFT JOIN clients c ON re.seller_id = c.id
+    </sql>
+
+    <delete id="deleteById">
+        DELETE FROM real_estates re WHERE re.id = #{realEstateId}
+    </delete>
+
+    <update id="update">
+        UPDATE real_estates
+        SET
+            price = #{price},
+            is_available = #{isAvailable},
+            real_estate_description = #{description},
+            real_estate_type = #{realEstateType},
+            metrics = #{metrics},
+            rooms = #{rooms}
+        WHERE
+            id = #{id}
+    </update>
+
+    <select id="findById" resultMap="RealEstateResultMap">
+        <include refid="realEstateSelect"/>
+        WHERE re.id = #{realEstateId}
+    </select>
+
+    <select id="findAll" resultMap="RealEstateResultMap">
+        <include refid="realEstateSelect"/>
+    </select>
+
+    <resultMap id="RealEstateResultMap" type="com.solvd.domain.RealEstate" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="price" property="price"/>
+        <result column="is_available" property="isAvailable"/>
+        <result column="real_estate_description" property="description"/>
+        <result column="real_estate_type" property="realEstateType" javaType="com.solvd.domain.enums.RealEstateType"
+                jdbcType="VARCHAR" />
+        <result column="metrics" property="metrics"/>
+        <result column="rooms" property="rooms"/>
+        <association property="address" resultMap="com.solvd.persistence.AddressRepository.AddressResultMapForRealEstate"/>
+        <association property="seller" resultMap="com.solvd.persistence.ClientRepository.ClientResultMapForRealEstate"/>
+    </resultMap>
+</mapper>

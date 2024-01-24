@@ -46,8 +46,10 @@
         <result column="amount" property="amount"/>
         <result column="agreement_status" property="status"/>
         <result column="duration" property="duration"/>
-        <association property="realEstate" resultMap="com.solvd.persistence.RealEstateRepository.RealEstateResultMap"/>
-        <association property="client" resultMap="com.solvd.persistence.ClientRepository.ClientResultMap"/>
+        <association property="realEstate" column="real_estate_id"
+                     select="com.solvd.persistence.RealEstateRepository.findById"/>
+        <association property="client" column="client_id"
+                    select="com.solvd.persistence.ClientRepository.findById"/>
     </resultMap>
 
 </mapper>

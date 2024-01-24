@@ -33,16 +33,16 @@ public class AgreementTest {
         //creating instances
         Client client = new Client();
         Client seller = new Client();
-        client.setEmail("aj2732819@gmail.com");
-        client.setPhoneNumber("001011231dw03");
+        client.setEmail("aj2619@gmail.com");
+        client.setPhoneNumber("008082");
         client.setFirstName("Anna");
         client.setLastName("Polichuk");
         client.setRegistrationDate(new Date());
 
         seller.setFirstName("Ivan");
         seller.setLastName("Kulikov");
-        seller.setEmail("ikuflev@gmail.com");
-        seller.setPhoneNumber("+222-2223-223122-22");
+        seller.setEmail("ikd46778ev@gmail.com");
+        seller.setPhoneNumber("+232-2542");
         seller.setRegistrationDate(new Date());
 
         Address address = new Address();
@@ -87,7 +87,7 @@ public class AgreementTest {
 
         RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
         RealEstateService realEstateService = new RealEstateServiceImpl(realEstateRepository, addressService);
-        realEstateService.create(realEstate,address.getId());
+        realEstateService.create(realEstate, client.getId());
         System.out.println(realEstate);
 
         AgreementRepository agreementRepository = new AgreementRepositoryMyBatisImpl();
@@ -99,9 +99,11 @@ public class AgreementTest {
 
         agreement.setDuration("4 months");
         agreementService.update(agreement);
-        System.out.println(agreement);
 
-        System.out.println(agreementService.getById(1));
+
+
+
+        System.out.println(agreementService.getById(5));
 
 
         agreementService.deleteById(1);
@@ -109,10 +111,10 @@ public class AgreementTest {
         agreementService.deleteById(3);
         agreementService.deleteById(4);
 
-        List<Agreement> agreements = agreementService.getAll();
-        for (Agreement agrm : agreements) {
-            System.out.println(agrm);
-        }
+        //List<Agreement> agreements = agreementService.getAll();
+        //for (Agreement agrm : agreements) {
+         //   System.out.println(agrm);
+       // }
     }
 
 }

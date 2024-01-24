@@ -19,6 +19,8 @@
     <mappers>
         <mapper resource="mappers/ClientMapper.xml"/>
         <mapper resource="mappers/AddressMapper.xml"/>
+        <mapper resource="mappers/PhotoMapper.xml"/>
+        <mapper resource="mappers/TagMapper.xml"/>
         <mapper resource="mappers/RealEstateMapper.xml"/>
     </mappers>
 </configuration>

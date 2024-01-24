@@ -1,7 +1,7 @@
 package com.solvd.service.impl;
 
 import com.solvd.domain.RealEstate;
-import com.solvd.persistence.repositories.RealEstateRepository;
+import com.solvd.persistence.RealEstateRepository;
 import com.solvd.service.RealEstateService;
 import lombok.AllArgsConstructor;
 

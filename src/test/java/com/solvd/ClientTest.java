@@ -1,8 +1,8 @@
 package com.solvd;
 
 import com.solvd.domain.Client;
-import com.solvd.persistence.repositories.mybatisImpl.ClientRepositoryMybatisImpl;
-import com.solvd.persistence.repositories.ClientRepository;
+import com.solvd.persistence.impl.ClientRepositoryMybatisImpl;
+import com.solvd.persistence.ClientRepository;
 import com.solvd.service.ClientService;
 import com.solvd.service.impl.ClientServiceImpl;
 

@@ -1,8 +1,8 @@
-package com.solvd.persistence.repositories.mybatisImpl;
+package com.solvd.persistence.impl;
 
 import com.solvd.domain.RealEstate;
 import com.solvd.persistence.Config;
-import com.solvd.persistence.repositories.RealEstateRepository;
+import com.solvd.persistence.RealEstateRepository;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;

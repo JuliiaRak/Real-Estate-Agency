@@ -1,4 +1,4 @@
-package com.solvd.persistence.repositories;
+package com.solvd.persistence;
 
 import com.solvd.domain.Address;
 

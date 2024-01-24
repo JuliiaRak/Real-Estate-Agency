@@ -1,8 +1,8 @@
-package com.solvd.persistence.repositories.mybatisImpl;
+package com.solvd.persistence.impl;
 
 import com.solvd.domain.Tag;
 import com.solvd.persistence.Config;
-import com.solvd.persistence.repositories.TagRepository;
+import com.solvd.persistence.TagRepository;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;

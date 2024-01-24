@@ -1,7 +1,7 @@
-package com.solvd.persistence.repositories.mybatisImpl;
+package com.solvd.persistence.impl;
 
 import com.solvd.domain.Tag;
-import com.solvd.persistence.repositories.TagRepository;
+import com.solvd.persistence.TagRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

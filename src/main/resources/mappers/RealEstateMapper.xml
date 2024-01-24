@@ -60,7 +60,7 @@
         <result column="rooms" property="rooms"/>
         <association property="address" resultMap="com.solvd.persistence.repositories.AddressRepository.AddressResultMapForRealEstate"/>
         <association property="seller" resultMap="com.solvd.persistence.repositories.ClientRepository.ClientResultMapForRealEstate"/>
-        <collection property="photos" resultMap="com.solvd.persistence.repositories.PhotoRepository.PhotoResultMap"/>
-        <collection property="tags" resultMap="com.solvd.persistence.repositories.TagRepository.TagResultMap"/>
+        <collection property="photos" resultMap="com.solvd.persistence.PhotoRepository.PhotoResultMap"/>
+        <collection property="tags" resultMap="com.solvd.persistence.TagRepository.TagResultMap"/>
     </resultMap>
 </mapper>

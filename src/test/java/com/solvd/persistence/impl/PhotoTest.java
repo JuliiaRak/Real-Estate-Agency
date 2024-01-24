@@ -1,7 +1,7 @@
-package com.solvd.persistence.repositories.mybatisImpl;
+package com.solvd.persistence.impl;
 
 import com.solvd.domain.Photo;
-import com.solvd.persistence.repositories.PhotoRepository;
+import com.solvd.persistence.PhotoRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

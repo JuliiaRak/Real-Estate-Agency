@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solvd.persistence.AgreementRepository">
+    
+    <insert id="create" keyColumn="id" keyProperty= "agreement.id" useGeneratedKeys="true">
+        INSERT INTO agreements(agreement_date, amount, agreement_status, duration, real_estate_id, client_id)
+        VALUES(#{agreement.date}, #{agreement.amount}, #{agreement.status}, #{agreement.duration}, #{realEstateId}, #{clientId})
+    </insert>
+
+    <update id="update">
+        UPDATE agreements
+            SET agreement_date =  #{date},
+                amount = #{amount},
+                agreement_status = #{status},
+                duration = #{duration}
+        WHERE id=#{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM agreements WHERE id = #{id}
+    </delete>
+
+    <sql id="agreementSelect">
+        SELECT ag.agreement_date, ag.amount, ag.agreement_status, ag.duration,
+            real_estate_id, re.price, re.is_available,  re.real_estate_description,
+            re.real_estate_type, re.metrics, re.rooms,
+            client_id,cl.first_name, cl.last_name, cl.email, cl.phone_number
+        FROM agreements ag
+        LEFT JOIN real_estates re ON re.id = ag.real_estate_id
+        LEFT JOIN clients cl ON cl.id =  ag.client_id
+    </sql>
+
+    <select id="findById" resultMap="AgreementResultMap">
+        <include refid="agreementSelect"/>
+        <where> ag.id = #{id}</where>
+    </select>
+
+    <select id="findAll" resultMap="AgreementResultMap">
+        <include refid="agreementSelect"/>
+    </select>
+
+    <resultMap id="AgreementResultMap" type="com.solvd.domain.Agreement" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="agreement_date" property="date"/>
+        <result column="amount" property="amount"/>
+        <result column="agreement_status" property="status"/>
+        <result column="duration" property="duration"/>
+        <association property="realEstate" resultMap="com.solvd.persistence.RealEstateRepository.RealEstateResultMap"/>
+        <association property="client" resultMap="com.solvd.persistence.ClientRepository.ClientResultMap"/>
+    </resultMap>
+
+</mapper>

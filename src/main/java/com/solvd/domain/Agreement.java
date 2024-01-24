@@ -3,6 +3,7 @@ package com.solvd.domain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -10,7 +11,7 @@ import java.util.Date;
 public class Agreement {
     private long id;
     private Date date;
-    private double amount;
+    private BigDecimal amount;
     private String duration;
     private String status;
     private RealEstate realEstate;

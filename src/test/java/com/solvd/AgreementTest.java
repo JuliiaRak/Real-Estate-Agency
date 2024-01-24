@@ -33,16 +33,16 @@ public class AgreementTest {
         //creating instances
         Client client = new Client();
         Client seller = new Client();
-        client.setEmail("adidj2732819@gmail.com");
-        client.setPhoneNumber("0010112312900hdw03");
+        client.setEmail("aj2732819@gmail.com");
+        client.setPhoneNumber("001011231dw03");
         client.setFirstName("Anna");
         client.setLastName("Polichuk");
         client.setRegistrationDate(new Date());
 
         seller.setFirstName("Ivan");
         seller.setLastName("Kulikov");
-        seller.setEmail("ikuflelov@gmail.com");
-        seller.setPhoneNumber("+222-2223-222-22");
+        seller.setEmail("ikuflev@gmail.com");
+        seller.setPhoneNumber("+222-2223-223122-22");
         seller.setRegistrationDate(new Date());
 
         Address address = new Address();
@@ -65,7 +65,7 @@ public class AgreementTest {
 
 
         Agreement agreement = new Agreement();
-        agreement.setAmount(58);
+        agreement.setAmount(BigDecimal.valueOf(37218));
         agreement.setDate(new Date());
         agreement.setClient(client);
         agreement.setStatus("Paid");
@@ -86,8 +86,8 @@ public class AgreementTest {
         System.out.println(address);
 
         RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
-        RealEstateService realEstateService = new RealEstateServiceImpl(realEstateRepository);
-        realEstateService.create(realEstate, client.getId(), address.getId());
+        RealEstateService realEstateService = new RealEstateServiceImpl(realEstateRepository, addressService);
+        realEstateService.create(realEstate,address.getId());
         System.out.println(realEstate);
 
         AgreementRepository agreementRepository = new AgreementRepositoryMyBatisImpl();

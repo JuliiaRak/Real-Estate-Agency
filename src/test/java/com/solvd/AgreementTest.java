@@ -25,7 +25,7 @@ import com.solvd.service.impl.RealEstateServiceImpl;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
-import java.util.Optional;
+
 
 
 public class AgreementTest {
@@ -33,11 +33,18 @@ public class AgreementTest {
 
         //creating instances
         Client client =  new Client();
-        client.setEmail("adidj312830141@gmail.com");
-        client.setPhoneNumber("080120120901303");
+        Client seller =  new Client();
+        client.setEmail("adidj228313910939@gmail.com");
+        client.setPhoneNumber("00201312900hdiew03");
         client.setFirstName("Anna");
         client.setLastName("Polichuk");
         client.setRegistrationDate(new java.util.Date());
+
+        seller.setFirstName("Ivan");
+        seller.setLastName("Kulikov");
+        seller.setEmail("ikulikov@gmail.com");
+        seller.setPhoneNumber("+222-22-222-22-22");
+        seller.setRegistrationDate(new java.util.Date());
 
         Address address = new Address();
         address.setCountry("Ukraine");
@@ -55,6 +62,7 @@ public class AgreementTest {
         realEstate.setRooms(5);
         realEstate.setAvailable(true);
         realEstate.setAddress(address);
+        realEstate.setSeller(seller);
 
 
         Agreement agreement =  new Agreement();
@@ -70,6 +78,7 @@ public class AgreementTest {
         ClientRepository clientRepository = new ClientRepositoryMybatisImpl();
         ClientService clientService = new ClientServiceImpl(clientRepository);
         clientService.create(client);
+        clientService.create(seller);
         System.out.println(client);
 
         AddressRepository addressRepository =  new AddressRepositoryMybatisImpl();
@@ -79,7 +88,7 @@ public class AgreementTest {
 
         RealEstateRepository realEstateRepository =  new RealEstateRepositoryMybatisImpl();
         RealEstateService realEstateService =  new RealEstateServiceImpl(realEstateRepository);
-        realEstateService.create(realEstate, client.getId(), 1);
+        realEstateService.create(realEstate, client.getId(), address.getId());
         System.out.println(realEstate);
 
         AgreementRepository agreementRepository =  new AgreementRepositoryMyBatisImpl();

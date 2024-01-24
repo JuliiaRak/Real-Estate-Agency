@@ -12,10 +12,15 @@
         SELECT
             re.id, re.price, re.is_available, re.real_estate_description, re.real_estate_type, re.metrics, re.rooms,
             a.id AS address_id, a.country, a.region, a.city, a.street, a.building, a.apartment,
-            c.id AS seller_id, c.first_name, c.last_name, c.email, c.phone_number, c.reg_date
+            c.id AS seller_id, c.first_name, c.last_name, c.email, c.phone_number, c.reg_date,
+            pl.*,
+            t.*
         FROM real_estates re
         LEFT JOIN addresses a ON re.address_id = a.id
         LEFT JOIN clients c ON re.seller_id = c.id
+        LEFT JOIN photo_links pl ON pl.real_estate_id = re.id
+        LEFT JOIN real_estate_has_tags re_t ON re_t.real_estate_id = re.id
+        LEFT JOIN tags t ON t.tag_name = re_t.tag_name
     </sql>
 
     <delete id="deleteById">
@@ -25,14 +30,14 @@
     <update id="update">
         UPDATE real_estates
         SET
-            price = #{price},
-            is_available = #{isAvailable},
-            real_estate_description = #{description},
-            real_estate_type = #{realEstateType},
-            metrics = #{metrics},
-            rooms = #{rooms}
+        price = #{price},
+        is_available = #{isAvailable},
+        real_estate_description = #{description},
+        real_estate_type = #{realEstateType},
+        metrics = #{metrics},
+        rooms = #{rooms}
         WHERE
-            id = #{id}
+        id = #{id}
     </update>
 
     <select id="findById" resultMap="RealEstateResultMap">
@@ -55,5 +60,7 @@
         <result column="rooms" property="rooms"/>
         <association property="address" resultMap="com.solvd.persistence.AddressRepository.AddressResultMapForRealEstate"/>
         <association property="seller" resultMap="com.solvd.persistence.ClientRepository.ClientResultMapForRealEstate"/>
+        <collection property="photos" resultMap="com.solvd.persistence.PhotoRepository.PhotoResultMap"/>
+        <collection property="tags" resultMap="com.solvd.persistence.TagRepository.TagResultMap"/>
     </resultMap>
 </mapper>

@@ -23,28 +23,27 @@ import com.solvd.service.impl.ClientServiceImpl;
 import com.solvd.service.impl.RealEstateServiceImpl;
 
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 
-
 public class AgreementTest {
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         //creating instances
-        Client client =  new Client();
-        Client seller =  new Client();
-        client.setEmail("adidj228313910939@gmail.com");
-        client.setPhoneNumber("00201312900hdiew03");
+        Client client = new Client();
+        Client seller = new Client();
+        client.setEmail("adidj2732819@gmail.com");
+        client.setPhoneNumber("0010112312900hdw03");
         client.setFirstName("Anna");
         client.setLastName("Polichuk");
-        client.setRegistrationDate(new java.util.Date());
+        client.setRegistrationDate(new Date());
 
         seller.setFirstName("Ivan");
         seller.setLastName("Kulikov");
-        seller.setEmail("ikulikov@gmail.com");
-        seller.setPhoneNumber("+222-22-222-22-22");
-        seller.setRegistrationDate(new java.util.Date());
+        seller.setEmail("ikuflelov@gmail.com");
+        seller.setPhoneNumber("+222-2223-222-22");
+        seller.setRegistrationDate(new Date());
 
         Address address = new Address();
         address.setCountry("Ukraine");
@@ -54,7 +53,7 @@ public class AgreementTest {
         address.setBuilding("2");
         address.setApartment("99");
 
-        RealEstate realEstate =  new RealEstate();
+        RealEstate realEstate = new RealEstate();
         realEstate.setRealEstateType(RealEstateType.APARTMENT);
         realEstate.setPrice(BigDecimal.valueOf(156000));
         realEstate.setMetrics("3245");
@@ -65,9 +64,9 @@ public class AgreementTest {
         realEstate.setSeller(seller);
 
 
-        Agreement agreement =  new Agreement();
+        Agreement agreement = new Agreement();
         agreement.setAmount(58);
-        agreement.setDate(Date.valueOf("2011-05-06"));
+        agreement.setDate(new Date());
         agreement.setClient(client);
         agreement.setStatus("Paid");
         agreement.setRealEstate(realEstate);
@@ -81,18 +80,18 @@ public class AgreementTest {
         clientService.create(seller);
         System.out.println(client);
 
-        AddressRepository addressRepository =  new AddressRepositoryMybatisImpl();
-        AddressService addressService =  new AddressServiceImpl(addressRepository);
+        AddressRepository addressRepository = new AddressRepositoryMybatisImpl();
+        AddressService addressService = new AddressServiceImpl(addressRepository);
         addressService.create(address);
         System.out.println(address);
 
-        RealEstateRepository realEstateRepository =  new RealEstateRepositoryMybatisImpl();
-        RealEstateService realEstateService =  new RealEstateServiceImpl(realEstateRepository);
+        RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
+        RealEstateService realEstateService = new RealEstateServiceImpl(realEstateRepository);
         realEstateService.create(realEstate, client.getId(), address.getId());
         System.out.println(realEstate);
 
-        AgreementRepository agreementRepository =  new AgreementRepositoryMyBatisImpl();
-        AgreementService agreementService =  new AgreementServiceImpl(agreementRepository);
+        AgreementRepository agreementRepository = new AgreementRepositoryMyBatisImpl();
+        AgreementService agreementService = new AgreementServiceImpl(agreementRepository);
         agreementService.create(agreement, realEstate.getId(), client.getId());
         System.out.println(agreement);
 
@@ -110,8 +109,8 @@ public class AgreementTest {
         agreementService.deleteById(3);
         agreementService.deleteById(4);
 
-        List<Agreement> agreements =  agreementService.getAll();
-        for(Agreement agrm: agreements){
+        List<Agreement> agreements = agreementService.getAll();
+        for (Agreement agrm : agreements) {
             System.out.println(agrm);
         }
     }

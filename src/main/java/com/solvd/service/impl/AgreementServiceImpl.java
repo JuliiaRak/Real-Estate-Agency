@@ -1,7 +1,6 @@
 package com.solvd.service.impl;
 
 import com.solvd.domain.Agreement;
-import com.solvd.persistence.impl.AgreementRepositoryMyBatisImpl;
 import com.solvd.persistence.AgreementRepository;
 import com.solvd.service.AgreementService;
 
@@ -11,9 +10,10 @@ import java.util.Optional;
 public class AgreementServiceImpl implements AgreementService {
     private final AgreementRepository agreementRepository;
 
-    public AgreementServiceImpl(AgreementRepository agreementRepository){
-        this.agreementRepository =  agreementRepository;
+    public AgreementServiceImpl(AgreementRepository agreementRepository) {
+        this.agreementRepository = agreementRepository;
     }
+
     @Override
     public void create(Agreement agreement, long realEstateId, long clientId) {
         agreementRepository.create(agreement, realEstateId, clientId);

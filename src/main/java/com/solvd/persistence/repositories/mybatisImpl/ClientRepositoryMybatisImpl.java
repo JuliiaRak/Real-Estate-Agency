@@ -34,10 +34,10 @@ public class ClientRepositoryMybatisImpl implements ClientRepository {
     }
 
     @Override
-    public List<Client> getAll() {
+    public List<Client> findAll() {
         try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
             ClientRepository clientRepository = sqlSession.getMapper(ClientRepository.class);
-            return clientRepository.getAll();
+            return clientRepository.findAll();
         }
     }
 }

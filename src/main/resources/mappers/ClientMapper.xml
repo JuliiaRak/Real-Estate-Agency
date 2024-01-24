@@ -7,18 +7,22 @@
         VALUES (#{firstName}, #{lastName}, #{email}, #{phoneNumber}, #{registrationDate})
     </insert>
 
+    <sql id="clientSelect">
+        SELECT c.id, c.first_name, c.last_name, c.email, c.phone_number, c.reg_date
+        FROM clients c
+    </sql>
+
     <delete id="deleteById">
         DELETE FROM clients c WHERE c.id = #{id}
     </delete>
 
     <select id="findById">
-        SELECT c.id, c.first_name, c.last_name, c.email, c.phone_number, c.reg_date
-        FROM clients c WHERE c.id = #{id}
+        <include refid="clientSelect"/>
+        WHERE c.id = #{id}
     </select>
 
-    <select id="getAll" resultMap="ClientResultMap">
-        SELECT c.id, c.first_name, c.last_name, c.email, c.phone_number, c.reg_date
-        FROM clients c
+    <select id="findAll" resultMap="ClientResultMap">
+        <include refid="clientSelect"/>
     </select>
 
     <resultMap id="ClientResultMap" type="com.solvd.domain.Client" autoMapping="false">

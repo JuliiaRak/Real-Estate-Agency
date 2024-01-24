@@ -7,19 +7,24 @@
         VALUES (#{country}, #{region}, #{city}, #{street},
         #{building}, #{apartment})
     </insert>
+
+    <sql id="addressSelect">
+        SELECT a.id, a.country, a.region, a.city, a.street, a.building, a.apartment
+        FROM addresses a
+    </sql>
     
     <delete id="deleteById">
-        DELETE FROM addresses a WHERE a.id = #{id};
+        DELETE FROM addresses a
+        WHERE a.id = #{id};
     </delete>
 
     <select id="findById">
-        SELECT a.id, a.country, a.region, a.city, a.street, a.building, a.apartment
-        FROM addresses a WHERE a.id = #{id}
+        <include refid="addressSelect"/>
+        WHERE a.id = #{id}
     </select>
 
-    <select id="getAll" resultMap="AddressResultMap">
-        SELECT a.id, a.country, a.region, a.city, a.street, a.building, a.apartment
-        FROM addresses a
+    <select id="findAll" resultMap="AddressResultMap">
+        <include refid="addressSelect"/>
     </select>
 
     <resultMap id="AddressResultMap" type="com.solvd.domain.Address" autoMapping="false">

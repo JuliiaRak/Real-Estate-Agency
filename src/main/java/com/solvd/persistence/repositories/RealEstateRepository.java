@@ -11,5 +11,5 @@ public interface RealEstateRepository {
                 @Param("addressId") long addressId);
     void deleteById(long realEstateId);
     Optional<RealEstate> findById(long realEstateId);
-    List<RealEstate> getAll();
+    List<RealEstate> findAll();
 }

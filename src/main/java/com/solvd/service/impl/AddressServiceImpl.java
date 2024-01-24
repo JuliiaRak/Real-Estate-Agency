@@ -23,12 +23,12 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public Optional<Address> findById(long id) {
+    public Optional<Address> getById(long id) {
         return addressRepository.findById(id);
     }
 
     @Override
     public List<Address> getAll() {
-        return addressRepository.getAll();
+        return addressRepository.findAll();
     }
 }

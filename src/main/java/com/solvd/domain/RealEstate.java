@@ -1,5 +1,6 @@
 package com.solvd.domain;
 
+import com.solvd.domain.enums.RealEstateType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,8 +12,8 @@ public class RealEstate {
     private long id;
     private BigDecimal price;
     private boolean isAvailable;
-    private String realEstateDescription;
-    private String realEstateType;
+    private String description;
+    private RealEstateType realEstateType;
     private String metrics;
     private int rooms;
     private Address address;

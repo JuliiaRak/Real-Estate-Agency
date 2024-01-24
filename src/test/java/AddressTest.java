@@ -26,7 +26,7 @@ public class AddressTest {
         AddressService addressService = new AddressServiceImpl(addressRepository);
         addressService.create(address);
         addressService.create(address2);
-        System.out.println(addressService.findById(address.getId()));
+        System.out.println(addressService.getById(address.getId()));
         System.out.println(addressService.getAll());
         addressService.deleteById(address.getId());
         addressService.deleteById(address2.getId());

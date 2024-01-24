@@ -23,12 +23,12 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Optional<Client> findById(long id) {
+    public Optional<Client> getById(long id) {
         return clientRepository.findById(id);
     }
 
     @Override
     public List<Client> getAll() {
-        return clientRepository.getAll();
+        return clientRepository.findAll();
     }
 }

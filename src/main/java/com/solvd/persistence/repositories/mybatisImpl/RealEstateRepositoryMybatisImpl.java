@@ -26,6 +26,14 @@ public class RealEstateRepositoryMybatisImpl implements RealEstateRepository {
     }
 
     @Override
+    public void update(RealEstate realEstate) {
+        try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
+            RealEstateRepository realEstateRepository = sqlSession.getMapper(RealEstateRepository.class);
+            realEstateRepository.update(realEstate);
+        }
+    }
+
+    @Override
     public Optional<RealEstate> findById(long realEstateId) {
         try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
             RealEstateRepository realEstateRepository = sqlSession.getMapper(RealEstateRepository.class);

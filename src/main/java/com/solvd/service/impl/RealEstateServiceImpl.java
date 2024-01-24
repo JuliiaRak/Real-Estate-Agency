@@ -23,6 +23,11 @@ public class RealEstateServiceImpl implements RealEstateService {
     }
 
     @Override
+    public void update(RealEstate realEstate) {
+        realEstateRepository.update(realEstate);
+    }
+
+    @Override
     public Optional<RealEstate> getById(long realEstateId) {
         return realEstateRepository.findById(realEstateId);
     }

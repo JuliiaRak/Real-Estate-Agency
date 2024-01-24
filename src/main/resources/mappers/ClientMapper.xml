@@ -16,6 +16,19 @@
         DELETE FROM clients c WHERE c.id = #{id}
     </delete>
 
+    <update id="update">
+        UPDATE clients
+        SET
+            first_name = #{firstName},
+            last_name = #{lastName},
+            email = #{email},
+            phone_number = #{phoneNumber},
+            reg_date = #{registrationDate}
+        WHERE
+            id = #{id}
+    </update>
+
+
     <select id="findById">
         <include refid="clientSelect"/>
         WHERE c.id = #{id}

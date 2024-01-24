@@ -23,6 +23,11 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    public void update(Address address) {
+        addressRepository.update(address);
+    }
+
+    @Override
     public Optional<Address> getById(long id) {
         return addressRepository.findById(id);
     }

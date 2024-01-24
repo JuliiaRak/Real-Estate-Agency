@@ -22,6 +22,19 @@
         DELETE FROM real_estates re WHERE re.id = #{realEstateId}
     </delete>
 
+    <update id="update">
+        UPDATE real_estates
+        SET
+            price = #{price},
+            is_available = #{isAvailable},
+            real_estate_description = #{description},
+            real_estate_type = #{realEstateType},
+            metrics = #{metrics},
+            rooms = #{rooms}
+        WHERE
+            id = #{id}
+    </update>
+
     <select id="findById" resultMap="RealEstateResultMap">
         <include refid="realEstateSelect"/>
         WHERE re.id = #{realEstateId}

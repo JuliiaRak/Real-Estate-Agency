@@ -18,6 +18,19 @@
         WHERE a.id = #{id};
     </delete>
 
+    <update id="update">
+        UPDATE addresses
+        SET
+            country = #{country},
+            region = #{region},
+            city = #{city},
+            street = #{street},
+            building = #{building},
+            apartment = #{apartment}
+        WHERE
+        id = #{id}
+    </update>
+
     <select id="findById">
         <include refid="addressSelect"/>
         WHERE a.id = #{id}

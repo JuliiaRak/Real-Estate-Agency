@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @EqualsAndHashCode(of = "id")
@@ -18,4 +19,6 @@ public class RealEstate {
     private int rooms;
     private Address address;
     private Client seller;
+    private List<Photo> photos;
+    private List<Tag> tags;
 }

@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RealEstateRepository {
-    void create(@Param("realEstate") RealEstate realEstate, @Param("clientId") long clientId,
-                @Param("addressId") long addressId);
+    void create(RealEstate realEstate);
     void deleteById(long realEstateId);
     void update(RealEstate realEstate);
     Optional<RealEstate> findById(long realEstateId);

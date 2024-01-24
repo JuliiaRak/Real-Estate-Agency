@@ -2,17 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.solvd.persistence.RealEstateRepository">
-    <insert id="create" keyColumn="id" keyProperty="realEstate.id" useGeneratedKeys="true">
+    <insert id="create" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
         INSERT INTO real_estates (price, is_available, real_estate_description, real_estate_type, metrics, rooms, seller_id, address_id)
-        VALUES (#{realEstate.price}, #{realEstate.isAvailable}, #{realEstate.description}, #{realEstate.realEstateType},
-        #{realEstate.metrics}, #{realEstate.rooms}, #{clientId}, #{addressId})
+        VALUES (#{price}, #{isAvailable}, #{description}, #{realEstateType},
+        #{metrics}, #{rooms}, #{seller.id}, #{address.id})
     </insert>
 
     <sql id="realEstateSelect">
         SELECT
             re.id AS real_estate_id, re.price, re.is_available, re.real_estate_description, re.real_estate_type, re.metrics, re.rooms,
             a.id, a.country, a.region, a.city, a.street, a.building, a.apartment,
-            c.id AS client_id, c.first_name, c.last_name, c.email, c.phone_number, c.reg_date
+            c.id AS client_id, c.first_name, c.last_name, c.email, c.phone_number, c.reg_date,
+            pl.*,
+            t.*
         FROM real_estates re
         LEFT JOIN addresses a ON re.address_id = a.id
         LEFT JOIN clients c ON re.seller_id = c.id

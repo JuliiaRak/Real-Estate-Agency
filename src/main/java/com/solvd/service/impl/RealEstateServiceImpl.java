@@ -13,8 +13,8 @@ public class RealEstateServiceImpl implements RealEstateService {
     private final RealEstateRepository realEstateRepository;
 
     @Override
-    public void create(RealEstate realEstate, long clientId, long addressId) {
-        realEstateRepository.create(realEstate, clientId, addressId);
+    public void create(RealEstate realEstate) {
+        realEstateRepository.create(realEstate);
     }
 
     @Override

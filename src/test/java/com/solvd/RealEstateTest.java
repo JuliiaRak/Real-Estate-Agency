@@ -37,7 +37,6 @@ public class RealEstateTest {
         client2.setRegistrationDate(new Date());
 
         Address address = new Address();
-        Address address2 = new Address();
         address.setCountry("Ukraine");
         address.setRegion("central region");
         address.setCity("Kyiv");
@@ -56,16 +55,19 @@ public class RealEstateTest {
         ClientRepository clientRepository = new ClientRepositoryMybatisImpl();
         ClientService clientService = new ClientServiceImpl(clientRepository);
         clientService.create(client);
+
         System.out.println(clientRepository.findById(client.getId()));
 
         AddressRepository addressRepository = new AddressRepositoryMybatisImpl();
         AddressService addressService = new AddressServiceImpl(addressRepository);
-        addressService.create(address);
-        System.out.println(addressService.getById(address.getId()));
 
         RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
         RealEstateService realEstateService = new RealEstateServiceImpl(realEstateRepository);
-        realEstateService.create(realEstate, client.getId(), address.getId());
+        realEstate.setSeller(client);
+        realEstate.setAddress(address);
+        realEstateService.create(realEstate);
+
+        System.out.println(addressService.getById(address.getId()));
         address.setBuilding("3");
         address.setApartment("100");
         addressService.update(address);
@@ -82,7 +84,6 @@ public class RealEstateTest {
 
         realEstateService.deleteById(realEstate.getId());
         addressService.deleteById(address.getId());
-        addressService.deleteById(address2.getId());
         clientService.deleteById(client.getId());
         clientService.deleteById(client2.getId());
     }

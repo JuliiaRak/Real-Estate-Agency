@@ -9,7 +9,7 @@
     </insert>
 
     <sql id="addressSelect">
-        SELECT a.id, a.country, a.region, a.city, a.street, a.building, a.apartment
+        SELECT a.id AS address_id, a.country, a.region, a.city, a.street, a.building, a.apartment
         FROM addresses a
     </sql>
     
@@ -31,7 +31,7 @@
         id = #{id}
     </update>
 
-    <select id="findById">
+    <select id="findById" resultMap="AddressResultMap">
         <include refid="addressSelect"/>
         WHERE a.id = #{id}
     </select>
@@ -41,7 +41,7 @@
     </select>
 
     <resultMap id="AddressResultMap" type="com.solvd.domain.Address" autoMapping="false">
-        <id column="id" property="id"/>
+        <id column="address_id" property="id"/>
         <result column="country" property="country"/>
         <result column="region" property="region"/>
         <result column="city" property="city"/>

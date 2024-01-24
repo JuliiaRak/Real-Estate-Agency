@@ -16,7 +16,7 @@ public class RealEstateServiceImpl implements RealEstateService {
 
     @Override
     public void create(RealEstate realEstate, long clientId) {
-        realEstate.setAddress(addressService.create(realEstate.getAddress()));
+        addressService.create(realEstate.getAddress());
         realEstateRepository.create(realEstate, clientId);
     }
 

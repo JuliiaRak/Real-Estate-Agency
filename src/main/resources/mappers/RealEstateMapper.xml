@@ -10,9 +10,9 @@
 
     <sql id="realEstateSelect">
         SELECT
-            re.id, re.price, re.is_available, re.real_estate_description, re.real_estate_type, re.metrics, re.rooms,
-            a.id AS address_id, a.country, a.region, a.city, a.street, a.building, a.apartment,
-            c.id AS seller_id, c.first_name, c.last_name, c.email, c.phone_number, c.reg_date
+            re.id AS real_estate_id, re.price, re.is_available, re.real_estate_description, re.real_estate_type, re.metrics, re.rooms,
+            a.id, a.country, a.region, a.city, a.street, a.building, a.apartment,
+            c.id AS client_id, c.first_name, c.last_name, c.email, c.phone_number, c.reg_date
         FROM real_estates re
         LEFT JOIN addresses a ON re.address_id = a.id
         LEFT JOIN clients c ON re.seller_id = c.id
@@ -45,7 +45,7 @@
     </select>
 
     <resultMap id="RealEstateResultMap" type="com.solvd.domain.RealEstate" autoMapping="false">
-        <id column="id" property="id"/>
+        <id column="real_estate_id" property="id"/>
         <result column="price" property="price"/>
         <result column="is_available" property="isAvailable"/>
         <result column="real_estate_description" property="description"/>
@@ -53,7 +53,7 @@
                 jdbcType="VARCHAR" />
         <result column="metrics" property="metrics"/>
         <result column="rooms" property="rooms"/>
-        <association property="address" resultMap="com.solvd.persistence.AddressRepository.AddressResultMapForRealEstate"/>
-        <association property="seller" resultMap="com.solvd.persistence.ClientRepository.ClientResultMapForRealEstate"/>
+        <association property="address" resultMap="com.solvd.persistence.AddressRepository.AddressResultMap"/>
+        <association property="seller" resultMap="com.solvd.persistence.ClientRepository.ClientResultMap"/>
     </resultMap>
 </mapper>

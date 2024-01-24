@@ -49,14 +49,4 @@
         <result column="building" property="building"/>
         <result column="apartment" property="apartment"/>
     </resultMap>
-
-    <resultMap id="AddressResultMapForRealEstate" type="com.solvd.domain.Address" autoMapping="false">
-        <id column="address_id" property="id"/>
-        <result column="country" property="country"/>
-        <result column="region" property="region"/>
-        <result column="city" property="city"/>
-        <result column="street" property="street"/>
-        <result column="building" property="building"/>
-        <result column="apartment" property="apartment"/>
-    </resultMap>
 </mapper>

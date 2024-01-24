@@ -56,12 +56,12 @@ public class RealEstateTest {
         ClientRepository clientRepository = new ClientRepositoryMybatisImpl();
         ClientService clientService = new ClientServiceImpl(clientRepository);
         clientService.create(client);
-        System.out.println(client);
+        System.out.println(clientRepository.findById(client.getId()));
 
         AddressRepository addressRepository = new AddressRepositoryMybatisImpl();
         AddressService addressService = new AddressServiceImpl(addressRepository);
         addressService.create(address);
-        System.out.println(address);
+        System.out.println(addressService.getById(address.getId()));
 
         RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
         RealEstateService realEstateService = new RealEstateServiceImpl(realEstateRepository);

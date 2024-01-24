@@ -21,7 +21,7 @@
     </delete>
 
     <sql id="agreementSelect">
-        SELECT ag.agreement_date, ag.amount, ag.agreement_status, ag.duration,
+        SELECT ag.id, ag.agreement_date, ag.amount, ag.agreement_status, ag.duration,
             real_estate_id, re.price, re.is_available,  re.real_estate_description,
             re.real_estate_type, re.metrics, re.rooms,
             client_id,cl.first_name, cl.last_name, cl.email, cl.phone_number

@@ -1,3 +1,5 @@
+package com.solvd;
+
 import com.solvd.domain.Address;
 import com.solvd.domain.Client;
 import com.solvd.domain.RealEstate;

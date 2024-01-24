@@ -1,3 +1,5 @@
+package com.solvd;
+
 import com.solvd.domain.Address;
 import com.solvd.persistence.repositories.mybatisImpl.AddressRepositoryMybatisImpl;
 import com.solvd.persistence.repositories.AddressRepository;

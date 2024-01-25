@@ -4,6 +4,8 @@ import com.solvd.domain.Address;
 import com.solvd.domain.Client;
 import com.solvd.domain.RealEstate;
 import com.solvd.domain.enums.RealEstateType;
+import com.solvd.domain.exceptions.EmailAlreadyExistException;
+import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
 import com.solvd.persistence.AddressRepository;
 import com.solvd.persistence.ClientRepository;
 import com.solvd.persistence.RealEstateRepository;
@@ -21,28 +23,21 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class RealEstateTest {
-    public static void main(String[] args) {
-        Client client = new Client();
-        Client client2 = new Client();
-        client.setFirstName("Denys");
-        client.setLastName("Kulikov");
-        client.setEmail("dkulikov@gmail.com");
-        client.setPhoneNumber("+111-11-111-11-11");
-        client.setRegistrationDate(new Date());
+    public static void main(String[] args) throws PhoneNumberAlreadyExistException, EmailAlreadyExistException {
+        Client.Builder builder = new Client.Builder();
+        try {
+            builder.setFirstName("Denys");
+            builder.setLastName("Kulikov");
+            builder.setEmail("dkulikov@gmail.com");
+            builder.setPhoneNumber("+380991234567");
+            builder.setRegistrationDate(new Date());
+        } catch (IllegalArgumentException e) {
+            System.out.println("An invalid object was created: " + e.getMessage());
+        }
+        Client client = builder.build();
 
-        client2.setFirstName("Ivan");
-        client2.setLastName("Kulikov");
-        client2.setEmail("ikulikov@gmail.com");
-        client2.setPhoneNumber("+222-22-222-22-22");
-        client2.setRegistrationDate(new Date());
-
-        Address address = new Address();
-        address.setCountry("Ukraine");
-        address.setRegion("central region");
-        address.setCity("Kyiv");
-        address.setStreet("Kyiv street");
-        address.setBuilding("2");
-        address.setApartment("99");
+        Address address = new Address(0, "Ukraine", "central region", "Kyiv",
+                "Kyiv street", "2", "99");
 
         RealEstate realEstate = new RealEstate();
         realEstate.setPrice(BigDecimal.valueOf(100000));
@@ -85,6 +80,5 @@ public class RealEstateTest {
         realEstateService.deleteById(realEstate.getId());
         addressService.deleteById(address.getId());
         clientService.deleteById(client.getId());
-        clientService.deleteById(client2.getId());
     }
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -19,6 +20,14 @@ public class RealEstate {
     private int rooms;
     private Address address;
     private Client seller;
-    private List<Photo> photos;
-    private List<Tag> tags;
+    private List<Photo> photos = new ArrayList<>();
+    private List<Tag> tags = new ArrayList<>();
+
+    public void addPhoto(Photo photo) {
+        photos.add(photo);
+    }
+
+    public void addTag(Tag tag) {
+        tags.add(tag);
+    }
 }

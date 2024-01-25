@@ -12,7 +12,7 @@ public interface AgreementService {
 
     void update(Agreement agreement);
 
-    Optional<Agreement> getById(long id);
+    Agreement getById(long id);
 
     List<Agreement> getAll();
 }

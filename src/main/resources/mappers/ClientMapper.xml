@@ -38,6 +38,16 @@
         <include refid="clientSelect"/>
     </select>
 
+    <select id="findByEmail" resultMap="ClientResultMap">
+        <include refid="clientSelect"/>
+        WHERE c.email = #{email}
+    </select>
+
+    <select id="findByPhoneNumber" resultMap="ClientResultMap">
+        <include refid="clientSelect"/>
+        WHERE c.phone_number = #{phoneNumber}
+    </select>
+
     <resultMap id="ClientResultMap" type="com.solvd.domain.Client" autoMapping="false">
         <id column="seller_id" property="id"/>
         <result column="first_name" property="firstName"/>

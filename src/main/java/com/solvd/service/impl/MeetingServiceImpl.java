@@ -1,7 +1,6 @@
 package com.solvd.service.impl;
 
 import com.solvd.domain.Meeting;
-import com.solvd.persistence.EmployeeRepository;
 import com.solvd.persistence.MeetingRepository;
 import com.solvd.service.MeetingService;
 import lombok.AllArgsConstructor;

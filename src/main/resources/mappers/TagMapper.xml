@@ -25,6 +25,10 @@
         <include refid="selectAll"/>
     </select>
 
+    <select id="existsByName">
+        SELECT EXISTS(SELECT 1 FROM tags WHERE tag_name = #{name})
+    </select>
+
     <resultMap id="TagResultMap" type="com.solvd.domain.Tag">
         <id column="tag_name" property="name"/>
     </resultMap>

@@ -12,4 +12,6 @@ public interface TagRepository {
     List<Tag> findAllByRealEstateId(long realEstateId);
 
     List<Tag> findAll();
+
+    boolean existsByName(String name);
 }

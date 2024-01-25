@@ -10,7 +10,11 @@ public interface PhotoRepository {
 
     void deleteByRealEstateId(long realEstateId);
 
+    void deleteByLink(String link);
+
     List<Photo> findAllByRealEstateId(long realEstateId);
 
     List<Photo> findAll();
+
+    boolean existsByLink(String link);
 }

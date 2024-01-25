@@ -40,4 +40,12 @@ public class TagRepositoryMybatisImpl implements TagRepository {
             return tagRepository.findAll();
         }
     }
+
+    @Override
+    public boolean existsByName(String name) {
+        try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
+            TagRepository tagRepository = sqlSession.getMapper(TagRepository.class);
+            return tagRepository.existsByName(name);
+        }
+    }
 }

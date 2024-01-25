@@ -1,13 +1,13 @@
 package com.solvd.service.impl;
 
 import com.solvd.domain.RealEstate;
+import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.persistence.RealEstateRepository;
 import com.solvd.service.AddressService;
 import com.solvd.service.RealEstateService;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 public class RealEstateServiceImpl implements RealEstateService {
@@ -16,8 +16,10 @@ public class RealEstateServiceImpl implements RealEstateService {
 
     @Override
     public void create(RealEstate realEstate, long clientId) {
+        realEstateCheck(realEstate);
         addressService.create(realEstate.getAddress());
         realEstateRepository.create(realEstate, clientId);
+
     }
 
     @Override
@@ -31,12 +33,16 @@ public class RealEstateServiceImpl implements RealEstateService {
     }
 
     @Override
-    public Optional<RealEstate> getById(long realEstateId) {
-        return realEstateRepository.findById(realEstateId);
+    public RealEstate getById(long realEstateId) throws EntityNotFoundException {
+        return realEstateRepository.findById(realEstateId).orElseThrow(() -> new EntityNotFoundException("RealEstate", realEstateId));
     }
 
     @Override
     public List<RealEstate> getAll() {
         return realEstateRepository.findAll();
+    }
+
+    private void realEstateCheck(RealEstate realEstate) {
+
     }
 }

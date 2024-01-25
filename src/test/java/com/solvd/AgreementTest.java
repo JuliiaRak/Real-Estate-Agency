@@ -5,6 +5,9 @@ import com.solvd.domain.Agreement;
 import com.solvd.domain.Client;
 import com.solvd.domain.RealEstate;
 import com.solvd.domain.enums.RealEstateType;
+import com.solvd.domain.exceptions.EmailAlreadyExistException;
+import com.solvd.domain.exceptions.EntityNotFoundException;
+import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
 import com.solvd.persistence.AddressRepository;
 import com.solvd.persistence.AgreementRepository;
 import com.solvd.persistence.ClientRepository;
@@ -28,7 +31,7 @@ import java.util.List;
 
 
 public class AgreementTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws EntityNotFoundException {
 
         //creating instances
         Client client = new Client();
@@ -76,8 +79,12 @@ public class AgreementTest {
 
         ClientRepository clientRepository = new ClientRepositoryMybatisImpl();
         ClientService clientService = new ClientServiceImpl(clientRepository);
-        clientService.create(client);
-        clientService.create(seller);
+        try {
+            clientService.create(client);
+            clientService.create(seller);
+        } catch (EmailAlreadyExistException | PhoneNumberAlreadyExistException e) {
+            throw new RuntimeException(e);
+        }
         System.out.println(client);
 
         AddressRepository addressRepository = new AddressRepositoryMybatisImpl();

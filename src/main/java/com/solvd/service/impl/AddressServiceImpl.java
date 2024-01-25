@@ -1,12 +1,12 @@
 package com.solvd.service.impl;
 
 import com.solvd.domain.Address;
+import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.persistence.AddressRepository;
 import com.solvd.service.AddressService;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 public class AddressServiceImpl implements AddressService {
@@ -14,6 +14,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public void create(Address address) {
+        addressCheck(address);
         addressRepository.create(address);
     }
 
@@ -23,17 +24,25 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public void update(Address address) {
+    public void update(Address address) throws EntityNotFoundException {
+        if (addressRepository.findById(address.getId()).isEmpty()) {
+            throw new EntityNotFoundException("Address", address.getId());
+        }
+        addressCheck(address);
         addressRepository.update(address);
     }
 
     @Override
-    public Optional<Address> getById(long id) {
-        return addressRepository.findById(id);
+    public Address getById(long id) throws EntityNotFoundException {
+        return addressRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Address", id));
     }
 
     @Override
     public List<Address> getAll() {
         return addressRepository.findAll();
+    }
+
+    private void addressCheck(Address address) {
+
     }
 }

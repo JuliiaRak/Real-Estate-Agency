@@ -6,7 +6,7 @@ import com.solvd.domain.exceptions.EntityNotFoundException;
 import java.util.List;
 
 public interface TagService {
-    void assignToRealEstate(Tag tag, long realEstateId) throws EntityNotFoundException;
+    void assignToRealEstate(Tag tag, long realEstateId);
 
     void deleteByName(String name);
 

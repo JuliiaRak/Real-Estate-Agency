@@ -15,7 +15,7 @@ public class MeetingTest {
     public static void main(String[] args) {
         MeetingService meetingService = new MeetingServiceImpl(new MeetingRepositoryMybatisImpl());
 
-        Meeting meeting = new Meeting(0L, new Date(), new Date(), "status", null, null, null);
+        Meeting meeting = new Meeting(new Date(), new Date(), "status", null, null, null);
         meetingService.create(meeting, 2L, 6L, 10L);
         System.out.println(meetingService.getById(meeting.getId()));
 

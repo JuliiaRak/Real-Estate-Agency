@@ -1,6 +1,5 @@
 package com.solvd.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -8,7 +7,6 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Meeting {
@@ -19,4 +17,13 @@ public class Meeting {
     private RealEstate realEstate;
     private Client buyer;
     private Employee employee;
+
+    public Meeting(Date meetingDateTime, Date inquiryDate, String meetingStatus, RealEstate realEstate, Client buyer, Employee employee) {
+        this.meetingDateTime = meetingDateTime;
+        this.inquiryDate = inquiryDate;
+        this.meetingStatus = meetingStatus;
+        this.realEstate = realEstate;
+        this.buyer = buyer;
+        this.employee = employee;
+    }
 }

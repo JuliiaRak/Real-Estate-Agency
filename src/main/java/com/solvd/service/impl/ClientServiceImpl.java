@@ -31,7 +31,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void update(Client client) throws EntityNotFoundException {
         if (clientRepository.findById(client.getId()).isEmpty()) {
-            throw new EntityNotFoundException("Client");
+            throw new EntityNotFoundException("Client", client.getId());
         }
         clientCheck(client);
         clientRepository.update(client);

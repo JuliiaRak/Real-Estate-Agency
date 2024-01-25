@@ -12,10 +12,11 @@ public class TagServiceImpl implements TagService {
     private final TagRepository tagRepository;
 
     @Override
-    public void create(Tag tag) {
+    public void assignToRealEstate(Tag tag, long realEstateId) {
         if (!tagRepository.existsByName(tag.getName())) {
             tagRepository.create(tag);
         }
+        tagRepository.assignToRealEstate(tag, realEstateId);
     }
 
     @Override

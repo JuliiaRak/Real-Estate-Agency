@@ -6,25 +6,23 @@ import com.solvd.domain.RealEstate;
 import com.solvd.domain.enums.RealEstateType;
 import com.solvd.domain.exceptions.EmailAlreadyExistException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
+import com.solvd.domain.exceptions.LinkAlreadyExistsException;
 import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
 import com.solvd.persistence.AddressRepository;
 import com.solvd.persistence.ClientRepository;
 import com.solvd.persistence.RealEstateRepository;
-import com.solvd.persistence.impl.AddressRepositoryMybatisImpl;
-import com.solvd.persistence.impl.ClientRepositoryMybatisImpl;
-import com.solvd.persistence.impl.RealEstateRepositoryMybatisImpl;
-import com.solvd.service.AddressService;
-import com.solvd.service.ClientService;
-import com.solvd.service.RealEstateService;
-import com.solvd.service.impl.AddressServiceImpl;
-import com.solvd.service.impl.ClientServiceImpl;
-import com.solvd.service.impl.RealEstateServiceImpl;
+import com.solvd.persistence.impl.*;
+import com.solvd.service.*;
+import com.solvd.service.impl.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class RealEstateTest {
-    public static void main(String[] args) throws PhoneNumberAlreadyExistException, EmailAlreadyExistException, EntityNotFoundException {
+    public static void main(String[] args) throws PhoneNumberAlreadyExistException, EmailAlreadyExistException, EntityNotFoundException, LinkAlreadyExistsException {
+        PhotoService photoService = new PhotoServiceImpl(new PhotoRepositoryMybatisImpl());
+        TagService tagService = new TagServiceImpl(new TagRepositoryMybatisImpl());
+
         Client.Builder builder = new Client.Builder();
         try {
             builder.setFirstName("Denys");
@@ -63,7 +61,7 @@ public class RealEstateTest {
         AddressService addressService = new AddressServiceImpl(addressRepository);
 
         RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
-        RealEstateService realEstateService = new RealEstateServiceImpl(realEstateRepository, addressService);
+        RealEstateService realEstateService = new RealEstateServiceImpl(realEstateRepository, addressService, photoService, tagService);
         realEstate.setSeller(client);
         realEstate.setAddress(address);
         realEstateService.create(realEstate, client.getId());

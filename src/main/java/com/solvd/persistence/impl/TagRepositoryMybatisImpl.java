@@ -18,6 +18,14 @@ public class TagRepositoryMybatisImpl implements TagRepository {
     }
 
     @Override
+    public void assignToRealEstate(Tag tag, long realEstateId) {
+        try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
+            TagRepository tagRepository = sqlSession.getMapper(TagRepository.class);
+            tagRepository.assignToRealEstate(tag, realEstateId);
+        }
+    }
+
+    @Override
     public void deleteByName(String name) {
         try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
             TagRepository tagRepository = sqlSession.getMapper(TagRepository.class);

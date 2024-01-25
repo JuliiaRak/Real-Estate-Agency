@@ -1,11 +1,12 @@
 package com.solvd.service;
 
 import com.solvd.domain.Tag;
+import com.solvd.domain.exceptions.EntityNotFoundException;
 
 import java.util.List;
 
 public interface TagService {
-    void create(Tag tag);
+    void assignToRealEstate(Tag tag, long realEstateId) throws EntityNotFoundException;
 
     void deleteByName(String name);
 

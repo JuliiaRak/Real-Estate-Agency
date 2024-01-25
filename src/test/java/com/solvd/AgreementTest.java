@@ -7,31 +7,24 @@ import com.solvd.domain.RealEstate;
 import com.solvd.domain.enums.RealEstateType;
 import com.solvd.domain.exceptions.EmailAlreadyExistException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
+import com.solvd.domain.exceptions.LinkAlreadyExistsException;
 import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
 import com.solvd.persistence.AddressRepository;
 import com.solvd.persistence.AgreementRepository;
 import com.solvd.persistence.ClientRepository;
 import com.solvd.persistence.RealEstateRepository;
-import com.solvd.persistence.impl.AddressRepositoryMybatisImpl;
-import com.solvd.persistence.impl.AgreementRepositoryMyBatisImpl;
-import com.solvd.persistence.impl.ClientRepositoryMybatisImpl;
-import com.solvd.persistence.impl.RealEstateRepositoryMybatisImpl;
-import com.solvd.service.AddressService;
-import com.solvd.service.AgreementService;
-import com.solvd.service.ClientService;
-import com.solvd.service.RealEstateService;
-import com.solvd.service.impl.AddressServiceImpl;
-import com.solvd.service.impl.AgreementServiceImpl;
-import com.solvd.service.impl.ClientServiceImpl;
-import com.solvd.service.impl.RealEstateServiceImpl;
+import com.solvd.persistence.impl.*;
+import com.solvd.service.*;
+import com.solvd.service.impl.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 
 public class AgreementTest {
-    public static void main(String[] args) throws EntityNotFoundException {
+    public static void main(String[] args) throws EntityNotFoundException, LinkAlreadyExistsException {
+        PhotoService photoService = new PhotoServiceImpl(new PhotoRepositoryMybatisImpl());
+        TagService tagService = new TagServiceImpl(new TagRepositoryMybatisImpl());
 
         //creating instances
         Client client = new Client();
@@ -93,7 +86,7 @@ public class AgreementTest {
         System.out.println(address);
 
         RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
-        RealEstateService realEstateService = new RealEstateServiceImpl(realEstateRepository, addressService);
+        RealEstateService realEstateService = new RealEstateServiceImpl(realEstateRepository, addressService, photoService, tagService);
         realEstateService.create(realEstate, client.getId());
         System.out.println(realEstate);
 
@@ -108,8 +101,6 @@ public class AgreementTest {
         agreementService.update(agreement);
 
 
-
-
         System.out.println(agreementService.getById(5));
 
 
@@ -120,8 +111,8 @@ public class AgreementTest {
 
         //List<Agreement> agreements = agreementService.getAll();
         //for (Agreement agrm : agreements) {
-         //   System.out.println(agrm);
-       // }
+        //   System.out.println(agrm);
+        // }
     }
 
 }

@@ -10,6 +10,6 @@ public interface MeetingService {
     void create(Meeting meeting, Long realEstateId, Long buyerId, Long employeeId);
     void deleteById(long id);
     void update(Meeting meeting, Long realEstateId, Long buyerId, Long employeeId) throws EntityNotFoundException;
-    Optional<Meeting> getById(long id);
+    Meeting getById(long id) throws EntityNotFoundException;
     List<Meeting> getAll();
 }

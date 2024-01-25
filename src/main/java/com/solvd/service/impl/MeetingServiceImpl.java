@@ -37,8 +37,9 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public Optional<Meeting> getById(long id) {
-        return meetingRepository.findById(id);
+    public Meeting getById(long id) throws EntityNotFoundException {
+        return meetingRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Meeting", id));
     }
 
     @Override

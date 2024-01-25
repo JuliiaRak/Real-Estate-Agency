@@ -8,7 +8,7 @@ import java.util.List;
 public interface AddressService {
     void create(Address address);
     void deleteById(long id);
-    void update(Address address);
+    void update(Address address) throws EntityNotFoundException;
     Address getById(long id) throws EntityNotFoundException;
     List<Address> getAll();
 }

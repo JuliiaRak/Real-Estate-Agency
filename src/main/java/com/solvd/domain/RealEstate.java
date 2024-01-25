@@ -27,7 +27,15 @@ public class RealEstate {
         photos.add(photo);
     }
 
+    public void removePhoto(Photo photo) {
+        photos.remove(photo);
+    }
+
     public void addTag(Tag tag) {
         tags.add(tag);
+    }
+
+    public void removeTag(Tag tag) {
+        tags.remove(tag);
     }
 }

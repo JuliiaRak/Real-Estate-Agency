@@ -1,6 +1,7 @@
 package com.solvd.service.impl;
 
 import com.solvd.domain.Agreement;
+import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.persistence.AgreementRepository;
 import com.solvd.service.AgreementService;
 
@@ -30,8 +31,8 @@ public class AgreementServiceImpl implements AgreementService {
     }
 
     @Override
-    public Optional<Agreement> getById(long id) {
-        return agreementRepository.findById(id);
+    public Agreement getById(long id) throws EntityNotFoundException {
+        return agreementRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Agreement", id));
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.solvd;
 
 import com.solvd.domain.Client;
 import com.solvd.domain.exceptions.EmailAlreadyExistException;
+import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
 import com.solvd.persistence.ClientRepository;
 import com.solvd.persistence.impl.ClientRepositoryMybatisImpl;
@@ -11,7 +12,7 @@ import com.solvd.service.impl.ClientServiceImpl;
 import java.util.Date;
 
 public class ClientTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws EntityNotFoundException {
         Client.Builder builder = new Client.Builder();
         try {
             builder.setFirstName("Denys");

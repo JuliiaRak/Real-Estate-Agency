@@ -1,12 +1,12 @@
 package com.solvd.service.impl;
 
 import com.solvd.domain.Employee;
+import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.persistence.EmployeeRepository;
 import com.solvd.service.EmployeeService;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
@@ -29,8 +29,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Optional<Employee> getById(long id) {
-        return employeeRepository.findById(id);
+    public Employee getById(long id) throws EntityNotFoundException {
+        return employeeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Employee", id));
     }
 
     @Override

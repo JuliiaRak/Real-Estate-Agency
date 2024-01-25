@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface ClientService {
     void create(Client client) throws EmailAlreadyExistException, PhoneNumberAlreadyExistException;
     void deleteById(long id);
-    void update(Client client);
+    void update(Client client) throws EntityNotFoundException;
     Client getById(long id) throws EntityNotFoundException;
     List<Client> getAll();
 }

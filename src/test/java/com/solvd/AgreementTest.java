@@ -6,6 +6,7 @@ import com.solvd.domain.Client;
 import com.solvd.domain.RealEstate;
 import com.solvd.domain.enums.RealEstateType;
 import com.solvd.domain.exceptions.EmailAlreadyExistException;
+import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
 import com.solvd.persistence.AddressRepository;
 import com.solvd.persistence.AgreementRepository;
@@ -30,7 +31,7 @@ import java.util.List;
 
 
 public class AgreementTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws EntityNotFoundException {
 
         //creating instances
         Client client = new Client();

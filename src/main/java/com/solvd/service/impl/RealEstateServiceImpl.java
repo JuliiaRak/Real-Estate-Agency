@@ -19,6 +19,7 @@ public class RealEstateServiceImpl implements RealEstateService {
         realEstateCheck(realEstate);
         addressService.create(realEstate.getAddress());
         realEstateRepository.create(realEstate, clientId);
+
     }
 
     @Override
@@ -42,26 +43,6 @@ public class RealEstateServiceImpl implements RealEstateService {
     }
 
     private void realEstateCheck(RealEstate realEstate) {
-        if (realEstate == null) {
-            throw new IllegalArgumentException("RealEstate cannot be null");
-        }
-        if (realEstate.getPrice() == null) {
-            throw new IllegalArgumentException("Price cannot be null");
-        }
-        if (realEstate.getDescription() == null) {
-            throw new IllegalArgumentException("Description cannot be null");
-        }
-        if (realEstate.getDescription().isEmpty()) {
-            throw new IllegalArgumentException("Description cannot be empty");
-        }
-        if (realEstate.getRealEstateType() == null) {
-            throw new IllegalArgumentException("RealEstateType cannot be null");
-        }
-        if (realEstate.getMetrics() == null) {
-            throw new IllegalArgumentException("Description cannot be null");
-        }
-        if (realEstate.getMetrics().isEmpty()) {
-            throw new IllegalArgumentException("Description cannot be empty");
-        }
+
     }
 }

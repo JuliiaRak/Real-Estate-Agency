@@ -49,7 +49,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<Employee> getAll() {
         return employeeRepository.findAll();
     }
-
+  
     public void validate(Employee employee) {
         // Перевірка, що ім'я та прізвище не є порожніми
         if (employee.getFirstName()==null || employee.getLastName()==null  || employee.getFirstName().isEmpty() || employee.getLastName().isEmpty() || employee.getFirstName().isBlank() || employee.getLastName().isBlank()) {

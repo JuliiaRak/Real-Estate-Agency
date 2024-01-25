@@ -1,6 +1,7 @@
 package com.solvd;
 
 import com.solvd.domain.Employee;
+import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.persistence.impl.EmployeeRepositoryMybatisImpl;
 import com.solvd.service.EmployeeService;
 import com.solvd.service.impl.EmployeeServiceImpl;
@@ -8,7 +9,7 @@ import com.solvd.service.impl.EmployeeServiceImpl;
 import java.util.Date;
 
 public class EmployeeTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws EntityNotFoundException {
 
         EmployeeService employeeService = new EmployeeServiceImpl(new EmployeeRepositoryMybatisImpl());
 

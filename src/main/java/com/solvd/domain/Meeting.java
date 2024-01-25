@@ -5,19 +5,18 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-@EqualsAndHashCode(of = "id")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Agreement {
+@EqualsAndHashCode(of = "id")
+public class Meeting {
     private long id;
-    private Date date;
-    private BigDecimal amount;
-    private String duration;
-    private String status;
+    private Date meetingDateTime;
+    private Date inquiryDate;
+    private String meetingStatus;
     private RealEstate realEstate;
-    private Client client;
+    private Client buyer;
+    private Employee employee;
 }

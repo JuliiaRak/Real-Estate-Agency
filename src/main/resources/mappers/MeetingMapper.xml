@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solvd.persistence.MeetingRepository">
+    <insert id="create" keyColumn="id" keyProperty="meeting.id" useGeneratedKeys="true">
+        INSERT INTO meetings (meeting_date_time, inquiry_date, meeting_status, real_estate_id, buyer_id, employee_id)
+        VALUES (#{meeting.meetingDateTime}, #{meeting.inquiryDate}, #{meeting.meetingStatus}, #{realEstateId}, #{buyerId}, #{employeeId})
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM meetings m WHERE m.id = #{id}
+    </delete>
+
+    <update id="update">
+        UPDATE meetings
+        SET
+        meeting_date_time = #{meeting.meetingDateTime},
+        inquiry_date = #{meeting.inquiryDate},
+        meeting_status = #{meeting.meetingStatus},
+        real_estate_id = #{realEstateId},
+        buyer_id = #{buyerId},
+        employee_id = #{employeeId}
+        WHERE
+        id = #{meeting.id}
+    </update>
+
+    <sql id="meetingSelect">
+        SELECT m.id, m.meeting_date_time, m.inquiry_date, m.meeting_status, m.real_estate_id, m.buyer_id, m.employee_id
+        FROM meetings m
+    </sql>
+
+    <select id="findById" resultMap="MeetingResultMap">
+        <include refid="meetingSelect"/>
+        WHERE m.id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="MeetingResultMap">
+        <include refid="meetingSelect"/>
+    </select>
+
+    <resultMap id="MeetingResultMap" type="com.solvd.domain.Meeting" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="meeting_date_time" property="meetingDateTime"/>
+        <result column="inquiry_date" property="inquiryDate"/>
+        <result column="meeting_status" property="meetingStatus"/>
+        <association property="realEstate" column="real_estate_id"
+                     javaType="com.solvd.domain.RealEstate"
+                     select="com.solvd.persistence.RealEstateRepository.findById"
+                     fetchType="eager">
+        </association>
+        <association property="buyer" column="buyer_id"
+                     javaType="com.solvd.domain.Client"
+                     select="com.solvd.persistence.ClientRepository.findById"
+                     fetchType="eager">
+        </association>
+        <association property="employee" column="employee_id"
+                     javaType="com.solvd.domain.Employee"
+                     select="com.solvd.persistence.EmployeeRepository.findById"
+                     fetchType="eager">
+        </association>
+    </resultMap>
+</mapper>

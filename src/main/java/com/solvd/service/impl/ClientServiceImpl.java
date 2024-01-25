@@ -47,6 +47,16 @@ public class ClientServiceImpl implements ClientService {
         return clientRepository.findAll();
     }
 
+    @Override
+    public Client getByEmail(String email) throws EntityNotFoundException {
+        return clientRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("Client", 0));
+    }
+
+    @Override
+    public Client getByPhoneNumber(String phoneNumber) throws EntityNotFoundException {
+        return clientRepository.findByPhoneNumber(phoneNumber).orElseThrow(() -> new EntityNotFoundException("Client", 0));
+    }
+
     private void checkEmailAndPhoneNumber(Client client) throws EmailAlreadyExistException, PhoneNumberAlreadyExistException {
         if (clientRepository.findByEmail(client.getEmail()).isPresent()) {
             throw new EmailAlreadyExistException("A customer with this email address already exists");

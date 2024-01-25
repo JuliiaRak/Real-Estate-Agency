@@ -14,4 +14,6 @@ public interface ClientService {
     void update(Client client) throws EntityNotFoundException;
     Client getById(long id) throws EntityNotFoundException;
     List<Client> getAll();
+    Client getByEmail(String email) throws EntityNotFoundException;
+    Client getByPhoneNumber(String phoneNumber) throws EntityNotFoundException;
 }

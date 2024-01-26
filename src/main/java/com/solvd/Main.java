@@ -26,6 +26,9 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class Main {
+    private static final ClientService CLIENT_SERVICE = new ClientServiceImpl();
+    private static final AddressService ADDRESS_SERVICE = new AddressServiceImpl();
+    private static final RealEstateService REAL_ESTATE_SERVICE = new RealEstateServiceImpl();
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -69,8 +72,7 @@ public class Main {
 
         Client client = builder.build();
         try {
-            ClientService clientService = new ClientServiceImpl();
-            clientService.create(client);
+            CLIENT_SERVICE.create(client);
         } catch (PhoneNumberAlreadyExistException | EmailAlreadyExistException e) {
             System.out.println(e.getMessage());
             return;
@@ -105,8 +107,8 @@ public class Main {
                     String phoneNumber = scanner.nextLine();
 
                     try {
-                        clientService.getByEmail(email);
-                        Client client = clientService.getByPhoneNumber(phoneNumber);
+                        CLIENT_SERVICE.getByEmail(email);
+                        Client client = CLIENT_SERVICE.getByPhoneNumber(phoneNumber);
 
                         System.out.println("Thank you for LogIn");
 
@@ -127,8 +129,7 @@ public class Main {
     public static void userActions(Scanner scanner, Client client) throws EntityNotFoundException, LinkAlreadyExistsException {
         boolean exitLoop = false;
 
-        AddressService addressService = new AddressServiceImpl();
-        RealEstateService realEstateService = new RealEstateServiceImpl();
+
 
         while (!exitLoop) {
             System.out.println("Now choose an action (write a number):");
@@ -162,7 +163,7 @@ public class Main {
                     realEstate.setSeller(client);
                     realEstate.setAddress(address);
 
-                    realEstateService.create(realEstate, client.getId());
+                    REAL_ESTATE_SERVICE.create(realEstate, client.getId());
                     break;
                 case "2":
                     System.out.println("Choose what type of Real Estate you are looking for\n" +
@@ -178,14 +179,14 @@ public class Main {
                             realEstateType = RealEstateType.BUILDING;
                             break;
                     }
-                    System.out.println(realEstateService.getAllByType(realEstateType));
+                    System.out.println(REAL_ESTATE_SERVICE.getAllByType(realEstateType));
                     break;
                 case "3":
-                    System.out.println(realEstateService.getAll());
+                    System.out.println(REAL_ESTATE_SERVICE.getAll());
                     // Handle viewing all real estates
                     break;
                 case "4":
-                    System.out.println(realEstateService.getAllBySeller(client));
+                    System.out.println(REAL_ESTATE_SERVICE.getAllBySeller(client));
                 case "5":
                     System.out.println("Do you really want to delete your account?");
                     System.out.println("Choose an action (write a number):");

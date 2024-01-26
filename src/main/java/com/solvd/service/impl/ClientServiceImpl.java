@@ -59,12 +59,12 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client getByEmail(String email) throws EntityNotFoundException {
-        return clientRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("Client", 0));
+        return clientRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("Client"));
     }
 
     @Override
     public Client getByPhoneNumber(String phoneNumber) throws EntityNotFoundException {
-        return clientRepository.findByPhoneNumber(phoneNumber).orElseThrow(() -> new EntityNotFoundException("Client", 0));
+        return clientRepository.findByPhoneNumber(phoneNumber).orElseThrow(() -> new EntityNotFoundException("Client"));
     }
 
     private void checkEmailAndPhoneNumber(Client client) throws EmailAlreadyExistException, PhoneNumberAlreadyExistException {

@@ -31,6 +31,7 @@ import java.util.Date;
 
 
 public class AgreementTest {
+
     public static void main(String[] args) throws EntityNotFoundException, LinkAlreadyExistsException, PhoneNumberAlreadyExistsException, EmailAlreadyExistsException {
         //creating instances
         Client client = new Client();
@@ -43,79 +44,79 @@ public class AgreementTest {
         client.setLastName("Polichuk");
         client.setRegistrationDate(new Date());
 
-        seller.setFirstName("Ivan");
-        seller.setLastName("Kulikov");
-        seller.setEmail("ikd0004233124003v@gmail.com");
-        seller.setPhoneNumber("1202-1252342");
-        seller.setEmail("ikd46778ev@gmail.com");
-        seller.setPhoneNumber("+232-2542");
-        seller.setRegistrationDate(new Date());
+                seller.setFirstName("Ivan");
+                seller.setLastName("Kulikov");
+                seller.setEmail("ikd0004233124003v@gmail.com");
+                seller.setPhoneNumber("1202-1252342");
+                seller.setEmail("ikd46778ev@gmail.com");
+                seller.setPhoneNumber("+232-2542");
+                seller.setRegistrationDate(new Date());
 
-        Address address = new Address();
-        address.setCountry("Ukraine");
-        address.setRegion("central region");
-        address.setCity("Kyiv");
-        address.setStreet("Kyiv street");
-        address.setBuilding("2");
-        address.setApartment("99");
+                Address address = new Address();
+                address.setCountry("Ukraine");
+                address.setRegion("central region");
+                address.setCity("Kyiv");
+                address.setStreet("Kyiv street");
+                address.setBuilding("2");
+                address.setApartment("99");
 
-        RealEstate realEstate = new RealEstate();
-        realEstate.setRealEstateType(RealEstateType.APARTMENT);
-        realEstate.setPrice(BigDecimal.valueOf(156000));
-        realEstate.setMetrics("3245");
-        realEstate.setDescription("Very cool apartment");
-        realEstate.setRooms(5);
-        realEstate.setAvailable(true);
-        realEstate.setAddress(address);
-        realEstate.setSeller(seller);
+                RealEstate realEstate = new RealEstate();
+                realEstate.setRealEstateType(RealEstateType.APARTMENT);
+                realEstate.setPrice(BigDecimal.valueOf(156000));
+                realEstate.setMetrics("3245");
+                realEstate.setDescription("Very cool apartment");
+                realEstate.setRooms(5);
+                realEstate.setAvailable(true);
+                realEstate.setAddress(address);
+                realEstate.setSeller(seller);
 
 
-        Agreement agreement = new Agreement();
-        Agreement agreement2 =  new Agreement();
-        agreement.setAmount(BigDecimal.valueOf(37218));
-        agreement.setDate(new Date());
-        agreement.setClient(client);
-        agreement.setStatus("Paid");
-        agreement.setRealEstate(realEstate);
-        agreement.setDuration("Indefinite");
+                Agreement agreement = new Agreement();
+                Agreement agreement2 =  new Agreement();
+                agreement.setAmount(BigDecimal.valueOf(37218));
+                agreement.setDate(new Date());
+                agreement.setClient(client);
+                agreement.setStatus("Paid");
+                agreement.setRealEstate(realEstate);
+                agreement.setDuration("Indefinite");
 
-        agreement2.setAmount(BigDecimal.valueOf(500));
-        agreement2.setDate(new Date(2023-11-02));
-        agreement2.setClient(client);
-        agreement2.setStatus("unpaid");
-        agreement2.setRealEstate(realEstate);
-        agreement2.setDuration("3 months");
-        agreement.setDuration("3 month");
+                agreement2.setAmount(BigDecimal.valueOf(500));
+                agreement2.setDate(new Date(2023-11-02));
+                agreement2.setClient(client);
+                agreement2.setStatus("unpaid");
+                agreement2.setRealEstate(realEstate);
+                agreement2.setDuration("3 months");
+                agreement.setDuration("3 month");
 
-        //creating repositories, services
+                //creating repositories, services
 
-        ClientRepository clientRepository = new ClientRepositoryMybatisImpl();
-        ClientService clientService = new ClientServiceImpl();
-        clientService.create(client);
-        clientService.create(seller);
-        try {
-            clientService.create(client);
-            clientService.create(seller);
-        } catch (EmailAlreadyExistsException | PhoneNumberAlreadyExistsException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(client);
+                ClientRepository clientRepository = new ClientRepositoryMybatisImpl();
+                ClientService clientService = new ClientServiceImpl();
+                clientService.create(client);
+                clientService.create(seller);
+                try {
+                        clientService.create(client);
+                        clientService.create(seller);
+                } catch (EmailAlreadyExistsException | PhoneNumberAlreadyExistsException e) {
+                        throw new RuntimeException(e);
+                }
+                System.out.println(client);
 
-        AddressRepository addressRepository = new AddressRepositoryMybatisImpl();
-        AddressService addressService = new AddressServiceImpl();
-        addressService.create(address);
+                AddressRepository addressRepository = new AddressRepositoryMybatisImpl();
+                AddressService addressService = new AddressServiceImpl();
+                addressService.create(address);
 
-        System.out.println(address);
+                System.out.println(address);
 
-        RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
-        RealEstateService realEstateService = new RealEstateServiceImpl();
-        realEstateService.create(realEstate, client.getId());
-        //System.out.println(realEstate);
+                RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
+                RealEstateService realEstateService = new RealEstateServiceImpl();
+                realEstateService.create(realEstate, client.getId());
+                //System.out.println(realEstate);
 
-        AgreementRepository agreementRepository = new AgreementRepositoryMyBatisImpl();
-        AgreementService agreementService = new AgreementServiceImpl();
+                AgreementRepository agreementRepository = new AgreementRepositoryMyBatisImpl();
+                AgreementService agreementService = new AgreementServiceImpl();
 
-        //check CRUD operations
+                //check CRUD operations
 
         /*agreement.setDuration("4 months");
         agreementService.update(agreement);
@@ -168,16 +169,16 @@ public class AgreementTest {
             System.out.println(agrm);
         }*/
 
-        //check the validation
-        agreementService.create(agreement2, realEstate.getId(), client.getId());
-        System.out.println(realEstateService.getById(realEstate.getId()));
+                //check the validation
+                agreementService.create(agreement2, realEstate.getId(), client.getId());
+                System.out.println(realEstateService.getById(realEstate.getId()));
 
-        System.out.println(agreement2);
+                System.out.println(agreement2);
 
-        //List<Agreement> agreements = agreementService.getAll();
-        //for (Agreement agrm : agreements) {
-         //   System.out.println(agrm);
-       // }
-    }
+                //List<Agreement> agreements = agreementService.getAll();
+                //for (Agreement agrm : agreements) {
+                //   System.out.println(agrm);
+                // }
+        }
 
 }

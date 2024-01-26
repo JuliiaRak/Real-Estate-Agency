@@ -1,9 +1,9 @@
 package com.solvd;
 
 import com.solvd.domain.Client;
-import com.solvd.domain.exceptions.EmailAlreadyExistException;
+import com.solvd.domain.exceptions.EmailAlreadyExistsException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
-import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
+import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
 import com.solvd.persistence.ClientRepository;
 import com.solvd.persistence.impl.ClientRepositoryMybatisImpl;
 import com.solvd.service.ClientService;
@@ -39,9 +39,9 @@ public class ClientTest {
         try {
             clientService.create(client);
             clientService.create(client2);
-        } catch (EmailAlreadyExistException e) {
+        } catch (EmailAlreadyExistsException e) {
             throw new RuntimeException(e);
-        } catch (PhoneNumberAlreadyExistException e) {
+        } catch (PhoneNumberAlreadyExistsException e) {
             System.out.println(e.getMessage());
         }
 

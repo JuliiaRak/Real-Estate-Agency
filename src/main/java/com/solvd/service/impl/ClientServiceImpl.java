@@ -1,9 +1,9 @@
 package com.solvd.service.impl;
 
 import com.solvd.domain.Client;
-import com.solvd.domain.exceptions.EmailAlreadyExistException;
+import com.solvd.domain.exceptions.EmailAlreadyExistsException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
-import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
+import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
 import com.solvd.persistence.ClientRepository;
 import com.solvd.persistence.impl.ClientRepositoryMybatisImpl;
 import com.solvd.service.ClientService;
@@ -26,7 +26,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void create(Client client) throws EmailAlreadyExistException, PhoneNumberAlreadyExistException {
+    public void create(Client client) throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException {
         validate(client);
         checkEmailAndPhoneNumber(client);
 
@@ -67,13 +67,13 @@ public class ClientServiceImpl implements ClientService {
         return clientRepository.findByPhoneNumber(phoneNumber).orElseThrow(() -> new EntityNotFoundException("Client"));
     }
 
-    private void checkEmailAndPhoneNumber(Client client) throws EmailAlreadyExistException, PhoneNumberAlreadyExistException {
+    private void checkEmailAndPhoneNumber(Client client) throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException {
         if (clientRepository.findByEmail(client.getEmail()).isPresent()) {
-            throw new EmailAlreadyExistException("A customer with this email address already exists");
+            throw new EmailAlreadyExistsException("A customer with this email address already exists");
         }
 
         if (clientRepository.findByPhoneNumber(client.getPhoneNumber()).isPresent()) {
-            throw new PhoneNumberAlreadyExistException("A customer with this phone number already exists");
+            throw new PhoneNumberAlreadyExistsException("A customer with this phone number already exists");
         }
     }
 

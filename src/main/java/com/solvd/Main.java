@@ -4,16 +4,10 @@ import com.solvd.domain.Address;
 import com.solvd.domain.Client;
 import com.solvd.domain.RealEstate;
 import com.solvd.domain.enums.RealEstateType;
-import com.solvd.domain.exceptions.EmailAlreadyExistException;
+import com.solvd.domain.exceptions.EmailAlreadyExistsException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.domain.exceptions.LinkAlreadyExistsException;
-import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
-import com.solvd.persistence.AddressRepository;
-import com.solvd.persistence.ClientRepository;
-import com.solvd.persistence.RealEstateRepository;
-import com.solvd.persistence.impl.AddressRepositoryMybatisImpl;
-import com.solvd.persistence.impl.ClientRepositoryMybatisImpl;
-import com.solvd.persistence.impl.RealEstateRepositoryMybatisImpl;
+import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
 import com.solvd.service.AddressService;
 import com.solvd.service.ClientService;
 import com.solvd.service.RealEstateService;
@@ -29,6 +23,7 @@ public class Main {
     private static final ClientService CLIENT_SERVICE = new ClientServiceImpl();
     private static final AddressService ADDRESS_SERVICE = new AddressServiceImpl();
     private static final RealEstateService REAL_ESTATE_SERVICE = new RealEstateServiceImpl();
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -73,7 +68,7 @@ public class Main {
         Client client = builder.build();
         try {
             CLIENT_SERVICE.create(client);
-        } catch (PhoneNumberAlreadyExistException | EmailAlreadyExistException e) {
+        } catch (PhoneNumberAlreadyExistsException | EmailAlreadyExistsException e) {
             System.out.println(e.getMessage());
             return;
         }
@@ -89,7 +84,6 @@ public class Main {
 
     private static void login(Scanner scanner) {
         boolean exitLoop = false;
-        ClientService clientService = new ClientServiceImpl();
 
         while (!exitLoop) {
             System.out.println("Now choose an action (write a number):");
@@ -128,9 +122,6 @@ public class Main {
 
     public static void userActions(Scanner scanner, Client client) throws EntityNotFoundException, LinkAlreadyExistsException {
         boolean exitLoop = false;
-
-
-
         while (!exitLoop) {
             System.out.println("Now choose an action (write a number):");
             System.out.println("1. Put new real estate up for sale.");
@@ -178,6 +169,8 @@ public class Main {
                         case "2":
                             realEstateType = RealEstateType.BUILDING;
                             break;
+                        default:
+                            System.out.println("Invalid option. Please Enter '1' or '2' ");
                     }
                     System.out.println(REAL_ESTATE_SERVICE.getAllByType(realEstateType));
                     break;

@@ -5,10 +5,10 @@ import com.solvd.domain.Agreement;
 import com.solvd.domain.Client;
 import com.solvd.domain.RealEstate;
 import com.solvd.domain.enums.RealEstateType;
-import com.solvd.domain.exceptions.EmailAlreadyExistException;
+import com.solvd.domain.exceptions.EmailAlreadyExistsException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.domain.exceptions.LinkAlreadyExistsException;
-import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
+import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
 import com.solvd.persistence.AddressRepository;
 import com.solvd.persistence.AgreementRepository;
 import com.solvd.persistence.ClientRepository;
@@ -31,17 +31,18 @@ import java.util.Date;
 
 
 public class AgreementTest {
-        public static void main(String[] args) throws EntityNotFoundException, LinkAlreadyExistsException, PhoneNumberAlreadyExistException, EmailAlreadyExistException {
-                //creating instances
-                Client client = new Client();
-                Client seller = new Client();
-                client.setEmail("00aj20121890231129@gmail.com");
-                client.setPhoneNumber("0851000012");
-                client.setEmail("aj2619@gmail.com");
-                client.setPhoneNumber("008082");
-                client.setFirstName("Anna");
-                client.setLastName("Polichuk");
-                client.setRegistrationDate(new Date());
+
+    public static void main(String[] args) throws EntityNotFoundException, LinkAlreadyExistsException, PhoneNumberAlreadyExistsException, EmailAlreadyExistsException {
+        //creating instances
+        Client client = new Client();
+        Client seller = new Client();
+        client.setEmail("00aj20121890231129@gmail.com");
+        client.setPhoneNumber("0851000012");
+        client.setEmail("aj2619@gmail.com");
+        client.setPhoneNumber("008082");
+        client.setFirstName("Anna");
+        client.setLastName("Polichuk");
+        client.setRegistrationDate(new Date());
 
                 seller.setFirstName("Ivan");
                 seller.setLastName("Kulikov");
@@ -96,7 +97,7 @@ public class AgreementTest {
                 try {
                         clientService.create(client);
                         clientService.create(seller);
-                } catch (EmailAlreadyExistException | PhoneNumberAlreadyExistException e) {
+                } catch (EmailAlreadyExistsException | PhoneNumberAlreadyExistsException e) {
                         throw new RuntimeException(e);
                 }
                 System.out.println(client);

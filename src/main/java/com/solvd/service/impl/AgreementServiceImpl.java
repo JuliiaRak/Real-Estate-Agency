@@ -61,10 +61,7 @@ public class AgreementServiceImpl implements AgreementService {
 
         @Override
         public List<Agreement> getAll () throws EntityNotFoundException {
-            List<Agreement> allAgreements = agreementRepository.findAll();
-            if (!allAgreements.isEmpty()) {
-                return allAgreements;
-            } else throw new RuntimeException("There is no Argeement at all");
+            return agreementRepository.findAll();
 
         }
 
@@ -91,3 +88,4 @@ public class AgreementServiceImpl implements AgreementService {
         }
 
 }
+

@@ -16,5 +16,3 @@ public interface AgreementService {
 
     List<Agreement> getAll() throws EntityNotFoundException;
 }
-
-

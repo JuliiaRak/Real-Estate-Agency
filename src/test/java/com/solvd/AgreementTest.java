@@ -34,6 +34,7 @@ public class AgreementTest {
     public static void main(String[] args) throws EntityNotFoundException, PhoneNumberAlreadyExistException, EmailAlreadyExistException {
 
 
+
         //creating instances
         Client client = new Client();
         Client seller = new Client();
@@ -93,6 +94,7 @@ public class AgreementTest {
 
         ClientRepository clientRepository = new ClientRepositoryMybatisImpl();
         ClientService clientService = new ClientServiceImpl(clientRepository);
+
         clientService.create(client);
         clientService.create(seller);
         try {
@@ -127,6 +129,8 @@ public class AgreementTest {
         System.out.println(agreementService.getById(5));
 
 =======
+=======
+>>>>>>> 84077952e77b12b9ebae351c307703160ee07d06
         System.out.println(realEstate);
 
         AgreementRepository agreementRepository = new AgreementRepositoryMyBatisImpl();
@@ -145,12 +149,16 @@ public class AgreementTest {
         System.out.println(agreementService.getById(5));
 
 
+<<<<<<< HEAD
+>>>>>>> 84077952e77b12b9ebae351c307703160ee07d06
+=======
 >>>>>>> 84077952e77b12b9ebae351c307703160ee07d06
         agreementService.deleteById(1);
         agreementService.deleteById(2);
         agreementService.deleteById(3);
         agreementService.deleteById(4);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         List<Agreement> agreements = agreementService.getAll();
         for (Agreement agrm : agreements) {

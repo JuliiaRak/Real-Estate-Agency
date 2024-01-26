@@ -11,4 +11,6 @@ public interface EmployeeRepository {
     void update(Employee employee);
     Optional<Employee> findById(long id);
     List<Employee> findAll();
+    Optional<Employee> findByEmail(String email);
+    Optional<Employee> findByPhoneNumber(String phoneNember);
 }

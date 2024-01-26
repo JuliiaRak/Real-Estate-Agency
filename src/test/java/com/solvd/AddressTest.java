@@ -1,13 +1,14 @@
 package com.solvd;
 
 import com.solvd.domain.Address;
+import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.persistence.AddressRepository;
 import com.solvd.persistence.impl.AddressRepositoryMybatisImpl;
 import com.solvd.service.AddressService;
 import com.solvd.service.impl.AddressServiceImpl;
 
 public class AddressTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws EntityNotFoundException {
         Address address = new Address();
         Address address2 = new Address();
         address.setCountry("Ukraine");

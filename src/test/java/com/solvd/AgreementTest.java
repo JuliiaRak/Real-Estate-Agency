@@ -5,6 +5,9 @@ import com.solvd.domain.Agreement;
 import com.solvd.domain.Client;
 import com.solvd.domain.RealEstate;
 import com.solvd.domain.enums.RealEstateType;
+import com.solvd.domain.exceptions.EmailAlreadyExistException;
+import com.solvd.domain.exceptions.EntityNotFoundException;
+import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
 import com.solvd.persistence.AddressRepository;
 import com.solvd.persistence.AgreementRepository;
 import com.solvd.persistence.ClientRepository;
@@ -28,13 +31,16 @@ import java.util.List;
 
 
 public class AgreementTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws EntityNotFoundException, PhoneNumberAlreadyExistException, EmailAlreadyExistException {
+
 
         //creating instances
         Client client = new Client();
         Client seller = new Client();
         client.setEmail("00aj20121890231129@gmail.com");
         client.setPhoneNumber("0851000012");
+        client.setEmail("aj2619@gmail.com");
+        client.setPhoneNumber("008082");
         client.setFirstName("Anna");
         client.setLastName("Polichuk");
         client.setRegistrationDate(new Date());
@@ -43,6 +49,8 @@ public class AgreementTest {
         seller.setLastName("Kulikov");
         seller.setEmail("ikd0004233124003v@gmail.com");
         seller.setPhoneNumber("1202-1252342");
+        seller.setEmail("ikd46778ev@gmail.com");
+        seller.setPhoneNumber("+232-2542");
         seller.setRegistrationDate(new Date());
 
         Address address = new Address();
@@ -79,6 +87,7 @@ public class AgreementTest {
         agreement2.setStatus("unpaid");
         agreement2.setRealEstate(realEstate);
         agreement2.setDuration("3 months");
+        agreement.setDuration("3 month");
 
         //creating repositories, services
 
@@ -86,12 +95,19 @@ public class AgreementTest {
         ClientService clientService = new ClientServiceImpl(clientRepository);
         clientService.create(client);
         clientService.create(seller);
+        try {
+            clientService.create(client);
+            clientService.create(seller);
+        } catch (EmailAlreadyExistException | PhoneNumberAlreadyExistException e) {
+            throw new RuntimeException(e);
+        }
         System.out.println(client);
 
         AddressRepository addressRepository = new AddressRepositoryMybatisImpl();
         AddressService addressService = new AddressServiceImpl(addressRepository);
         addressService.create(address);
-        //System.out.println(address);
+
+        System.out.println(address);
 
         RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
         RealEstateService realEstateService = new RealEstateServiceImpl(realEstateRepository, addressService);
@@ -110,11 +126,32 @@ public class AgreementTest {
 
         System.out.println(agreementService.getById(5));
 
+=======
+        System.out.println(realEstate);
+
+        AgreementRepository agreementRepository = new AgreementRepositoryMyBatisImpl();
+        AgreementService agreementService = new AgreementServiceImpl(agreementRepository);
+        agreementService.create(agreement, realEstate.getId(), client.getId());
+        System.out.println(agreement);
+
+        //check CRUD operations
+
+        agreement.setDuration("4 months");
+        agreementService.update(agreement);
+
+
+
+
+        System.out.println(agreementService.getById(5));
+
+
+>>>>>>> 84077952e77b12b9ebae351c307703160ee07d06
         agreementService.deleteById(1);
         agreementService.deleteById(2);
         agreementService.deleteById(3);
         agreementService.deleteById(4);
 
+<<<<<<< HEAD
         List<Agreement> agreements = agreementService.getAll();
         for (Agreement agrm : agreements) {
             System.out.println(agrm);
@@ -127,6 +164,10 @@ public class AgreementTest {
 
         System.out.println(agreement2);
 
+        //List<Agreement> agreements = agreementService.getAll();
+        //for (Agreement agrm : agreements) {
+         //   System.out.println(agrm);
+       // }
     }
 
 }

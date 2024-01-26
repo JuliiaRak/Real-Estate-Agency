@@ -15,4 +15,6 @@ public interface ClientService {
     List<Client> getAll();
     Client getByEmail(String email) throws EntityNotFoundException;
     Client getByPhoneNumber(String phoneNumber) throws EntityNotFoundException;
+
+    boolean existsById(long id);
 }

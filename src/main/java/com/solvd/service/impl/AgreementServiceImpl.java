@@ -5,6 +5,7 @@ import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.persistence.AgreementRepository;
 import com.solvd.persistence.impl.AgreementRepositoryMyBatisImpl;
 import com.solvd.service.AgreementService;
+import com.solvd.service.ClientService;
 import com.solvd.service.RealEstateService;
 import com.solvd.service.validators.Validator;
 import com.solvd.service.validators.bigint.MaxLongValidator;
@@ -21,20 +22,34 @@ import java.util.List;
 public class AgreementServiceImpl implements AgreementService {
     private final AgreementRepository agreementRepository;
     private final RealEstateService realEstateService;
+    private final ClientService clientService;
 
     public AgreementServiceImpl() {
         this.agreementRepository = new AgreementRepositoryMyBatisImpl();
         this.realEstateService = new RealEstateServiceImpl();
+        this.clientService = new ClientServiceImpl();
     }
 
     @Override
-    public void create(Agreement agreement, long realEstateId, long clientId) {
+    public void create(Agreement agreement, long realEstateId, long clientId) throws EntityNotFoundException {
         validate(agreement);
+        checkRealEstate(realEstateId);
+        checkClient(clientId);
 
         agreementRepository.create(agreement, realEstateId, clientId);
 
-        if (agreement.getDuration().contains("Indefinite")) {
-            realEstateService.deleteById(realEstateId);
+        realEstateService.hideById(realEstateId);
+    }
+
+    private void checkRealEstate(long realEstateId) throws EntityNotFoundException {
+        if (!realEstateService.existsById(realEstateId)) {
+            throw new EntityNotFoundException("Real estate");
+        }
+    }
+
+    private void checkClient(long clientId) throws EntityNotFoundException {
+        if (!clientService.existsById(clientId)) {
+            throw new EntityNotFoundException("Client");
         }
     }
 

@@ -18,4 +18,6 @@ public interface RealEstateService {
     List<RealEstate> getAll();
 
     boolean existsById(long id);
+
+    void hideById(long id) throws EntityNotFoundException;
 }

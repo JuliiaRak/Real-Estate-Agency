@@ -63,6 +63,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findAll();
     }
 
+    @Override
+    public boolean existsById(long id) {
+        return employeeRepository.findById(id).isPresent();
+    }
+
     private void validate(Employee employee) {
         Validator<Object> objectValidator = new NotNullObjectValidator();
         objectValidator.validate("employee", employee);

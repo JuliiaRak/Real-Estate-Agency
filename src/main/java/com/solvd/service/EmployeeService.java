@@ -13,4 +13,5 @@ public interface EmployeeService {
     void update(Employee employee) throws EmailAlreadyExistsException, EntityNotFoundException, PhoneNumberAlreadyExistsException;
     Employee getById(long id) throws EntityNotFoundException;
     List<Employee> getAll();
+    boolean existsById(long id);
 }

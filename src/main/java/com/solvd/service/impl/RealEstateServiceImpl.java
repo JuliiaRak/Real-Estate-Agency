@@ -77,6 +77,13 @@ public class RealEstateServiceImpl implements RealEstateService {
         return realEstateRepository.findById(id).isPresent();
     }
 
+    @Override
+    public void hideById(long id) throws EntityNotFoundException {
+        RealEstate realEstate = getById(id);
+        realEstate.setAvailable(false);
+        update(realEstate);
+    }
+
     public void validate(RealEstate realEstate) {
         Validator<Object> objectValidator = new NotNullObjectValidator();
         objectValidator.validate("real estate", realEstate);

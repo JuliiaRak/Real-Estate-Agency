@@ -169,11 +169,13 @@ public class Main {
                         case "2":
                             realEstateType = RealEstateType.BUILDING;
                             break;
-                        default:
-                            System.out.println("Invalid option. Please Enter '1' or '2' ");
                     }
-                    System.out.println(REAL_ESTATE_SERVICE.getAllByType(realEstateType));
-                    break;
+                    try {
+                        System.out.println(REAL_ESTATE_SERVICE.getAllByType(realEstateType));
+                    } catch (Exception e) {
+                        System.out.println("Invalid option. Please Enter '1' or '2' ");
+                    }
+
                 case "3":
                     System.out.println(REAL_ESTATE_SERVICE.getAll());
                     // Handle viewing all real estates

@@ -29,8 +29,9 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("Welcome to the Real Estate Agency console app.");
-            System.out.println("Write '0' to register as a new client or '1' to login and confirm your identity.");
+            System.out.println("Welcome to the Real Estate Agency console app. Please choose an action");
+            System.out.println("Enter '0' to register as a new client");
+            System.out.println("Enter '1' to login and confirm your identity.");
 
             String input = scanner.nextLine();
 
@@ -77,6 +78,52 @@ public class Main {
 
         System.out.println("Thank you for registration!");
 
+        userActions(scanner, client);
+    }
+
+    private static void login(Scanner scanner) {
+        boolean exitLoop = false;
+
+        while (!exitLoop) {
+            System.out.println("Now choose an action (write a number):");
+            System.out.println("1. Enter your email and phone number.");
+            System.out.println("2. Exit");
+            System.out.print("Enter your choice: ");
+
+            String choice = scanner.nextLine();
+
+            ClientRepository clientRepository = new ClientRepositoryMybatisImpl();
+            ClientService clientService = new ClientServiceImpl(clientRepository);
+
+            switch (choice) {
+                case "1":
+                    System.out.print("Please enter your email: ");
+                    String email = scanner.nextLine();
+                    System.out.print("Please Enter your phone number: ");
+                    String phoneNumber = scanner.nextLine();
+
+                    try {
+                        clientService.getByEmail(email);
+                        Client client = clientService.getByPhoneNumber(phoneNumber);
+
+                        System.out.println("Thank you for LogIn");
+
+                        userActions(scanner, client);
+                    } catch (EntityNotFoundException e) {
+                        System.out.println(e.getMessage());
+                        break;
+                    }
+                    break;
+                case "2":
+                    exitLoop = true;
+                    break;
+                default:
+                    System.out.println("Invalid option. Please enter '1', '2'");
+            }
+        }
+    }
+
+    public static void userActions(Scanner scanner, Client client) {
         boolean exitLoop = false;
 
         while (!exitLoop) {
@@ -128,51 +175,10 @@ public class Main {
                     exitLoop = true;
                     break;
                 default:
-                    System.out.println("Invalid option. Please enter '1', '2', or '3'.");
+                    System.out.println("Invalid option. Please enter '1', '2', '3' or '4'.");
             }
 
             // Add more cases for other actions as needed
-        }
-    }
-
-    private static void login(Scanner scanner) {
-        boolean exitLoop = false;
-
-        while (!exitLoop) {
-            System.out.println("Now choose an action (write a number):");
-            System.out.println("1. Enter your email and phone number.");
-            System.out.println("2. Exit");
-            System.out.print("Enter your choice: ");
-
-            String choice = scanner.nextLine();
-
-            ClientRepository clientRepository = new ClientRepositoryMybatisImpl();
-            ClientService clientService = new ClientServiceImpl(clientRepository);
-
-            switch (choice) {
-                case "1":
-                    System.out.print("Please enter your email: ");
-                    String email = scanner.nextLine();
-                    System.out.print("Please Enter your phone number: ");
-                    String phoneNumber = scanner.nextLine();
-
-                    try {
-                        clientService.getByEmail(email);
-                        Client client = clientService.getByPhoneNumber(phoneNumber);
-
-                        System.out.println("Thank you for LogIn");
-
-                    } catch (EntityNotFoundException e) {
-                        System.out.println(e.getMessage());
-                        break;
-                    }
-                    break;
-                case "2":
-                    exitLoop = true;
-                    break;
-                default:
-                    System.out.println("Invalid option. Please enter '1', '2'");
-            }
         }
     }
 

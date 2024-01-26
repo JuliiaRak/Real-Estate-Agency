@@ -6,6 +6,37 @@ import com.solvd.domain.RealEstate;
 import com.solvd.domain.enums.RealEstateType;
 import com.solvd.domain.exceptions.EmailAlreadyExistException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
+<<<<<<< HEAD
+=======
+import com.solvd.domain.exceptions.LinkAlreadyExistsException;
+>>>>>>> 0d2f2cbc9ed21ab901991fac39171141a97ba074
+import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
+import com.solvd.persistence.AddressRepository;
+import com.solvd.persistence.ClientRepository;
+import com.solvd.persistence.RealEstateRepository;
+import com.solvd.persistence.impl.AddressRepositoryMybatisImpl;
+import com.solvd.persistence.impl.ClientRepositoryMybatisImpl;
+import com.solvd.persistence.impl.RealEstateRepositoryMybatisImpl;
+import com.solvd.service.AddressService;
+import com.solvd.service.ClientService;
+import com.solvd.service.RealEstateService;
+import com.solvd.service.impl.AddressServiceImpl;
+import com.solvd.service.impl.ClientServiceImpl;
+import com.solvd.service.impl.RealEstateServiceImpl;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.Scanner;
+
+package com.solvd;
+
+import com.solvd.domain.Address;
+import com.solvd.domain.Client;
+import com.solvd.domain.RealEstate;
+import com.solvd.domain.enums.RealEstateType;
+import com.solvd.domain.exceptions.EmailAlreadyExistException;
+import com.solvd.domain.exceptions.EntityNotFoundException;
+import com.solvd.domain.exceptions.LinkAlreadyExistsException;
 import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
 import com.solvd.persistence.AddressRepository;
 import com.solvd.persistence.ClientRepository;
@@ -68,8 +99,7 @@ public class Main {
 
         Client client = builder.build();
         try {
-            ClientRepository clientRepository = new ClientRepositoryMybatisImpl();
-            ClientService clientService = new ClientServiceImpl(clientRepository);
+            ClientService clientService = new ClientServiceImpl();
             clientService.create(client);
         } catch (PhoneNumberAlreadyExistException | EmailAlreadyExistException e) {
             System.out.println(e.getMessage());
@@ -78,11 +108,16 @@ public class Main {
 
         System.out.println("Thank you for registration!");
 
-        userActions(scanner, client);
+        try {
+            userActions(scanner, client);
+        } catch (EntityNotFoundException | LinkAlreadyExistsException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void login(Scanner scanner) {
         boolean exitLoop = false;
+        ClientService clientService = new ClientServiceImpl();
 
         while (!exitLoop) {
             System.out.println("Now choose an action (write a number):");
@@ -91,9 +126,6 @@ public class Main {
             System.out.print("Enter your choice: ");
 
             String choice = scanner.nextLine();
-
-            ClientRepository clientRepository = new ClientRepositoryMybatisImpl();
-            ClientService clientService = new ClientServiceImpl(clientRepository);
 
             switch (choice) {
                 case "1":
@@ -109,9 +141,8 @@ public class Main {
                         System.out.println("Thank you for LogIn");
 
                         userActions(scanner, client);
-                    } catch (EntityNotFoundException e) {
+                    } catch (EntityNotFoundException | LinkAlreadyExistsException e) {
                         System.out.println(e.getMessage());
-                        break;
                     }
                     break;
                 case "2":
@@ -123,25 +154,22 @@ public class Main {
         }
     }
 
-    public static void userActions(Scanner scanner, Client client) {
+    public static void userActions(Scanner scanner, Client client) throws EntityNotFoundException, LinkAlreadyExistsException {
         boolean exitLoop = false;
+
+        AddressService addressService = new AddressServiceImpl();
+        RealEstateService realEstateService = new RealEstateServiceImpl();
 
         while (!exitLoop) {
             System.out.println("Now choose an action (write a number):");
             System.out.println("1. Put new real estate up for sale.");
             System.out.println("2. View real estate by type.");
             System.out.println("3. View all real estates.");
-            System.out.println("4. View my real estates.");
+            System.out.println("4. Delete account.");
             System.out.println("5. Exit");
             System.out.print("Enter your choice: ");
 
             String choice = scanner.nextLine();
-
-            AddressRepository addressRepository = new AddressRepositoryMybatisImpl();
-            AddressService addressService = new AddressServiceImpl(addressRepository);
-
-            RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
-            RealEstateService realEstateService = new RealEstateServiceImpl(realEstateRepository, addressService);
 
             switch (choice) {
                 case "1":
@@ -167,27 +195,29 @@ public class Main {
                     break;
                 case "2":
                     // Handle viewing real estate by type
-                    System.out.println("Input what type of apartment you are looking for\n" +
-                            "1. Apartment\n" +
-                            "2. Building");
-                    String typeChoice = scanner.nextLine();
-                    RealEstateType realEstateType =  null;
-                    switch (typeChoice) {
-                        case "1":
-                           realEstateType = RealEstateType.APARTMENT;
-                            break;
-                        case "2":
-                            realEstateType = RealEstateType.BUILDING;
-                            break;
-                    }
-                    System.out.println(realEstateService.getAllByType(realEstateType));
                     break;
                 case "3":
                     System.out.println(realEstateService.getAll());
                     // Handle viewing all real estates
                     break;
                 case "4":
-                    System.out.println(realEstateService.getAllBySeller(client));
+                    System.out.println("Do you really want to delete your account?");
+                    System.out.println("Choose an action (write a number):");
+                    System.out.println("1. YES");
+                    System.out.println("2. Exit");
+
+                    String userInput = scanner.nextLine();
+
+                    switch (userInput) {
+                        case "1":
+                            break;
+                        case "2":
+                            exitLoop = true;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
                 case "5":
                     exitLoop = true;
                     break;

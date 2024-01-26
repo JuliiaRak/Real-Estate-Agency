@@ -127,14 +127,14 @@ public class Main {
 
     public static void userActions(Scanner scanner, Client client) throws EntityNotFoundException, LinkAlreadyExistsException {
         boolean exitLoop = false;
-
         while (!exitLoop) {
             System.out.println("Now choose an action (write a number):");
             System.out.println("1. Put new real estate up for sale.");
             System.out.println("2. View real estate by type.");
             System.out.println("3. View all real estates.");
-            System.out.println("4. Delete account.");
-            System.out.println("5. Exit");
+            System.out.println("4. View my real estates");
+            System.out.println("5. Delete account.");
+            System.out.println("6. Exit");
             System.out.print("Enter your choice: ");
 
             String choice = scanner.nextLine();
@@ -162,13 +162,30 @@ public class Main {
                     REAL_ESTATE_SERVICE.create(realEstate, client.getId());
                     break;
                 case "2":
-                    // Handle viewing real estate by type
-                    break;
+                    System.out.println("Choose what type of Real Estate you are looking for\n" +
+                            "1. Apartament\n" +
+                            "2. Building");
+                    RealEstateType realEstateType = null;
+                    String typeChoice = scanner.nextLine();
+                    switch (typeChoice){
+                        case "1":
+                            realEstateType = RealEstateType.APARTMENT;
+                            System.out.println(REAL_ESTATE_SERVICE.getAllByType(realEstateType));
+                            break;
+                        case "2":
+                            realEstateType = RealEstateType.BUILDING;
+                            System.out.println(REAL_ESTATE_SERVICE.getAllByType(realEstateType));
+                            break;
+                        default:
+                            System.out.println("Invalid option. Please Enter '1' or '2' ");
+                    }
                 case "3":
                     System.out.println(REAL_ESTATE_SERVICE.getAll());
                     // Handle viewing all real estates
                     break;
                 case "4":
+                    System.out.println(REAL_ESTATE_SERVICE.getAllBySeller(client));
+                case "5":
                     System.out.println("Do you really want to delete your account?");
                     System.out.println("Choose an action (write a number):");
                     System.out.println("1. YES");
@@ -187,7 +204,7 @@ public class Main {
                             break;
                     }
                     break;
-                case "5":
+                case "6":
                     exitLoop = true;
                     break;
                 default:

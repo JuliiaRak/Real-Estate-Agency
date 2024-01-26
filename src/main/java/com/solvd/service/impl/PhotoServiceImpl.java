@@ -6,6 +6,7 @@ import com.solvd.persistence.PhotoRepository;
 import com.solvd.persistence.impl.PhotoRepositoryMybatisImpl;
 import com.solvd.service.PhotoService;
 import com.solvd.service.validators.Validator;
+import com.solvd.service.validators.object.NotNullObjectValidator;
 import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,9 @@ public class PhotoServiceImpl implements PhotoService {
     }
 
     private void validate(Photo photo) {
+        Validator<Object> objectValidator = new NotNullObjectValidator();
+        objectValidator.validate("photo", photo);
+
         Validator<String> validator = new NotEmptyStringValidator(new NotNullStringValidator());
         validator.validate("photo link", photo.getLink());
     }

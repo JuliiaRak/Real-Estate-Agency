@@ -14,6 +14,7 @@ import com.solvd.service.TagService;
 import com.solvd.service.validators.Validator;
 import com.solvd.service.validators.number.NotNegativeIntegerValidator;
 import com.solvd.service.validators.number.NotNegativeLongValidator;
+import com.solvd.service.validators.object.NotNullObjectValidator;
 import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
 import com.solvd.service.validators.string.SizeStringValidator;
@@ -74,7 +75,11 @@ public class RealEstateServiceImpl implements RealEstateService {
         return realEstateRepository.findById(id).isPresent();
     }
 
-    private void validate(RealEstate realEstate) {
+    public void validate(RealEstate realEstate) {
+        Validator<Object> objectValidator = new NotNullObjectValidator();
+        objectValidator.validate("real estate", realEstate);
+        objectValidator.validate("price", realEstate.getPrice());
+
         Validator<String> stringValidator = new SizeStringValidator(15, new NotEmptyStringValidator(new NotNullStringValidator()));
         stringValidator.validate("metrics", realEstate.getMetrics());
 

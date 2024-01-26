@@ -10,6 +10,7 @@ import com.solvd.service.validators.Validator;
 import com.solvd.service.validators.date.NotNullDateValidator;
 import com.solvd.service.validators.date.PastDateValidator;
 import com.solvd.service.validators.number.NotNegativeLongValidator;
+import com.solvd.service.validators.object.NotNullObjectValidator;
 import com.solvd.service.validators.string.EmailStringValidator;
 import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
@@ -64,6 +65,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     private void validate(Employee employee) {
+        Validator<Object> objectValidator = new NotNullObjectValidator();
+        objectValidator.validate("employee", employee);
+
         Validator<String> notEmptyStringValidator = new NotEmptyStringValidator(new NotNullStringValidator());
         notEmptyStringValidator.validate("first name", employee.getFirstName());
         notEmptyStringValidator.validate("last name", employee.getLastName());

@@ -6,6 +6,7 @@ import com.solvd.persistence.AddressRepository;
 import com.solvd.persistence.impl.AddressRepositoryMybatisImpl;
 import com.solvd.service.AddressService;
 import com.solvd.service.validators.Validator;
+import com.solvd.service.validators.object.NotNullObjectValidator;
 import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
 import com.solvd.service.validators.string.SizeStringValidator;
@@ -52,6 +53,9 @@ public class AddressServiceImpl implements AddressService {
     }
 
     private void validate(Address address) {
+        Validator<Object> objectValidator = new NotNullObjectValidator();
+        objectValidator.validate("address", address);
+
         Validator<String> validator = new SizeStringValidator(new NotEmptyStringValidator(new NotNullStringValidator()));
         validator.validate("country", address.getCountry());
         validator.validate("region", address.getRegion());

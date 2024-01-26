@@ -9,6 +9,7 @@ import com.solvd.service.validators.Validator;
 import com.solvd.service.validators.date.FutureDateValidator;
 import com.solvd.service.validators.date.NotNullDateValidator;
 import com.solvd.service.validators.date.PastDateValidator;
+import com.solvd.service.validators.object.NotNullObjectValidator;
 import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
 import com.solvd.service.validators.string.SizeStringValidator;
@@ -58,6 +59,9 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     private void validate(Meeting meeting) {
+        Validator<Object> objectValidator = new NotNullObjectValidator();
+        objectValidator.validate("meeting", meeting);
+
         Validator<Date> notNullDateValidator = new NotNullDateValidator();
         Validator<Date> futureDateValidator = new FutureDateValidator(notNullDateValidator);
         futureDateValidator.validate("meeting date", meeting.getMeetingDateTime());

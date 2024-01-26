@@ -5,6 +5,7 @@ import com.solvd.persistence.TagRepository;
 import com.solvd.persistence.impl.TagRepositoryMybatisImpl;
 import com.solvd.service.TagService;
 import com.solvd.service.validators.Validator;
+import com.solvd.service.validators.object.NotNullObjectValidator;
 import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
 import com.solvd.service.validators.string.SizeStringValidator;
@@ -35,6 +36,9 @@ public class TagServiceImpl implements TagService {
     }
 
     private void validate(Tag tag) {
+        Validator<Object> objectValidator = new NotNullObjectValidator();
+        objectValidator.validate("tag", tag);
+
         Validator<String> validator = new SizeStringValidator(new NotEmptyStringValidator(new NotNullStringValidator()));
         validator.validate("Tag name", tag.getName());
     }

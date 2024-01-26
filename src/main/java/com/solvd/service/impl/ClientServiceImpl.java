@@ -10,6 +10,7 @@ import com.solvd.service.ClientService;
 import com.solvd.service.validators.Validator;
 import com.solvd.service.validators.date.NotNullDateValidator;
 import com.solvd.service.validators.date.PastDateValidator;
+import com.solvd.service.validators.object.NotNullObjectValidator;
 import com.solvd.service.validators.string.EmailStringValidator;
 import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
@@ -70,6 +71,9 @@ public class ClientServiceImpl implements ClientService {
     }
 
     private void validate(Client client) {
+        Validator<Object> objectValidator = new NotNullObjectValidator();
+        objectValidator.validate("client", client);
+
         Validator<String> notEmptyStringValidator = new NotEmptyStringValidator(new NotNullStringValidator());
         notEmptyStringValidator.validate("first name", client.getFirstName());
         notEmptyStringValidator.validate("last name", client.getLastName());

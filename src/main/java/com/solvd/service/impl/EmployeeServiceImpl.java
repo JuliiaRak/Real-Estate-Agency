@@ -1,7 +1,7 @@
 package com.solvd.service.impl;
 
 import com.solvd.domain.Employee;
-import com.solvd.domain.exceptions.EntityAlreadyExistExeption;
+import com.solvd.domain.exceptions.EmailAlreadyExistException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.persistence.EmployeeRepository;
 import com.solvd.persistence.impl.EmployeeRepositoryMybatisImpl;
@@ -28,7 +28,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void create(Employee employee) throws EntityAlreadyExistExeption {
+    public void create(Employee employee) throws EmailAlreadyExistException {
         validate(employee);
         employeeEmailAndPhoneNumberNotExistYetCheck(employee);
 
@@ -41,7 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void update(Employee employee) throws EntityAlreadyExistExeption, EntityNotFoundException {
+    public void update(Employee employee) throws EmailAlreadyExistException, EntityNotFoundException {
         validate(employee);
         employeeEmailAndPhoneNumberNotExistYetCheck(employee);
 
@@ -75,13 +75,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         integerValidator.validate("salary", employee.getSalary());
     }
 
-    private void employeeEmailAndPhoneNumberNotExistYetCheck(Employee employee) throws EntityAlreadyExistExeption {
+    private void employeeEmailAndPhoneNumberNotExistYetCheck(Employee employee) throws EmailAlreadyExistException {
         if (employeeRepository.findByEmail(employee.getEmail()).isPresent()) {
-            throw new EntityAlreadyExistExeption("Employee", "email", employee.getEmail());
+            throw new EmailAlreadyExistException("Employee", "email", employee.getEmail());
         }
 
         if (employeeRepository.findByPhoneNumber(employee.getPhoneNumber()).isPresent()) {
-            throw new EntityAlreadyExistExeption("Employee", "phone number", employee.getPhoneNumber());
+            throw new EmailAlreadyExistException("Employee", "phone number", employee.getPhoneNumber());
         }
     }
 }

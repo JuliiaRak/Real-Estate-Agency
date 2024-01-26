@@ -13,16 +13,18 @@ import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
 import com.solvd.service.validators.string.SizeStringValidator;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
-@NoArgsConstructor
 public class MeetingServiceImpl implements MeetingService {
 
-    private final MeetingRepository meetingRepository = new MeetingRepositoryMybatisImpl();
+    private final MeetingRepository meetingRepository;
+
+    public MeetingServiceImpl() {
+        this.meetingRepository = new MeetingRepositoryMybatisImpl();
+    }
 
     @Override
     public void create(Meeting meeting, Long realEstateId, Long buyerId, Long employeeId) {

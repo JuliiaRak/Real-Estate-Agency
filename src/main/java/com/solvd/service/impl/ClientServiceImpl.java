@@ -15,15 +15,17 @@ import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
 import com.solvd.service.validators.string.PhoneNumberStringValidator;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
-@NoArgsConstructor
 public class ClientServiceImpl implements ClientService {
-    private final ClientRepository clientRepository = new ClientRepositoryMybatisImpl();
+    private final ClientRepository clientRepository;
+
+    public ClientServiceImpl() {
+        this.clientRepository = new ClientRepositoryMybatisImpl();
+    }
 
     @Override
     public void create(Client client) throws EmailAlreadyExistException, PhoneNumberAlreadyExistException {

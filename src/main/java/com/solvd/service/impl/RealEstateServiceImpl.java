@@ -18,17 +18,22 @@ import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
 import com.solvd.service.validators.string.SizeStringValidator;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @AllArgsConstructor
-@NoArgsConstructor
 public class RealEstateServiceImpl implements RealEstateService {
-    private final RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
-    private final AddressService addressService = new AddressServiceImpl();
-    private final PhotoService photoService = new PhotoServiceImpl();
-    private final TagService tagService = new TagServiceImpl();
+    private final RealEstateRepository realEstateRepository;
+    private final AddressService addressService;
+    private final PhotoService photoService;
+    private final TagService tagService;
+
+    public RealEstateServiceImpl() {
+        this.realEstateRepository = new RealEstateRepositoryMybatisImpl();
+        this.addressService = new AddressServiceImpl();
+        this.photoService = new PhotoServiceImpl();
+        this.tagService = new TagServiceImpl();
+    }
 
     @Override
     public void create(RealEstate realEstate, long clientId) throws EntityNotFoundException, LinkAlreadyExistsException {

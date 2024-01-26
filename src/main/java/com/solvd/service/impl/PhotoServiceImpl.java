@@ -9,14 +9,16 @@ import com.solvd.service.validators.Validator;
 import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @AllArgsConstructor
-@NoArgsConstructor
 public class PhotoServiceImpl implements PhotoService {
-    private final PhotoRepository photoRepository = new PhotoRepositoryMybatisImpl();
+    private final PhotoRepository photoRepository;
+
+    public PhotoServiceImpl() {
+        this.photoRepository = new PhotoRepositoryMybatisImpl();
+    }
 
     @Override
     public void create(Photo photo, long realEstateId) throws LinkAlreadyExistsException {

@@ -10,14 +10,16 @@ import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
 import com.solvd.service.validators.string.SizeStringValidator;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @AllArgsConstructor
-@NoArgsConstructor
 public class AddressServiceImpl implements AddressService {
-    private final AddressRepository addressRepository = new AddressRepositoryMybatisImpl();
+    private final AddressRepository addressRepository;
+
+    public AddressServiceImpl() {
+        this.addressRepository = new AddressRepositoryMybatisImpl();
+    }
 
     @Override
     public void create(Address address) {

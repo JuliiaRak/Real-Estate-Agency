@@ -9,14 +9,16 @@ import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
 import com.solvd.service.validators.string.SizeStringValidator;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @AllArgsConstructor
-@NoArgsConstructor
 public class TagServiceImpl implements TagService {
-    private final TagRepository tagRepository = new TagRepositoryMybatisImpl();
+    private final TagRepository tagRepository;
+
+    public TagServiceImpl() {
+        this.tagRepository = new TagRepositoryMybatisImpl();
+    }
 
     @Override
     public void assignToRealEstate(Tag tag, long realEstateId) {

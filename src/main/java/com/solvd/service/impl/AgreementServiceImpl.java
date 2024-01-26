@@ -7,17 +7,20 @@ import com.solvd.persistence.impl.AgreementRepositoryMyBatisImpl;
 import com.solvd.service.AgreementService;
 import com.solvd.service.RealEstateService;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
-@NoArgsConstructor
 public class AgreementServiceImpl implements AgreementService {
-    private final AgreementRepository agreementRepository = new AgreementRepositoryMyBatisImpl();
-    private final RealEstateService realEstateService = new RealEstateServiceImpl();
+    private final AgreementRepository agreementRepository;
+    private final RealEstateService realEstateService;
+
+    public AgreementServiceImpl() {
+        this.agreementRepository = new AgreementRepositoryMyBatisImpl();
+        this.realEstateService = new RealEstateServiceImpl();
+    }
 
     @Override
     public void create(Agreement agreement, long realEstateId, long clientId) {

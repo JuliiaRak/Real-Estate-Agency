@@ -15,16 +15,18 @@ import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
 import com.solvd.service.validators.string.PhoneNumberStringValidator;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
-@NoArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private final EmployeeRepository employeeRepository = new EmployeeRepositoryMybatisImpl();
+    private final EmployeeRepository employeeRepository;
+
+    public EmployeeServiceImpl() {
+        this.employeeRepository = new EmployeeRepositoryMybatisImpl();
+    }
 
     @Override
     public void create(Employee employee) throws EntityAlreadyExistExeption {

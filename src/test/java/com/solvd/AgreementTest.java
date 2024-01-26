@@ -32,8 +32,6 @@ import java.util.List;
 
 public class AgreementTest {
     public static void main(String[] args) throws EntityNotFoundException, PhoneNumberAlreadyExistException, EmailAlreadyExistException {
-
-
         //creating instances
         Client client = new Client();
         Client seller = new Client();
@@ -117,8 +115,6 @@ public class AgreementTest {
         AgreementRepository agreementRepository = new AgreementRepositoryMyBatisImpl();
         AgreementService agreementService = new AgreementServiceImpl(agreementRepository,realEstateService);
 
-
-
         //check CRUD operations
 
         /*agreement.setDuration("4 months");
@@ -126,7 +122,6 @@ public class AgreementTest {
 
         System.out.println(agreementService.getById(5));
 
-=======
         System.out.println(realEstate);
 
         AgreementRepository agreementRepository = new AgreementRepositoryMyBatisImpl();
@@ -139,19 +134,13 @@ public class AgreementTest {
         agreement.setDuration("4 months");
         agreementService.update(agreement);
 
-
-
-
         System.out.println(agreementService.getById(5));
 
-
->>>>>>> 84077952e77b12b9ebae351c307703160ee07d06
         agreementService.deleteById(1);
         agreementService.deleteById(2);
         agreementService.deleteById(3);
         agreementService.deleteById(4);
 
-<<<<<<< HEAD
         List<Agreement> agreements = agreementService.getAll();
         for (Agreement agrm : agreements) {
             System.out.println(agrm);
@@ -160,7 +149,6 @@ public class AgreementTest {
         //check the validation
         agreementService.create(agreement2, realEstate.getId(), client.getId());
         System.out.println(realEstateService.getById(realEstate.getId()));
-
 
         System.out.println(agreement2);
 

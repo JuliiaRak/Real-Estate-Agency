@@ -7,6 +7,7 @@ import com.solvd.service.AgreementService;
 import com.solvd.service.RealEstateService;
 
 import java.math.BigDecimal;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -89,5 +90,4 @@ public class AgreementServiceImpl implements AgreementService {
                 return true;
             } else return false;
         }
-
 }

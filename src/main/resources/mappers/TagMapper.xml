@@ -11,6 +11,10 @@
         INSERT INTO real_estate_has_tags(tag_name, real_estate_id) VALUES (#{tag.name}, #{realEstateId})
     </insert>
 
+    <delete id="allocateFromRealEstate">
+        DELETE FROM real_estate_has_tags WHERE tag_name = #{tag.name} AND real_estate_id = #{realEstateId}
+    </delete>
+
     <delete id="deleteByName">
         DELETE FROM tags WHERE tag_name = #{name}
     </delete>

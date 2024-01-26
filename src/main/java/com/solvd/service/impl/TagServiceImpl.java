@@ -29,6 +29,11 @@ public class TagServiceImpl implements TagService {
         tagRepository.assignToRealEstate(tag, realEstateId);
     }
 
+    @Override
+    public void allocateFromRealEstate(Tag tag, long realEstateId) {
+        tagRepository.allocateFromRealEstate(tag, realEstateId);
+    }
+
     private void validate(Tag tag) {
         Validator<String> validator = new SizeStringValidator(new NotEmptyStringValidator(new NotNullStringValidator()));
         validator.validate("Tag name", tag.getName());

@@ -10,6 +10,8 @@ public interface TagRepository {
 
     void assignToRealEstate(@Param("tag") Tag tag, @Param("realEstateId") long realEstateId);
 
+    void allocateFromRealEstate(@Param("tag") Tag tag, @Param("realEstateId") long realEstateId);
+
     void deleteByName(String name);
 
     List<Tag> findAllByRealEstateId(long realEstateId);

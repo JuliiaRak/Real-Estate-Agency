@@ -5,9 +5,10 @@ import com.solvd.domain.Agreement;
 import com.solvd.domain.Client;
 import com.solvd.domain.RealEstate;
 import com.solvd.domain.enums.RealEstateType;
-import com.solvd.domain.exceptions.EmailAlreadyExistException;
+import com.solvd.domain.exceptions.EmailAlreadyExistsException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
-import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
+import com.solvd.domain.exceptions.LinkAlreadyExistsException;
+import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
 import com.solvd.persistence.AddressRepository;
 import com.solvd.persistence.AgreementRepository;
 import com.solvd.persistence.ClientRepository;
@@ -27,11 +28,10 @@ import com.solvd.service.impl.RealEstateServiceImpl;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 
 public class AgreementTest {
-    public static void main(String[] args) throws EntityNotFoundException, PhoneNumberAlreadyExistException, EmailAlreadyExistException {
+    public static void main(String[] args) throws EntityNotFoundException, LinkAlreadyExistsException, PhoneNumberAlreadyExistsException, EmailAlreadyExistsException {
         //creating instances
         Client client = new Client();
         Client seller = new Client();
@@ -90,31 +90,30 @@ public class AgreementTest {
         //creating repositories, services
 
         ClientRepository clientRepository = new ClientRepositoryMybatisImpl();
-        ClientService clientService = new ClientServiceImpl(clientRepository);
+        ClientService clientService = new ClientServiceImpl();
         clientService.create(client);
         clientService.create(seller);
         try {
             clientService.create(client);
             clientService.create(seller);
-        } catch (EmailAlreadyExistException | PhoneNumberAlreadyExistException e) {
+        } catch (EmailAlreadyExistsException | PhoneNumberAlreadyExistsException e) {
             throw new RuntimeException(e);
         }
         System.out.println(client);
 
         AddressRepository addressRepository = new AddressRepositoryMybatisImpl();
-        AddressService addressService = new AddressServiceImpl(addressRepository);
+        AddressService addressService = new AddressServiceImpl();
         addressService.create(address);
 
         System.out.println(address);
 
         RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
-        RealEstateService realEstateService = new RealEstateServiceImpl(realEstateRepository, addressService);
+        RealEstateService realEstateService = new RealEstateServiceImpl();
         realEstateService.create(realEstate, client.getId());
         //System.out.println(realEstate);
 
         AgreementRepository agreementRepository = new AgreementRepositoryMyBatisImpl();
-        AgreementService agreementService = new AgreementServiceImpl(agreementRepository,realEstateService);
-
+        AgreementService agreementService = new AgreementServiceImpl();
         //check CRUD operations
 
         /*agreement.setDuration("4 months");
@@ -122,12 +121,6 @@ public class AgreementTest {
 
         System.out.println(agreementService.getById(5));
 
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 84077952e77b12b9ebae351c307703160ee07d06
-=======
->>>>>>> a85536f3d0ec39fc53a2b4c4fd6b2d65dcdfc5b2
         System.out.println(realEstate);
 
         AgreementRepository agreementRepository = new AgreementRepositoryMyBatisImpl();
@@ -142,24 +135,11 @@ public class AgreementTest {
 
         System.out.println(agreementService.getById(5));
 
-<<<<<<< HEAD
-
-<<<<<<< HEAD
->>>>>>> 84077952e77b12b9ebae351c307703160ee07d06
-=======
->>>>>>> 84077952e77b12b9ebae351c307703160ee07d06
-=======
->>>>>>> a85536f3d0ec39fc53a2b4c4fd6b2d65dcdfc5b2
         agreementService.deleteById(1);
         agreementService.deleteById(2);
         agreementService.deleteById(3);
         agreementService.deleteById(4);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> a85536f3d0ec39fc53a2b4c4fd6b2d65dcdfc5b2
         List<Agreement> agreements = agreementService.getAll();
         for (Agreement agrm : agreements) {
             System.out.println(agrm);

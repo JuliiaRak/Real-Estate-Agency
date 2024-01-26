@@ -25,6 +25,14 @@ public class PhotoRepositoryMybatisImpl implements PhotoRepository {
     }
 
     @Override
+    public void deleteByLink(String link) {
+        try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
+            PhotoRepository photoRepository = sqlSession.getMapper(PhotoRepository.class);
+            photoRepository.deleteByLink(link);
+        }
+    }
+
+    @Override
     public List<Photo> findAllByRealEstateId(long realEstateId) {
         try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
             PhotoRepository photoRepository = sqlSession.getMapper(PhotoRepository.class);
@@ -37,6 +45,14 @@ public class PhotoRepositoryMybatisImpl implements PhotoRepository {
         try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
             PhotoRepository photoRepository = sqlSession.getMapper(PhotoRepository.class);
             return photoRepository.findAll();
+        }
+    }
+
+    @Override
+    public boolean existsByLink(String link) {
+        try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
+            PhotoRepository photoRepository = sqlSession.getMapper(PhotoRepository.class);
+            return photoRepository.existsByLink(link);
         }
     }
 }

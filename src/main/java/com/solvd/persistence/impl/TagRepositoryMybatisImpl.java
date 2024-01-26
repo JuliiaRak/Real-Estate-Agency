@@ -18,6 +18,22 @@ public class TagRepositoryMybatisImpl implements TagRepository {
     }
 
     @Override
+    public void assignToRealEstate(Tag tag, long realEstateId) {
+        try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
+            TagRepository tagRepository = sqlSession.getMapper(TagRepository.class);
+            tagRepository.assignToRealEstate(tag, realEstateId);
+        }
+    }
+
+    @Override
+    public void allocateFromRealEstate(Tag tag, long realEstateId) {
+        try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
+            TagRepository tagRepository = sqlSession.getMapper(TagRepository.class);
+            tagRepository.allocateFromRealEstate(tag, realEstateId);
+        }
+    }
+
+    @Override
     public void deleteByName(String name) {
         try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
             TagRepository tagRepository = sqlSession.getMapper(TagRepository.class);
@@ -38,6 +54,14 @@ public class TagRepositoryMybatisImpl implements TagRepository {
         try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
             TagRepository tagRepository = sqlSession.getMapper(TagRepository.class);
             return tagRepository.findAll();
+        }
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
+            TagRepository tagRepository = sqlSession.getMapper(TagRepository.class);
+            return tagRepository.existsByName(name);
         }
     }
 }

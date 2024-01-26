@@ -13,10 +13,7 @@ import java.util.Date;
 
 public class MeetingTest {
     public static void main(String[] args) {
-        MeetingService meetingService = new MeetingServiceImpl(new MeetingRepositoryMybatisImpl(),
-                new ClientServiceImpl(new ClientRepositoryMybatisImpl()),
-                new EmployeeServiceImpl(new EmployeeRepositoryMybatisImpl()),
-                new RealEstateServiceImpl(new RealEstateRepositoryMybatisImpl(), new AddressServiceImpl(new AddressRepositoryMybatisImpl())));
+        MeetingService meetingService = new MeetingServiceImpl();
 
         Meeting meeting = new Meeting(new Date(2024-1900, Calendar.APRIL, 22), new Date(), "status", null, null, null);
         meetingService.create(meeting, 2L, 6L, 10L);

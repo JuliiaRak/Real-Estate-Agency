@@ -3,7 +3,19 @@ package com.solvd.service.impl;
 import com.solvd.domain.Meeting;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.persistence.MeetingRepository;
-import com.solvd.service.*;
+import com.solvd.persistence.impl.MeetingRepositoryMybatisImpl;
+import com.solvd.service.ClientService;
+import com.solvd.service.EmployeeService;
+import com.solvd.service.MeetingService;
+import com.solvd.service.RealEstateService;
+import com.solvd.service.validators.Validator;
+import com.solvd.service.validators.date.FutureDateValidator;
+import com.solvd.service.validators.date.NotNullDateValidator;
+import com.solvd.service.validators.date.PastDateValidator;
+import com.solvd.service.validators.object.NotNullObjectValidator;
+import com.solvd.service.validators.string.NotEmptyStringValidator;
+import com.solvd.service.validators.string.NotNullStringValidator;
+import com.solvd.service.validators.string.SizeStringValidator;
 import lombok.AllArgsConstructor;
 
 import java.util.Date;
@@ -17,10 +29,16 @@ public class MeetingServiceImpl implements MeetingService {
     private final EmployeeService employeeService;
     private final RealEstateService realEstateService;
 
+    public MeetingServiceImpl() {
+        this.meetingRepository = new MeetingRepositoryMybatisImpl();
+        this.clientService = new ClientServiceImpl();
+        this.employeeService = new EmployeeServiceImpl();
+        this.realEstateService = new RealEstateServiceImpl();
+    }
+
     @Override
     public void create(Meeting meeting, Long realEstateId, Long buyerId, Long employeeId) {
         validate(meeting);
-        checkForeignKeysExistence(realEstateId, buyerId, employeeId);
         meetingRepository.create(meeting, realEstateId, buyerId, employeeId);
     }
 
@@ -49,25 +67,7 @@ public class MeetingServiceImpl implements MeetingService {
         return meetingRepository.findAll();
     }
 
-    public void validate(Meeting meeting) {
-        // Перевірка, що дата проведення зустрічі є у майбутньому
-        if (meeting.getMeetingDateTime() == null || meeting.getMeetingDateTime().before(new Date())) {
-            throw new IllegalArgumentException("Meeting date and time must be in the future");
-        }
-
-        // Перевірка, що дата подання запиту є у минулому
-        if (meeting.getInquiryDate() == null || meeting.getInquiryDate().after(new Date())) {
-            throw new IllegalArgumentException("Inquiry date cannot be in the future");
-        }
-
-        // Перевірка, що статус має допустимі значення (наприклад, "scheduled", "completed", тощо)
-        if (meeting.getMeetingStatus() == null && !meeting.getMeetingStatus().isEmpty()) {
-            throw new IllegalArgumentException("Invalid meeting status");
-        }
-
-    }
-
-    void checkForeignKeysExistence(Long realEstateId, Long buyerId, Long employeeId){
+    void checkForeignKeysExistence(Long realEstateId, Long buyerId, Long employeeId) {
         try {
             realEstateService.getById(realEstateId);
             clientService.getById(buyerId);
@@ -75,5 +75,20 @@ public class MeetingServiceImpl implements MeetingService {
         } catch (EntityNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void validate(Meeting meeting) {
+        Validator<Object> objectValidator = new NotNullObjectValidator();
+        objectValidator.validate("meeting", meeting);
+
+        Validator<Date> notNullDateValidator = new NotNullDateValidator();
+        Validator<Date> futureDateValidator = new FutureDateValidator(notNullDateValidator);
+        futureDateValidator.validate("meeting date", meeting.getMeetingDateTime());
+
+        Validator<Date> pastDateValidator = new PastDateValidator(notNullDateValidator);
+        pastDateValidator.validate("inquiry date", meeting.getInquiryDate());
+
+        Validator<String> stringValidator = new SizeStringValidator(new NotEmptyStringValidator(new NotNullStringValidator()));
+        stringValidator.validate("meeting status", meeting.getMeetingStatus());
     }
 }

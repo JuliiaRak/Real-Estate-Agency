@@ -11,6 +11,10 @@
         DELETE FROM photo_links WHERE real_estate_id = #{realEstateId}
     </delete>
 
+    <delete id="deleteByLink">
+        DELETE FROM photo_links WHERE link = #{link}
+    </delete>
+
     <sql id="selectAll">
         SELECT * FROM photo_links
     </sql>
@@ -22,6 +26,10 @@
 
     <select id="findAll" resultMap="PhotoResultMap">
         <include refid="selectAll"/>
+    </select>
+
+    <select id="existsByLink">
+        SELECT EXISTS(SELECT 1 FROM photo_links WHERE link = #{link})
     </select>
 
     <resultMap id="PhotoResultMap" type="com.solvd.domain.Photo" autoMapping="false">

@@ -1,12 +1,10 @@
 package com.solvd.domain;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(of = "id")
-@Builder
 public class Address {
     private long id;
     private String country;

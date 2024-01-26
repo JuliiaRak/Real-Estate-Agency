@@ -1,4 +1,4 @@
-package com.solvd.service.validators.number;
+package com.solvd.service.validators.integer;
 
 import com.solvd.service.validators.Validator;
 

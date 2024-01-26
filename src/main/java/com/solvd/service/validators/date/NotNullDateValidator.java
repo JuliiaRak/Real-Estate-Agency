@@ -1,6 +1,7 @@
 package com.solvd.service.validators.date;
 
 import com.solvd.service.validators.Validator;
+import com.solvd.service.validators.object.NotNullObjectValidator;
 
 import java.util.Date;
 
@@ -18,8 +19,6 @@ public class NotNullDateValidator implements Validator<Date> {
     @Override
     public void validate(String fieldName, Date entity) {
         validator.validate(fieldName, entity);
-        if (entity == null) {
-            throw new NullPointerException(String.format("%s cannot be null", fieldName));
-        }
+        new NotNullObjectValidator().validate(fieldName, entity);
     }
 }

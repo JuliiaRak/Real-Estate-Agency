@@ -12,8 +12,10 @@ import com.solvd.service.PhotoService;
 import com.solvd.service.RealEstateService;
 import com.solvd.service.TagService;
 import com.solvd.service.validators.Validator;
-import com.solvd.service.validators.number.NotNegativeIntegerValidator;
-import com.solvd.service.validators.number.NotNegativeLongValidator;
+import com.solvd.service.validators.bigint.MaxLongValidator;
+import com.solvd.service.validators.bigint.MinLongValidator;
+import com.solvd.service.validators.integer.MinIntegerValidator;
+import com.solvd.service.validators.integer.NotNegativeIntegerValidator;
 import com.solvd.service.validators.object.NotNullObjectValidator;
 import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
@@ -83,10 +85,9 @@ public class RealEstateServiceImpl implements RealEstateService {
         Validator<String> stringValidator = new SizeStringValidator(15, new NotEmptyStringValidator(new NotNullStringValidator()));
         stringValidator.validate("metrics", realEstate.getMetrics());
 
-        Validator<Long> longValidator = new NotNegativeLongValidator();
+        Validator<Long> longValidator = new MaxLongValidator(new MinLongValidator());
         longValidator.validate("price", realEstate.getPrice().longValue());
-
-        Validator<Integer> intValidator = new NotNegativeIntegerValidator();
+        Validator<Integer> intValidator = new MinIntegerValidator(1, new NotNegativeIntegerValidator());
         intValidator.validate("rooms", realEstate.getRooms());
     }
 }

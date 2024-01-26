@@ -10,7 +10,8 @@ import com.solvd.service.PersonService;
 import com.solvd.service.validators.Validator;
 import com.solvd.service.validators.date.NotNullDateValidator;
 import com.solvd.service.validators.date.PastDateValidator;
-import com.solvd.service.validators.number.NotNegativeLongValidator;
+import com.solvd.service.validators.integer.MaxIntegerValidator;
+import com.solvd.service.validators.integer.MinIntegerValidator;
 import com.solvd.service.validators.object.NotNullObjectValidator;
 import lombok.AllArgsConstructor;
 
@@ -70,8 +71,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         Validator<Date> dateValidator = new PastDateValidator(new NotNullDateValidator());
         dateValidator.validate("hire date", employee.getHireDate());
 
-        Validator<Long> longValidator = new NotNegativeLongValidator();
-        longValidator.validate("salary", employee.getSalary());
+        Validator<Integer> integerValidator = new MaxIntegerValidator(new MinIntegerValidator());
+        integerValidator.validate("salary", employee.getSalary());
     }
 
     private void employeeEmailAndPhoneNumberNotExistYetCheck(Employee employee) throws EntityAlreadyExistExeption {

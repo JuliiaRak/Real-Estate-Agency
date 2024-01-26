@@ -2,23 +2,25 @@ package com.solvd.service.impl;
 
 import com.solvd.domain.Meeting;
 import com.solvd.domain.exceptions.EntityNotFoundException;
-import com.solvd.persistence.EmployeeRepository;
 import com.solvd.persistence.MeetingRepository;
-import com.solvd.service.MeetingService;
+import com.solvd.service.*;
 import lombok.AllArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 public class MeetingServiceImpl implements MeetingService {
 
     private final MeetingRepository meetingRepository;
+    private final ClientService clientService;
+    private final EmployeeService employeeService;
+    private final RealEstateService realEstateService;
 
     @Override
     public void create(Meeting meeting, Long realEstateId, Long buyerId, Long employeeId) {
         validate(meeting);
+        checkForeignKeysExistence(realEstateId, buyerId, employeeId);
         meetingRepository.create(meeting, realEstateId, buyerId, employeeId);
     }
 
@@ -63,5 +65,15 @@ public class MeetingServiceImpl implements MeetingService {
             throw new IllegalArgumentException("Invalid meeting status");
         }
 
+    }
+
+    void checkForeignKeysExistence(Long realEstateId, Long buyerId, Long employeeId){
+        try {
+            realEstateService.getById(realEstateId);
+            clientService.getById(buyerId);
+            employeeService.getById(employeeId);
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

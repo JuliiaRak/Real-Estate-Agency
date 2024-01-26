@@ -9,6 +9,7 @@ import com.solvd.service.validators.Validator;
 import com.solvd.service.validators.object.NotNullObjectValidator;
 import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
+import com.solvd.service.validators.string.SizeStringValidator;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class PhotoServiceImpl implements PhotoService {
         Validator<Object> objectValidator = new NotNullObjectValidator();
         objectValidator.validate("photo", photo);
 
-        Validator<String> validator = new NotEmptyStringValidator(new NotNullStringValidator());
+        Validator<String> validator = new SizeStringValidator(300, new NotEmptyStringValidator(new NotNullStringValidator()));
         validator.validate("photo link", photo.getLink());
     }
 

@@ -3,17 +3,20 @@ package com.solvd.service.impl;
 import com.solvd.domain.Photo;
 import com.solvd.domain.exceptions.LinkAlreadyExistsException;
 import com.solvd.persistence.PhotoRepository;
+import com.solvd.persistence.impl.PhotoRepositoryMybatisImpl;
 import com.solvd.service.PhotoService;
 import com.solvd.service.validators.Validator;
 import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @AllArgsConstructor
+@NoArgsConstructor
 public class PhotoServiceImpl implements PhotoService {
-    private final PhotoRepository photoRepository;
+    private final PhotoRepository photoRepository = new PhotoRepositoryMybatisImpl();
 
     @Override
     public void create(Photo photo, long realEstateId) throws LinkAlreadyExistsException {

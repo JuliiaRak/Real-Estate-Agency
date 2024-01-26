@@ -3,18 +3,21 @@ package com.solvd.service.impl;
 import com.solvd.domain.Address;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.persistence.AddressRepository;
+import com.solvd.persistence.impl.AddressRepositoryMybatisImpl;
 import com.solvd.service.AddressService;
 import com.solvd.service.validators.Validator;
 import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
 import com.solvd.service.validators.string.SizeStringValidator;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @AllArgsConstructor
+@NoArgsConstructor
 public class AddressServiceImpl implements AddressService {
-    private final AddressRepository addressRepository;
+    private final AddressRepository addressRepository = new AddressRepositoryMybatisImpl();
 
     @Override
     public void create(Address address) {

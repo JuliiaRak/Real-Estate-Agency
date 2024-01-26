@@ -5,6 +5,7 @@ import com.solvd.domain.exceptions.EmailAlreadyExistException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
 import com.solvd.persistence.ClientRepository;
+import com.solvd.persistence.impl.ClientRepositoryMybatisImpl;
 import com.solvd.service.ClientService;
 import com.solvd.service.validators.Validator;
 import com.solvd.service.validators.date.NotNullDateValidator;
@@ -14,13 +15,15 @@ import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
 import com.solvd.service.validators.string.PhoneNumberStringValidator;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
+@NoArgsConstructor
 public class ClientServiceImpl implements ClientService {
-    private final ClientRepository clientRepository;
+    private final ClientRepository clientRepository = new ClientRepositoryMybatisImpl();
 
     @Override
     public void create(Client client) throws EmailAlreadyExistException, PhoneNumberAlreadyExistException {

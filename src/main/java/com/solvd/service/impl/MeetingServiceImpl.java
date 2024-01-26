@@ -3,6 +3,7 @@ package com.solvd.service.impl;
 import com.solvd.domain.Meeting;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.persistence.MeetingRepository;
+import com.solvd.persistence.impl.MeetingRepositoryMybatisImpl;
 import com.solvd.service.MeetingService;
 import com.solvd.service.validators.Validator;
 import com.solvd.service.validators.date.FutureDateValidator;
@@ -12,14 +13,16 @@ import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
 import com.solvd.service.validators.string.SizeStringValidator;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
+@NoArgsConstructor
 public class MeetingServiceImpl implements MeetingService {
 
-    private final MeetingRepository meetingRepository;
+    private final MeetingRepository meetingRepository = new MeetingRepositoryMybatisImpl();
 
     @Override
     public void create(Meeting meeting, Long realEstateId, Long buyerId, Long employeeId) {

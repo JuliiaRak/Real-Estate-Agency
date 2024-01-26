@@ -6,6 +6,7 @@ import com.solvd.domain.Tag;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.domain.exceptions.LinkAlreadyExistsException;
 import com.solvd.persistence.RealEstateRepository;
+import com.solvd.persistence.impl.RealEstateRepositoryMybatisImpl;
 import com.solvd.service.AddressService;
 import com.solvd.service.PhotoService;
 import com.solvd.service.RealEstateService;
@@ -17,15 +18,17 @@ import com.solvd.service.validators.string.NotEmptyStringValidator;
 import com.solvd.service.validators.string.NotNullStringValidator;
 import com.solvd.service.validators.string.SizeStringValidator;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @AllArgsConstructor
+@NoArgsConstructor
 public class RealEstateServiceImpl implements RealEstateService {
-    private final RealEstateRepository realEstateRepository;
-    private final AddressService addressService;
-    private final PhotoService photoService;
-    private final TagService tagService;
+    private final RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
+    private final AddressService addressService = new AddressServiceImpl();
+    private final PhotoService photoService = new PhotoServiceImpl();
+    private final TagService tagService = new TagServiceImpl();
 
     @Override
     public void create(RealEstate realEstate, long clientId) throws EntityNotFoundException, LinkAlreadyExistsException {

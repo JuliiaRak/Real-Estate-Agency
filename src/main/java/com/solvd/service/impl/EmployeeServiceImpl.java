@@ -6,15 +6,12 @@ import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.persistence.EmployeeRepository;
 import com.solvd.persistence.impl.EmployeeRepositoryMybatisImpl;
 import com.solvd.service.EmployeeService;
+import com.solvd.service.PersonService;
 import com.solvd.service.validators.Validator;
 import com.solvd.service.validators.date.NotNullDateValidator;
 import com.solvd.service.validators.date.PastDateValidator;
 import com.solvd.service.validators.number.NotNegativeLongValidator;
 import com.solvd.service.validators.object.NotNullObjectValidator;
-import com.solvd.service.validators.string.EmailStringValidator;
-import com.solvd.service.validators.string.NotEmptyStringValidator;
-import com.solvd.service.validators.string.NotNullStringValidator;
-import com.solvd.service.validators.string.PhoneNumberStringValidator;
 import lombok.AllArgsConstructor;
 
 import java.util.Date;
@@ -68,15 +65,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Validator<Object> objectValidator = new NotNullObjectValidator();
         objectValidator.validate("employee", employee);
 
-        Validator<String> notEmptyStringValidator = new NotEmptyStringValidator(new NotNullStringValidator());
-        notEmptyStringValidator.validate("first name", employee.getFirstName());
-        notEmptyStringValidator.validate("last name", employee.getLastName());
-
-        Validator<String> emailValidator = new EmailStringValidator(notEmptyStringValidator);
-        emailValidator.validate("email", employee.getEmail());
-
-        Validator<String> phoneNumberValidator = new PhoneNumberStringValidator(notEmptyStringValidator);
-        phoneNumberValidator.validate("phone number", employee.getPhoneNumber());
+        PersonService.validate(employee.getFirstName(), employee.getFirstName(), employee.getEmail(), employee.getPhoneNumber());
 
         Validator<Date> dateValidator = new PastDateValidator(new NotNullDateValidator());
         dateValidator.validate("hire date", employee.getHireDate());

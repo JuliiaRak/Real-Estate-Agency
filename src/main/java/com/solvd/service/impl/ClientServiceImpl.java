@@ -7,14 +7,11 @@ import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
 import com.solvd.persistence.ClientRepository;
 import com.solvd.persistence.impl.ClientRepositoryMybatisImpl;
 import com.solvd.service.ClientService;
+import com.solvd.service.PersonService;
 import com.solvd.service.validators.Validator;
 import com.solvd.service.validators.date.NotNullDateValidator;
 import com.solvd.service.validators.date.PastDateValidator;
 import com.solvd.service.validators.object.NotNullObjectValidator;
-import com.solvd.service.validators.string.EmailStringValidator;
-import com.solvd.service.validators.string.NotEmptyStringValidator;
-import com.solvd.service.validators.string.NotNullStringValidator;
-import com.solvd.service.validators.string.PhoneNumberStringValidator;
 import lombok.AllArgsConstructor;
 
 import java.util.Date;
@@ -74,15 +71,7 @@ public class ClientServiceImpl implements ClientService {
         Validator<Object> objectValidator = new NotNullObjectValidator();
         objectValidator.validate("client", client);
 
-        Validator<String> notEmptyStringValidator = new NotEmptyStringValidator(new NotNullStringValidator());
-        notEmptyStringValidator.validate("first name", client.getFirstName());
-        notEmptyStringValidator.validate("last name", client.getLastName());
-
-        Validator<String> emailValidator = new EmailStringValidator(notEmptyStringValidator);
-        emailValidator.validate("email", client.getEmail());
-
-        Validator<String> phoneNumberValidator = new PhoneNumberStringValidator(notEmptyStringValidator);
-        phoneNumberValidator.validate("phone number", client.getPhoneNumber());
+        PersonService.validate(client.getFirstName(), client.getFirstName(), client.getEmail(), client.getPhoneNumber());
 
         Validator<Date> dateValidator = new PastDateValidator(new NotNullDateValidator());
         dateValidator.validate("registration date", client.getRegistrationDate());

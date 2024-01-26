@@ -26,11 +26,13 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        boolean exitLoop = false;
 
-        while (true) {
+        while (!exitLoop) {
             System.out.println("Welcome to the Real Estate Agency console app. Please choose an action");
             System.out.println("Enter '0' to register as a new client");
             System.out.println("Enter '1' to login and confirm your identity.");
+            System.out.println("Enter '2' to Exit.");
 
             String input = scanner.nextLine();
 
@@ -41,8 +43,11 @@ public class Main {
                 case "1":
                     login(scanner);
                     break;
+                case "2":
+                    exitLoop = true;
+                    break;
                 default:
-                    System.out.println("Invalid option. Please enter '0' or '1'.");
+                    System.out.println("Invalid option. Please enter '0', '1' or '2'.");
             }
         }
     }
@@ -115,7 +120,7 @@ public class Main {
                     exitLoop = true;
                     break;
                 default:
-                    System.out.println("Invalid option. Please enter '1', '2'");
+                    System.out.println("Invalid option. Please enter '1' or '2'");
             }
         }
     }
@@ -173,6 +178,7 @@ public class Main {
 
                     switch (userInput) {
                         case "1":
+                            CLIENT_SERVICE.deleteById(client.getId());
                             break;
                         case "2":
                             exitLoop = true;

@@ -5,3 +5,4 @@ public class EntityNotFoundException extends Exception {
         super(name + " with id " + id + " not found");
     }
 }
+

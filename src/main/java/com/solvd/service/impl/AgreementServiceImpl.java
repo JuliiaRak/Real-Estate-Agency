@@ -59,7 +59,7 @@ public class AgreementServiceImpl implements AgreementService {
     }
 
     @Override
-    public List<Agreement> getAll() throws EntityNotFoundException {
+    public List<Agreement> getAll(){
         return agreementRepository.findAll();
 
     }

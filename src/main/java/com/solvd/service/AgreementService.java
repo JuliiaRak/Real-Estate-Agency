@@ -14,5 +14,5 @@ public interface AgreementService {
 
     Agreement getById(long id) throws EntityNotFoundException;
 
-    List<Agreement> getAll() throws EntityNotFoundException;
+    List<Agreement> getAll();
 }

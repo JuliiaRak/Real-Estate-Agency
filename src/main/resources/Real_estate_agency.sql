@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS real_estates (
 	id SERIAL PRIMARY KEY,
     price DECIMAL(10, 2) NOT NULL,
     is_available BOOLEAN NOT NULL,
-    real_estate_description VARCHAR(150) NULL,
+    real_estate_description TEXT NULL,
     real_estate_type VARCHAR(50) NOT NULL,
     metrics VARCHAR(50) NOT NULL,
     rooms INT NOT NULL,
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS real_estate_has_tags (
 );
 
 CREATE TABLE IF NOT EXISTS photo_links (
-    link VARCHAR(200) UNIQUE PRIMARY KEY NOT NULL,
+    link VARCHAR(300) UNIQUE PRIMARY KEY NOT NULL,
     real_estate_id BIGINT UNSIGNED NOT NULL,
     FOREIGN KEY(real_estate_id) REFERENCES real_estates(id) ON UPDATE NO ACTION ON DELETE NO ACTION
 );

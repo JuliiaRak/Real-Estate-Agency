@@ -3,7 +3,13 @@ package com.solvd.service.impl;
 import com.solvd.domain.Address;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.persistence.AddressRepository;
+import com.solvd.persistence.impl.AddressRepositoryMybatisImpl;
 import com.solvd.service.AddressService;
+import com.solvd.service.validators.Validator;
+import com.solvd.service.validators.object.NotNullObjectValidator;
+import com.solvd.service.validators.string.NotEmptyStringValidator;
+import com.solvd.service.validators.string.NotNullStringValidator;
+import com.solvd.service.validators.string.SizeStringValidator;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -12,9 +18,13 @@ import java.util.List;
 public class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
 
+    public AddressServiceImpl() {
+        this.addressRepository = new AddressRepositoryMybatisImpl();
+    }
+
     @Override
     public void create(Address address) {
-        addressCheck(address);
+        validate(address);
         addressRepository.create(address);
     }
 
@@ -28,7 +38,7 @@ public class AddressServiceImpl implements AddressService {
         if (addressRepository.findById(address.getId()).isEmpty()) {
             throw new EntityNotFoundException("Address", address.getId());
         }
-        addressCheck(address);
+        validate(address);
         addressRepository.update(address);
     }
 
@@ -42,7 +52,16 @@ public class AddressServiceImpl implements AddressService {
         return addressRepository.findAll();
     }
 
-    private void addressCheck(Address address) {
+    private void validate(Address address) {
+        Validator<Object> objectValidator = new NotNullObjectValidator();
+        objectValidator.validate("address", address);
 
+        Validator<String> validator = new SizeStringValidator(new NotEmptyStringValidator(new NotNullStringValidator()));
+        validator.validate("country", address.getCountry());
+        validator.validate("region", address.getRegion());
+        validator.validate("city", address.getCity());
+        validator.validate("street", address.getStreet());
+        validator.validate("building", address.getBuilding());
+        validator.validate("apartment", address.getApartment());
     }
 }

@@ -7,6 +7,7 @@ import com.solvd.domain.RealEstate;
 import com.solvd.domain.enums.RealEstateType;
 import com.solvd.domain.exceptions.EmailAlreadyExistException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
+import com.solvd.domain.exceptions.LinkAlreadyExistsException;
 import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
 import com.solvd.persistence.AddressRepository;
 import com.solvd.persistence.AgreementRepository;
@@ -27,11 +28,10 @@ import com.solvd.service.impl.RealEstateServiceImpl;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 
 public class AgreementTest {
-    public static void main(String[] args) throws EntityNotFoundException, PhoneNumberAlreadyExistException, EmailAlreadyExistException {
+    public static void main(String[] args) throws EntityNotFoundException, LinkAlreadyExistsException, PhoneNumberAlreadyExistException, EmailAlreadyExistException {
         //creating instances
         Client client = new Client();
         Client seller = new Client();
@@ -90,7 +90,7 @@ public class AgreementTest {
         //creating repositories, services
 
         ClientRepository clientRepository = new ClientRepositoryMybatisImpl();
-        ClientService clientService = new ClientServiceImpl(clientRepository);
+        ClientService clientService = new ClientServiceImpl();
         clientService.create(client);
         clientService.create(seller);
         try {
@@ -102,18 +102,18 @@ public class AgreementTest {
         System.out.println(client);
 
         AddressRepository addressRepository = new AddressRepositoryMybatisImpl();
-        AddressService addressService = new AddressServiceImpl(addressRepository);
+        AddressService addressService = new AddressServiceImpl();
         addressService.create(address);
 
         System.out.println(address);
 
         RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
-        RealEstateService realEstateService = new RealEstateServiceImpl(realEstateRepository, addressService);
+        RealEstateService realEstateService = new RealEstateServiceImpl();
         realEstateService.create(realEstate, client.getId());
         //System.out.println(realEstate);
 
         AgreementRepository agreementRepository = new AgreementRepositoryMyBatisImpl();
-        AgreementService agreementService = new AgreementServiceImpl(agreementRepository,realEstateService);
+        AgreementService agreementService = new AgreementServiceImpl();
 
         //check CRUD operations
 
@@ -139,6 +139,9 @@ public class AgreementTest {
 
         agreement.setDuration("4 months");
         agreementService.update(agreement);
+
+
+
 
         System.out.println(agreementService.getById(5));
 

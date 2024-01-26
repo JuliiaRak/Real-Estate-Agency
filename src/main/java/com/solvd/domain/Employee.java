@@ -1,6 +1,8 @@
 package com.solvd.domain;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -15,9 +17,9 @@ public class Employee {
     private String phoneNumber;
     private String position;
     private Date hireDate;
-    private long salary;
+    private int salary;
 
-    public Employee(String firstName, String lastName, String email, String phoneNumber, String position, Date hireDate, long salary) {
+    public Employee(String firstName, String lastName, String email, String phoneNumber, String position, Date hireDate, int salary) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

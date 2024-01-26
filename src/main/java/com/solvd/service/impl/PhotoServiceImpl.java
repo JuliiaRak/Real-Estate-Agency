@@ -4,6 +4,9 @@ import com.solvd.domain.Photo;
 import com.solvd.domain.exceptions.LinkAlreadyExistsException;
 import com.solvd.persistence.PhotoRepository;
 import com.solvd.service.PhotoService;
+import com.solvd.service.validators.Validator;
+import com.solvd.service.validators.string.NotEmptyStringValidator;
+import com.solvd.service.validators.string.NotNullStringValidator;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -14,10 +17,16 @@ public class PhotoServiceImpl implements PhotoService {
 
     @Override
     public void create(Photo photo, long realEstateId) throws LinkAlreadyExistsException {
+        validate(photo);
         if (photoRepository.existsByLink(photo.getLink())) {
             throw new LinkAlreadyExistsException(String.format("This link is already exists: %s", photo.getLink()));
         }
         photoRepository.create(photo, realEstateId);
+    }
+
+    private void validate(Photo photo) {
+        Validator<String> validator = new NotEmptyStringValidator(new NotNullStringValidator());
+        validator.validate("photo link", photo.getLink());
     }
 
     @Override

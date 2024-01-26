@@ -5,6 +5,14 @@ import com.solvd.domain.exceptions.EntityAlreadyExistExeption;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.persistence.EmployeeRepository;
 import com.solvd.service.EmployeeService;
+import com.solvd.service.validators.Validator;
+import com.solvd.service.validators.date.NotNullDateValidator;
+import com.solvd.service.validators.date.PastDateValidator;
+import com.solvd.service.validators.number.NotNegativeLongValidator;
+import com.solvd.service.validators.string.EmailStringValidator;
+import com.solvd.service.validators.string.NotEmptyStringValidator;
+import com.solvd.service.validators.string.NotNullStringValidator;
+import com.solvd.service.validators.string.PhoneNumberStringValidator;
 import lombok.AllArgsConstructor;
 
 import java.util.Date;
@@ -49,32 +57,23 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<Employee> getAll() {
         return employeeRepository.findAll();
     }
-  
-    public void validate(Employee employee) {
-        // Перевірка, що ім'я та прізвище не є порожніми
-        if (employee.getFirstName()==null || employee.getLastName()==null  || employee.getFirstName().isEmpty() || employee.getLastName().isEmpty() || employee.getFirstName().isBlank() || employee.getLastName().isBlank()) {
-            throw new IllegalArgumentException("The first and last name cannot be empty");
-        }
 
-        // Перевірка, що адреса електронної пошти є коректною
-        if (!employee.getEmail().matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-z]+$")) {
-            throw new IllegalArgumentException("Email address does not match the pattern 'yourname@mail.com'");
-        }
+    private void validate(Employee employee) {
+        Validator<String> notEmptyStringValidator = new NotEmptyStringValidator(new NotNullStringValidator());
+        notEmptyStringValidator.validate("first name", employee.getFirstName());
+        notEmptyStringValidator.validate("last name", employee.getLastName());
 
-        // Перевірка, що номер телефону є коректним
-        if (employee.getPhoneNumber()==null || !employee.getPhoneNumber().matches("^\\+?[0-9]{12}$")) {
-            throw new IllegalArgumentException("The phone number does not match the pattern '+380980307445'");
-        }
+        Validator<String> emailValidator = new EmailStringValidator(notEmptyStringValidator);
+        emailValidator.validate("email", employee.getEmail());
 
-        // Перевірка, що дата прийняття на роботу є у минулому
-        if (employee.getHireDate()==null || employee.getHireDate().after(new Date())) {
-            throw new IllegalArgumentException("Hiring date cannot be in the future");
-        }
+        Validator<String> phoneNumberValidator = new PhoneNumberStringValidator(notEmptyStringValidator);
+        phoneNumberValidator.validate("phone number", employee.getPhoneNumber());
 
-        // Перевірка, що зарплата не є від'ємною
-        if (employee.getSalary() < 0) {
-            throw new IllegalArgumentException("Salary cannot be negative");
-        }
+        Validator<Date> dateValidator = new PastDateValidator(new NotNullDateValidator());
+        dateValidator.validate("hire date", employee.getHireDate());
+
+        Validator<Long> longValidator = new NotNegativeLongValidator();
+        longValidator.validate("salary", employee.getSalary());
     }
 
     private void employeeEmailAndPhoneNumberNotExistYetCheck(Employee employee) throws EntityAlreadyExistExeption {

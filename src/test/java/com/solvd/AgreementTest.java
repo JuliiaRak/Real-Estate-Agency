@@ -32,9 +32,6 @@ import java.util.List;
 
 public class AgreementTest {
     public static void main(String[] args) throws EntityNotFoundException, PhoneNumberAlreadyExistException, EmailAlreadyExistException {
-
-
-
         //creating instances
         Client client = new Client();
         Client seller = new Client();
@@ -94,7 +91,6 @@ public class AgreementTest {
 
         ClientRepository clientRepository = new ClientRepositoryMybatisImpl();
         ClientService clientService = new ClientServiceImpl(clientRepository);
-
         clientService.create(client);
         clientService.create(seller);
         try {
@@ -119,8 +115,6 @@ public class AgreementTest {
         AgreementRepository agreementRepository = new AgreementRepositoryMyBatisImpl();
         AgreementService agreementService = new AgreementServiceImpl(agreementRepository,realEstateService);
 
-
-
         //check CRUD operations
 
         /*agreement.setDuration("4 months");
@@ -128,9 +122,12 @@ public class AgreementTest {
 
         System.out.println(agreementService.getById(5));
 
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 84077952e77b12b9ebae351c307703160ee07d06
+=======
+>>>>>>> a85536f3d0ec39fc53a2b4c4fd6b2d65dcdfc5b2
         System.out.println(realEstate);
 
         AgreementRepository agreementRepository = new AgreementRepositoryMyBatisImpl();
@@ -143,16 +140,16 @@ public class AgreementTest {
         agreement.setDuration("4 months");
         agreementService.update(agreement);
 
-
-
-
         System.out.println(agreementService.getById(5));
 
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 >>>>>>> 84077952e77b12b9ebae351c307703160ee07d06
 =======
 >>>>>>> 84077952e77b12b9ebae351c307703160ee07d06
+=======
+>>>>>>> a85536f3d0ec39fc53a2b4c4fd6b2d65dcdfc5b2
         agreementService.deleteById(1);
         agreementService.deleteById(2);
         agreementService.deleteById(3);
@@ -160,6 +157,9 @@ public class AgreementTest {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a85536f3d0ec39fc53a2b4c4fd6b2d65dcdfc5b2
         List<Agreement> agreements = agreementService.getAll();
         for (Agreement agrm : agreements) {
             System.out.println(agrm);
@@ -168,7 +168,6 @@ public class AgreementTest {
         //check the validation
         agreementService.create(agreement2, realEstate.getId(), client.getId());
         System.out.println(realEstateService.getById(realEstate.getId()));
-
 
         System.out.println(agreement2);
 

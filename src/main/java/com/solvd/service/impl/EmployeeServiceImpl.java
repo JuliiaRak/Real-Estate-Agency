@@ -1,8 +1,9 @@
 package com.solvd.service.impl;
 
 import com.solvd.domain.Employee;
-import com.solvd.domain.exceptions.EmailAlreadyExistException;
+import com.solvd.domain.exceptions.EmailAlreadyExistsException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
+import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
 import com.solvd.persistence.EmployeeRepository;
 import com.solvd.persistence.impl.EmployeeRepositoryMybatisImpl;
 import com.solvd.service.EmployeeService;
@@ -28,7 +29,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void create(Employee employee) throws EmailAlreadyExistException {
+    public void create(Employee employee) throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException {
         validate(employee);
         employeeEmailAndPhoneNumberNotExistYetCheck(employee);
 
@@ -41,7 +42,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void update(Employee employee) throws EmailAlreadyExistException, EntityNotFoundException {
+    public void update(Employee employee) throws EmailAlreadyExistsException, EntityNotFoundException, PhoneNumberAlreadyExistsException {
         validate(employee);
         employeeEmailAndPhoneNumberNotExistYetCheck(employee);
 
@@ -75,13 +76,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         integerValidator.validate("salary", employee.getSalary());
     }
 
-    private void employeeEmailAndPhoneNumberNotExistYetCheck(Employee employee) throws EmailAlreadyExistException {
+    private void employeeEmailAndPhoneNumberNotExistYetCheck(Employee employee) throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException {
         if (employeeRepository.findByEmail(employee.getEmail()).isPresent()) {
-            throw new EmailAlreadyExistException("Employee", "email", employee.getEmail());
+            throw new EmailAlreadyExistsException("Employee", "email", employee.getEmail());
         }
 
         if (employeeRepository.findByPhoneNumber(employee.getPhoneNumber()).isPresent()) {
-            throw new EmailAlreadyExistException("Employee", "phone number", employee.getPhoneNumber());
+            throw new PhoneNumberAlreadyExistsException("Employee", "phone number", employee.getPhoneNumber());
         }
     }
 }

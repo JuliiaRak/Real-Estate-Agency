@@ -4,10 +4,10 @@ import com.solvd.domain.Address;
 import com.solvd.domain.Client;
 import com.solvd.domain.RealEstate;
 import com.solvd.domain.enums.RealEstateType;
-import com.solvd.domain.exceptions.EmailAlreadyExistException;
+import com.solvd.domain.exceptions.EmailAlreadyExistsException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.domain.exceptions.LinkAlreadyExistsException;
-import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
+import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
 import com.solvd.persistence.AddressRepository;
 import com.solvd.persistence.ClientRepository;
 import com.solvd.persistence.RealEstateRepository;
@@ -31,7 +31,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class RealEstateTest {
-    public static void main(String[] args) throws PhoneNumberAlreadyExistException, EmailAlreadyExistException, EntityNotFoundException, LinkAlreadyExistsException {
+    public static void main(String[] args) throws PhoneNumberAlreadyExistsException, EmailAlreadyExistsException, EntityNotFoundException, LinkAlreadyExistsException {
         PhotoService photoService = new PhotoServiceImpl(new PhotoRepositoryMybatisImpl());
         TagService tagService = new TagServiceImpl(new TagRepositoryMybatisImpl());
 

@@ -4,10 +4,10 @@ import com.solvd.domain.Address;
 import com.solvd.domain.Client;
 import com.solvd.domain.RealEstate;
 import com.solvd.domain.enums.RealEstateType;
-import com.solvd.domain.exceptions.EmailAlreadyExistException;
+import com.solvd.domain.exceptions.EmailAlreadyExistsException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.domain.exceptions.LinkAlreadyExistsException;
-import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
+import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
 import com.solvd.service.AddressService;
 import com.solvd.service.ClientService;
 import com.solvd.service.RealEstateService;
@@ -23,6 +23,7 @@ public class Main {
     private static final ClientService CLIENT_SERVICE = new ClientServiceImpl();
     private static final AddressService ADDRESS_SERVICE = new AddressServiceImpl();
     private static final RealEstateService REAL_ESTATE_SERVICE = new RealEstateServiceImpl();
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -67,7 +68,7 @@ public class Main {
         Client client = builder.build();
         try {
             CLIENT_SERVICE.create(client);
-        } catch (PhoneNumberAlreadyExistException | EmailAlreadyExistException e) {
+        } catch (PhoneNumberAlreadyExistsException | EmailAlreadyExistsException e) {
             System.out.println(e.getMessage());
             return;
         }

@@ -7,6 +7,14 @@
         INSERT INTO tags(tag_name) VALUES (#{name})
     </insert>
 
+    <insert id="assignToRealEstate">
+        INSERT INTO real_estate_has_tags(tag_name, real_estate_id) VALUES (#{tag.name}, #{realEstateId})
+    </insert>
+
+    <delete id="allocateFromRealEstate">
+        DELETE FROM real_estate_has_tags WHERE tag_name = #{tag.name} AND real_estate_id = #{realEstateId}
+    </delete>
+
     <delete id="deleteByName">
         DELETE FROM tags WHERE tag_name = #{name}
     </delete>
@@ -23,6 +31,10 @@
 
     <select id="findAll" resultMap="TagResultMap">
         <include refid="selectAll"/>
+    </select>
+
+    <select id="existsByName">
+        SELECT EXISTS(SELECT 1 FROM tags WHERE tag_name = #{name})
     </select>
 
     <resultMap id="TagResultMap" type="com.solvd.domain.Tag">

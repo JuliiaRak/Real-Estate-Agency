@@ -24,6 +24,7 @@ public class PhotoTest {
         repository.deleteByRealEstateId(1);
         LOGGER.info("Should be empty -> " + repository.findAllByRealEstateId(1));
         LOGGER.info("Should be true -> " + repository.findAllByRealEstateId(1).isEmpty());
-        repository.deleteByRealEstateId(2);
+        repository.deleteByLink("g.com/p3");
+        LOGGER.info("Should be empty -> " + repository.findAll());
     }
 }

@@ -1,10 +1,6 @@
 package com.solvd;
 
-import com.solvd.domain.Employee;
 import com.solvd.domain.Meeting;
-import com.solvd.domain.exceptions.EntityNotFoundException;
-import com.solvd.persistence.impl.*;
-import com.solvd.service.EmployeeService;
 import com.solvd.service.MeetingService;
 import com.solvd.service.impl.*;
 

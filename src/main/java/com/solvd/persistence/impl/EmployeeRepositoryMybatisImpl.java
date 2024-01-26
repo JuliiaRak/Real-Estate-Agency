@@ -49,4 +49,20 @@ public class EmployeeRepositoryMybatisImpl implements EmployeeRepository {
             return employeeRepository.findAll();
         }
     }
+
+    @Override
+    public Optional<Employee> findByEmail(String email) {
+        try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
+            EmployeeRepository employeeRepository = sqlSession.getMapper(EmployeeRepository.class);
+            return employeeRepository.findByEmail(email);
+        }
+    }
+
+    @Override
+    public Optional<Employee> findByPhoneNumber(String phoneNember) {
+        try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
+            EmployeeRepository employeeRepository = sqlSession.getMapper(EmployeeRepository.class);
+            return employeeRepository.findByPhoneNumber(phoneNember);
+        }
+    }
 }

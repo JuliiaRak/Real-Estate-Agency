@@ -7,11 +7,6 @@
         VALUES (#{firstName}, #{lastName}, #{email}, #{phoneNumber}, #{position}, #{hireDate}, #{salary})
     </insert>
 
-    <sql id="employeeSelect">
-        SELECT e.id, e.first_name, e.last_name, e.email, e.phone_number, e.employee_position, e.hire_date, e.salary
-        FROM employees e
-    </sql>
-
     <delete id="deleteById">
         DELETE FROM employees e WHERE e.id = #{id}
     </delete>
@@ -30,6 +25,11 @@
         id = #{id}
     </update>
 
+    <sql id="employeeSelect">
+        SELECT e.id, e.first_name, e.last_name, e.email, e.phone_number, e.employee_position, e.hire_date, e.salary
+        FROM employees e
+    </sql>
+
     <select id="findById" resultMap="EmployeeResultMap">
         <include refid="employeeSelect"/>
         WHERE e.id = #{id}
@@ -37,6 +37,16 @@
 
     <select id="findAll" resultMap="EmployeeResultMap">
         <include refid="employeeSelect"/>
+    </select>
+
+    <select id="findByEmail" resultMap="EmployeeResultMap">
+        <include refid="employeeSelect"/>
+        WHERE e.email = #{email}
+    </select>
+
+    <select id="findByPhoneNumber" resultMap="EmployeeResultMap">
+        <include refid="employeeSelect"/>
+        WHERE e.phone_number = #{phoneNumber}
     </select>
 
     <resultMap id="EmployeeResultMap" type="com.solvd.domain.Employee" autoMapping="false">

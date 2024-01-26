@@ -11,4 +11,6 @@ public interface ClientRepository {
     void update(Client client);
     Optional<Client> findById(long id);
     List<Client> findAll();
+    Optional<Client> findByEmail(String email);
+    Optional<Client> findByPhoneNumber(String phoneNumber);
 }

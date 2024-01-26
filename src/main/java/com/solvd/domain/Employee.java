@@ -6,7 +6,6 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Employee {
     private long id;
@@ -17,4 +16,14 @@ public class Employee {
     private String position;
     private Date hireDate;
     private long salary;
+
+    public Employee(String firstName, String lastName, String email, String phoneNumber, String position, Date hireDate, long salary) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.position = position;
+        this.hireDate = hireDate;
+        this.salary = salary;
+    }
 }

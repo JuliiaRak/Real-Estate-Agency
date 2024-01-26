@@ -48,4 +48,20 @@ public class ClientRepositoryMybatisImpl implements ClientRepository {
             return clientRepository.findAll();
         }
     }
+
+    @Override
+    public Optional<Client> findByEmail(String email) {
+        try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
+            ClientRepository clientRepository = sqlSession.getMapper(ClientRepository.class);
+            return clientRepository.findByEmail(email);
+        }
+    }
+
+    @Override
+    public Optional<Client> findByPhoneNumber(String phoneNumber) {
+        try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
+            ClientRepository clientRepository = sqlSession.getMapper(ClientRepository.class);
+            return clientRepository.findByPhoneNumber(phoneNumber);
+        }
+    }
 }

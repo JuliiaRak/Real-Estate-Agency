@@ -6,36 +6,6 @@ import com.solvd.domain.RealEstate;
 import com.solvd.domain.enums.RealEstateType;
 import com.solvd.domain.exceptions.EmailAlreadyExistException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
-<<<<<<< HEAD
-=======
-import com.solvd.domain.exceptions.LinkAlreadyExistsException;
->>>>>>> 0d2f2cbc9ed21ab901991fac39171141a97ba074
-import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
-import com.solvd.persistence.AddressRepository;
-import com.solvd.persistence.ClientRepository;
-import com.solvd.persistence.RealEstateRepository;
-import com.solvd.persistence.impl.AddressRepositoryMybatisImpl;
-import com.solvd.persistence.impl.ClientRepositoryMybatisImpl;
-import com.solvd.persistence.impl.RealEstateRepositoryMybatisImpl;
-import com.solvd.service.AddressService;
-import com.solvd.service.ClientService;
-import com.solvd.service.RealEstateService;
-import com.solvd.service.impl.AddressServiceImpl;
-import com.solvd.service.impl.ClientServiceImpl;
-import com.solvd.service.impl.RealEstateServiceImpl;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Scanner;
-
-package com.solvd;
-
-import com.solvd.domain.Address;
-import com.solvd.domain.Client;
-import com.solvd.domain.RealEstate;
-import com.solvd.domain.enums.RealEstateType;
-import com.solvd.domain.exceptions.EmailAlreadyExistException;
-import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.domain.exceptions.LinkAlreadyExistsException;
 import com.solvd.domain.exceptions.PhoneNumberAlreadyExistException;
 import com.solvd.persistence.AddressRepository;
@@ -165,8 +135,9 @@ public class Main {
             System.out.println("1. Put new real estate up for sale.");
             System.out.println("2. View real estate by type.");
             System.out.println("3. View all real estates.");
-            System.out.println("4. Delete account.");
-            System.out.println("5. Exit");
+            System.out.println("4. View my real estates");
+            System.out.println("5. Delete account.");
+            System.out.println("6. Exit");
             System.out.print("Enter your choice: ");
 
             String choice = scanner.nextLine();
@@ -194,13 +165,28 @@ public class Main {
                     realEstateService.create(realEstate, client.getId());
                     break;
                 case "2":
-                    // Handle viewing real estate by type
+                    System.out.println("Choose what type of Real Estate you are looking for\n" +
+                            "1. Apartament\n" +
+                            "2. Building");
+                    RealEstateType realEstateType = null;
+                    String typeChoice = scanner.nextLine();
+                    switch (typeChoice){
+                        case "1":
+                            realEstateType = RealEstateType.APARTMENT;
+                            break;
+                        case "2":
+                            realEstateType = RealEstateType.BUILDING;
+                            break;
+                    }
+                    System.out.println(realEstateService.getAllByType(realEstateType));
                     break;
                 case "3":
                     System.out.println(realEstateService.getAll());
                     // Handle viewing all real estates
                     break;
                 case "4":
+                    System.out.println(realEstateService.getAllBySeller(client));
+                case "5":
                     System.out.println("Do you really want to delete your account?");
                     System.out.println("Choose an action (write a number):");
                     System.out.println("1. YES");
@@ -218,7 +204,7 @@ public class Main {
                             break;
                     }
                     break;
-                case "5":
+                case "6":
                     exitLoop = true;
                     break;
                 default:

@@ -10,9 +10,9 @@ VALUES ('USA', 'California', 'Los Angeles', 'Main St', '123', 'Apt 456'),
        ('UK', 'England', 'London', 'Oxford St', '789', 'Apt 638');
 
 INSERT INTO real_estates (price, is_available, real_estate_description, real_estate_type, metrics, rooms, seller_id, address_id)
-VALUES (100000.00, TRUE, 'Spacious apartment with a view', 'Apartment', '100 sqm', 3, 1, 1),
-       (250000.00, TRUE, 'Cozy house with a garden', 'House', '300 sqm', 5, 2, 2),
-       (50000.00, TRUE, 'Small studio in the city center', 'Apartment', '50 sqm', 1, 3, 3);
+VALUES (100000.00, TRUE, 'Spacious apartment with a view', 'APARTMENT', '100 sqm', 3, 1, 1),
+       (250000.00, TRUE, 'Cozy house with a garden', 'APARTMENT', '300 sqm', 5, 2, 2),
+       (50000.00, TRUE, 'Small studio in the city center', 'APARTMENT', '50 sqm', 1, 3, 3);
 
 INSERT INTO tags (tag_name)
 VALUES ('Luxury'),
@@ -43,3 +43,7 @@ INSERT INTO meetings (meeting_date_time, inquiry_date, meeting_status, real_esta
 VALUES ('2024-03-01', '2024-02-22', 'Scheduled', 1, 2, 1),
        ('2024-04-05', '2024-02-25', 'Completed', 2, 3, 2),
        ('2024-02-10', '2024-02-18', 'Pending', 3, 1, 3);
+
+UPDATE real_estates SET real_estate_type = 'APARTMENT' WHERE id = 1;
+UPDATE real_estates SET real_estate_type = 'BUILDING' WHERE id = 2;
+UPDATE real_estates SET real_estate_type = 'APARTMENT' WHERE id = 3;

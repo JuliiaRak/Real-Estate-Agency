@@ -78,16 +78,18 @@ public class Main {
         Client client = builder.build();
         try {
             CLIENT_SERVICE.create(client);
-        } catch (PhoneNumberAlreadyExistsException | EmailAlreadyExistsException e) {
-            System.out.println(e.getMessage());
+        } catch (IllegalArgumentException | NullPointerException |
+                 PhoneNumberAlreadyExistsException | EmailAlreadyExistsException e) {
+            System.out.println("\n" + e.getMessage());
             return;
         }
 
-        System.out.println("Thank you for registration!");
+        System.out.println("\n" + "Thank you for registration!");
 
         try {
             userActions(scanner, client);
-        } catch (EntityNotFoundException | LinkAlreadyExistsException e) {
+        } catch (IllegalArgumentException | NullPointerException |
+                 EntityNotFoundException | LinkAlreadyExistsException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -117,7 +119,8 @@ public class Main {
                         System.out.println("Thank you for LogIn");
 
                         userActions(scanner, client);
-                    } catch (EntityNotFoundException | LinkAlreadyExistsException e) {
+                    } catch (IllegalArgumentException | NullPointerException |
+                             EntityNotFoundException | LinkAlreadyExistsException e) {
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -209,7 +212,7 @@ public class Main {
                         realEstate.setSeller(client);
                         realEstate.setAddress(address);
                         REAL_ESTATE_SERVICE.create(realEstate, client.getId());
-                    } catch (Exception e) {
+                    } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -229,7 +232,7 @@ public class Main {
                             System.out.println(REAL_ESTATE_SERVICE.getAllByType(realEstateType));
                             break;
                         default:
-                            System.out.println("Invalid option. Please Enter '1' or '2' ");
+                            System.out.println("Invalid option.");
                     }
                     break;
                 case "3":
@@ -242,7 +245,12 @@ public class Main {
                     System.out.println(REAL_ESTATE_SERVICE.getAllBySeller(client));
                     break;
                 case "5":
-                    buyRealEstate(scanner, client);
+                    try {
+                        orderRealEstate(scanner, client);
+                    } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
                 case "6":
                     System.out.println("Do you really want to delete your account?");
                     System.out.println("Choose an action (write a number):");
@@ -254,11 +262,13 @@ public class Main {
                     switch (userInput) {
                         case "1":
                             CLIENT_SERVICE.deleteById(client.getId());
+                            exitLoop = true;
                             break;
                         case "2":
                             exitLoop = true;
                             break;
                         default:
+                            System.out.println("Invalid option.");
                             break;
                     }
                     break;
@@ -266,24 +276,19 @@ public class Main {
                     exitLoop = true;
                     break;
                 default:
-                    System.out.println("Invalid option. Please enter '1', '2', '3' or '4'.");
+                    System.out.println("Invalid option.");
             }
 
             // Add more cases for other actions as needed
         }
     }
-    public static void buyRealEstate(Scanner scanner, Client client){
+    public static void orderRealEstate(Scanner scanner, Client client) throws EntityNotFoundException {
         System.out.println("Enter the id of Real Estate you want to buy");
         String choice = scanner.nextLine();
         RealEstate realEstate = null;
-        try {
-            realEstate = REAL_ESTATE_SERVICE.getById(Long.parseLong(choice));
-        } catch (EntityNotFoundException e) {
-            System.out.println(e.getMessage());
-        }
+        realEstate = REAL_ESTATE_SERVICE.getById(Long.parseLong(choice));
 
         System.out.println("The price of Real Estate " + realEstate.getPrice());
-
 
         Agreement agreement = new Agreement();
         agreement.setRealEstate(realEstate);
@@ -292,14 +297,11 @@ public class Main {
         agreement.setAmount(realEstate.getPrice());
         agreement.setClient(client);
         agreement.setStatus("unpaid");
-        try {
-            AGREEMENT_SERVICE.create(agreement, realEstate.getId(), client.getId());
-        } catch (EntityNotFoundException e) {
-            System.out.println(e.getMessage());
-        }
+
+        AGREEMENT_SERVICE.create(agreement, realEstate.getId(), client.getId());
+
         System.out.println("Your agreement is ready ");
         System.out.println(agreement);
-
     }
 
     // Define other methods for handling real estate actions, employee management, agreements, etc.

@@ -17,6 +17,7 @@ import com.solvd.service.validators.string.SizeStringValidator;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 public class AgreementServiceImpl implements AgreementService {
@@ -90,5 +91,13 @@ public class AgreementServiceImpl implements AgreementService {
     @Override
     public List<Agreement> getAll(){
         return agreementRepository.findAll();
+    }
+
+    @Override
+    public Optional<Agreement> getByClientId(long clientId) {
+        return getAll().stream()
+                .filter(agreement -> agreement.getClient().getId() == clientId)
+                .findFirst();
+
     }
 }

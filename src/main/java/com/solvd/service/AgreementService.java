@@ -4,6 +4,7 @@ import com.solvd.domain.Agreement;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AgreementService {
     void create(Agreement agreement, long realEstateId, long clientId) throws EntityNotFoundException;
@@ -15,4 +16,6 @@ public interface AgreementService {
     Agreement getById(long id) throws EntityNotFoundException;
 
     List<Agreement> getAll();
+
+    Optional<Agreement> getByClientId(long id) throws EntityNotFoundException;
 }

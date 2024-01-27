@@ -21,6 +21,7 @@ import com.solvd.service.impl.RealEstateServiceImpl;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Main {
@@ -143,7 +144,9 @@ public class Main {
             System.out.println("4. View my real estates");
             System.out.println("5. Order real estate");
             System.out.println("6. Delete account.");
-            System.out.println("7. Exit");
+            System.out.println("7. View my ordered.");
+            System.out.println("8. Pay for agreement.");
+            System.out.println("9. Exit");
             System.out.print("Enter your choice: ");
 
             String choice = scanner.nextLine();
@@ -273,6 +276,16 @@ public class Main {
                     }
                     break;
                 case "7":
+                    System.out.println(AGREEMENT_SERVICE.getByClientId(client.getId()));
+                    break;
+                case "8":
+                    try {
+                        payForAgreement(scanner, client);
+                    } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case "9":
                     exitLoop = true;
                     break;
                 default:
@@ -282,10 +295,32 @@ public class Main {
             // Add more cases for other actions as needed
         }
     }
+
+    private static void payForAgreement(Scanner scanner, Client client) throws EntityNotFoundException {
+        Optional<Agreement> agreement = AGREEMENT_SERVICE.getByClientId(client.getId());
+        if(agreement.isEmpty()) {
+            System.out.println("You cannot have more than one Real Estate AGREEMENT");
+            return;
+        }
+
+        System.out.println("Thank you for paying for agreement");
+        RealEstate realEstate = agreement.get().getRealEstate();
+        realEstate.setAvailable(false);
+        REAL_ESTATE_SERVICE.update(realEstate);
+
+        AGREEMENT_SERVICE.deleteById(agreement.get().getId());
+    }
+
     public static void orderRealEstate(Scanner scanner, Client client) throws EntityNotFoundException {
+        if(AGREEMENT_SERVICE.getByClientId(client.getId()).isPresent()) {
+            System.out.println("You cannot have more than one Real Estate AGREEMENT");
+            return;
+        }
+
         System.out.println("Enter the id of Real Estate you want to buy");
         String choice = scanner.nextLine();
-        RealEstate realEstate = null;
+
+        RealEstate realEstate;
         realEstate = REAL_ESTATE_SERVICE.getById(Long.parseLong(choice));
 
         System.out.println("The price of Real Estate " + realEstate.getPrice());

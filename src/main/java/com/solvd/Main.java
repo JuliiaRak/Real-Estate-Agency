@@ -17,6 +17,7 @@ import com.solvd.service.impl.RealEstateServiceImpl;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -228,7 +229,10 @@ public class Main {
                     }
                     break;
                 case "3":
-                    System.out.println(REAL_ESTATE_SERVICE.getAll());
+                    List<RealEstate> realEstates =  REAL_ESTATE_SERVICE.getAll();
+                    for(RealEstate rlEsts: realEstates){
+                        System.out.println(rlEsts +"\n");
+                    }
                     break;
                 case "4":
                     System.out.println(REAL_ESTATE_SERVICE.getAllBySeller(client));

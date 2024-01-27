@@ -280,7 +280,7 @@ public class Main {
                     break;
                 case "8":
                     try {
-                        payForAgreement(scanner, client);
+                        payForAgreement(client);
                     } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
                         System.out.println(e.getMessage());
                     }
@@ -296,7 +296,7 @@ public class Main {
         }
     }
 
-    private static void payForAgreement(Scanner scanner, Client client) throws EntityNotFoundException {
+    private static void payForAgreement(Client client) throws EntityNotFoundException {
         Optional<Agreement> agreement = AGREEMENT_SERVICE.getByClientId(client.getId());
         if(agreement.isEmpty()) {
             System.out.println("You cannot have more than one Real Estate AGREEMENT");

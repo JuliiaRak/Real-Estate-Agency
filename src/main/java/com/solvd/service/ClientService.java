@@ -9,10 +9,18 @@ import java.util.List;
 
 public interface ClientService {
     void create(Client client) throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException;
+
     void deleteById(long id);
-    void update(Client client) throws EntityNotFoundException;
+
+    void update(Client client) throws EntityNotFoundException, EmailAlreadyExistsException, PhoneNumberAlreadyExistsException;
+
     Client getById(long id) throws EntityNotFoundException;
+
     List<Client> getAll();
+
     Client getByEmail(String email) throws EntityNotFoundException;
+
     Client getByPhoneNumber(String phoneNumber) throws EntityNotFoundException;
+
+    boolean existsById(long id);
 }

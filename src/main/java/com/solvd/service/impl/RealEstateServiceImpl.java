@@ -1,8 +1,10 @@
 package com.solvd.service.impl;
 
+import com.solvd.domain.Client;
 import com.solvd.domain.Photo;
 import com.solvd.domain.RealEstate;
 import com.solvd.domain.Tag;
+import com.solvd.domain.enums.RealEstateType;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.domain.exceptions.LinkAlreadyExistsException;
 import com.solvd.persistence.RealEstateRepository;
@@ -23,6 +25,7 @@ import com.solvd.service.validators.string.SizeStringValidator;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class RealEstateServiceImpl implements RealEstateService {
@@ -57,7 +60,10 @@ public class RealEstateServiceImpl implements RealEstateService {
     }
 
     @Override
-    public void update(RealEstate realEstate) {
+    public void update(RealEstate realEstate) throws EntityNotFoundException {
+        if (realEstateRepository.findById(realEstate.getId()).isEmpty()) {
+            throw new EntityNotFoundException("Real Estate", realEstate.getId());
+        }
         validate(realEstate);
         realEstateRepository.update(realEstate);
     }
@@ -73,8 +79,29 @@ public class RealEstateServiceImpl implements RealEstateService {
     }
 
     @Override
+    public List<RealEstate> getAllBySeller(Client seller) {
+        return realEstateRepository.findAll().stream()
+                .filter(realEstate -> realEstate.getSeller().getId() == seller.getId())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<RealEstate> getAllByType(RealEstateType realEstateType) {
+        return realEstateRepository.findAll().stream()
+                .filter(realEstate -> realEstate.getRealEstateType() == realEstateType)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public boolean existsById(long id) {
         return realEstateRepository.findById(id).isPresent();
+    }
+
+    @Override
+    public void hideById(long id) throws EntityNotFoundException {
+        RealEstate realEstate = getById(id);
+        realEstate.setAvailable(false);
+        update(realEstate);
     }
 
     public void validate(RealEstate realEstate) {

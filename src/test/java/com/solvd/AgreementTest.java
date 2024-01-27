@@ -117,6 +117,7 @@ public class AgreementTest {
                 AgreementService agreementService = new AgreementServiceImpl();
 
                 //check CRUD operations
+
         /*agreement.setDuration("4 months");
         agreementService.update(agreement);
 

@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    depends_on:
+      - mysql_db
+    networks:
+      - real-estate
+    stdin_open: true
+  mysql_db:
+    image: mysql:8.3.0
+    environment:
+      MYSQL_ROOT_PASSWORD: secret_password
+      MYSQL_DATABASE: real_estate_agency
+    ports:
+      - '3307:3306'
+    networks:
+      - real-estate
+    volumes:
+      - "./src/main/resources/Real_estate_agency.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./src/main/resources/data_initialization_real_estate_agency.sql:/docker-entrypoint-initdb.d/2.sql"
+
+networks:
+  real-estate:
+    name: real-estate
+    driver: bridge

@@ -123,12 +123,6 @@ public class AgreementTest {
 
         System.out.println(agreementService.getById(5));
 
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 84077952e77b12b9ebae351c307703160ee07d06
-=======
->>>>>>> a85536f3d0ec39fc53a2b4c4fd6b2d65dcdfc5b2
         System.out.println(realEstate);
 
         AgreementRepository agreementRepository = new AgreementRepositoryMyBatisImpl();
@@ -141,29 +135,13 @@ public class AgreementTest {
         agreement.setDuration("4 months");
         agreementService.update(agreement);
 
-
-
-
         System.out.println(agreementService.getById(5));
 
-<<<<<<< HEAD
-
-<<<<<<< HEAD
->>>>>>> 84077952e77b12b9ebae351c307703160ee07d06
-=======
->>>>>>> 84077952e77b12b9ebae351c307703160ee07d06
-=======
->>>>>>> a85536f3d0ec39fc53a2b4c4fd6b2d65dcdfc5b2
         agreementService.deleteById(1);
         agreementService.deleteById(2);
         agreementService.deleteById(3);
         agreementService.deleteById(4);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> a85536f3d0ec39fc53a2b4c4fd6b2d65dcdfc5b2
         List<Agreement> agreements = agreementService.getAll();
         for (Agreement agrm : agreements) {
             System.out.println(agrm);

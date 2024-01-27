@@ -12,7 +12,7 @@ import com.solvd.service.impl.ClientServiceImpl;
 import java.util.Date;
 
 public class ClientTest {
-    public static void main(String[] args) throws EntityNotFoundException {
+    public static void main(String[] args) throws EntityNotFoundException, EmailAlreadyExistsException, PhoneNumberAlreadyExistsException {
         Client.Builder builder = new Client.Builder();
         try {
             builder.setFirstName("Denys");

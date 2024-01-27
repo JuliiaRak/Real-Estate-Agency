@@ -72,7 +72,6 @@ public class AgreementServiceImpl implements AgreementService {
         agreementRepository.deleteById(id);
     }
 
-
     @Override
     public void update(Agreement agreement) throws EntityNotFoundException {
         if (agreementRepository.findById(agreement.getId()).isEmpty()) {

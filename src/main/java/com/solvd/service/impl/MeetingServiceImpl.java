@@ -4,7 +4,10 @@ import com.solvd.domain.Meeting;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.persistence.MeetingRepository;
 import com.solvd.persistence.impl.MeetingRepositoryMybatisImpl;
+import com.solvd.service.ClientService;
+import com.solvd.service.EmployeeService;
 import com.solvd.service.MeetingService;
+import com.solvd.service.RealEstateService;
 import com.solvd.service.validators.Validator;
 import com.solvd.service.validators.date.FutureDateValidator;
 import com.solvd.service.validators.date.NotNullDateValidator;
@@ -22,15 +25,43 @@ import java.util.List;
 public class MeetingServiceImpl implements MeetingService {
 
     private final MeetingRepository meetingRepository;
+    private final RealEstateService realEstateService;
+    private final ClientService clientService;
+    private final EmployeeService employeeService;
 
     public MeetingServiceImpl() {
         this.meetingRepository = new MeetingRepositoryMybatisImpl();
+        this.realEstateService = new RealEstateServiceImpl();
+        this.clientService = new ClientServiceImpl();
+        this.employeeService = new EmployeeServiceImpl();
     }
 
     @Override
-    public void create(Meeting meeting, Long realEstateId, Long buyerId, Long employeeId) {
+    public void create(Meeting meeting, Long realEstateId, Long buyerId, Long employeeId) throws EntityNotFoundException {
         validate(meeting);
+        checkRealEstate(realEstateId);
+        checkBuyer(buyerId);
+        checkEmployee(employeeId);
+
         meetingRepository.create(meeting, realEstateId, buyerId, employeeId);
+    }
+
+    private void checkRealEstate(Long realEstateId) throws EntityNotFoundException {
+        if (!realEstateService.existsById(realEstateId)) {
+            throw new EntityNotFoundException("Real estate");
+        }
+    }
+
+    private void checkBuyer(Long buyerId) throws EntityNotFoundException {
+        if (!clientService.existsById(buyerId)) {
+            throw new EntityNotFoundException("Buyer");
+        }
+    }
+
+    private void checkEmployee(Long employeeId) throws EntityNotFoundException {
+        if (!employeeService.existsById(employeeId)) {
+            throw new EntityNotFoundException("Employee");
+        }
     }
 
     @Override
@@ -40,10 +71,10 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public void update(Meeting meeting, Long realEstateId, Long buyerId, Long employeeId) throws EntityNotFoundException {
-        validate(meeting);
         if (meetingRepository.findById(meeting.getId()).isEmpty()) {
             throw new EntityNotFoundException("Meeting", meeting.getId());
         }
+        validate(meeting);
         meetingRepository.update(meeting, realEstateId, buyerId, employeeId);
     }
 

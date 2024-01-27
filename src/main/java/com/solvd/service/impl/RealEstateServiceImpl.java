@@ -60,7 +60,10 @@ public class RealEstateServiceImpl implements RealEstateService {
     }
 
     @Override
-    public void update(RealEstate realEstate) {
+    public void update(RealEstate realEstate) throws EntityNotFoundException {
+        if (realEstateRepository.findById(realEstate.getId()).isEmpty()) {
+            throw new EntityNotFoundException("Real Estate", realEstate.getId());
+        }
         validate(realEstate);
         realEstateRepository.update(realEstate);
     }
@@ -90,6 +93,13 @@ public class RealEstateServiceImpl implements RealEstateService {
     @Override
     public boolean existsById(long id) {
         return realEstateRepository.findById(id).isPresent();
+    }
+
+    @Override
+    public void hideById(long id) throws EntityNotFoundException {
+        RealEstate realEstate = getById(id);
+        realEstate.setAvailable(false);
+        update(realEstate);
     }
 
     public void validate(RealEstate realEstate) {

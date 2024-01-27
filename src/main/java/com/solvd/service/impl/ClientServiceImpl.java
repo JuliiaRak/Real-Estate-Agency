@@ -39,11 +39,13 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void update(Client client) throws EntityNotFoundException {
+    public void update(Client client) throws EntityNotFoundException, EmailAlreadyExistsException, PhoneNumberAlreadyExistsException {
         if (clientRepository.findById(client.getId()).isEmpty()) {
             throw new EntityNotFoundException("Client", client.getId());
         }
         validate(client);
+        checkEmailAndPhoneNumber(client);
+
         clientRepository.update(client);
     }
 
@@ -73,11 +75,11 @@ public class ClientServiceImpl implements ClientService {
     }
 
     private void checkEmailAndPhoneNumber(Client client) throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException {
-        if (clientRepository.findByEmail(client.getEmail()).isPresent()) {
+        if (clientRepository.findByEmail(client.getEmail()).filter(c -> c.getId() != client.getId()).isPresent()) {
             throw new EmailAlreadyExistsException("A customer with this email address already exists");
         }
 
-        if (clientRepository.findByPhoneNumber(client.getPhoneNumber()).isPresent()) {
+        if (clientRepository.findByPhoneNumber(client.getPhoneNumber()).filter(c -> c.getId() != client.getId()).isPresent()) {
             throw new PhoneNumberAlreadyExistsException("A customer with this phone number already exists");
         }
     }

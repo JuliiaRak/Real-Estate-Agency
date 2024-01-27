@@ -71,10 +71,10 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public void update(Meeting meeting, Long realEstateId, Long buyerId, Long employeeId) throws EntityNotFoundException {
-        validate(meeting);
         if (meetingRepository.findById(meeting.getId()).isEmpty()) {
             throw new EntityNotFoundException("Meeting", meeting.getId());
         }
+        validate(meeting);
         meetingRepository.update(meeting, realEstateId, buyerId, employeeId);
     }
 

@@ -31,7 +31,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void create(Employee employee) throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException {
         validate(employee);
-        employeeEmailAndPhoneNumberNotExistYetCheck(employee);
+        checkEmailAndPhoneNumber(employee);
 
         employeeRepository.create(employee);
     }
@@ -43,12 +43,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void update(Employee employee) throws EmailAlreadyExistsException, EntityNotFoundException, PhoneNumberAlreadyExistsException {
-        validate(employee);
-        employeeEmailAndPhoneNumberNotExistYetCheck(employee);
-
         if (employeeRepository.findById(employee.getId()).isEmpty()) {
             throw new EntityNotFoundException("Employee", employee.getId());
         }
+        validate(employee);
+        checkEmailAndPhoneNumber(employee);
         employeeRepository.update(employee);
     }
 
@@ -81,12 +80,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         integerValidator.validate("salary", employee.getSalary());
     }
 
-    private void employeeEmailAndPhoneNumberNotExistYetCheck(Employee employee) throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException {
-        if (employeeRepository.findByEmail(employee.getEmail()).isPresent()) {
+    private void checkEmailAndPhoneNumber(Employee employee) throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException {
+        if (employeeRepository.findByEmail(employee.getEmail()).filter(e -> e.getId() != employee.getId()).isPresent()) {
             throw new EmailAlreadyExistsException("Employee", "email", employee.getEmail());
         }
-
-        if (employeeRepository.findByPhoneNumber(employee.getPhoneNumber()).isPresent()) {
+        if (employeeRepository.findByPhoneNumber(employee.getPhoneNumber()).filter(e -> e.getId() != employee.getId()).isPresent()) {
             throw new PhoneNumberAlreadyExistsException("Employee", "phone number", employee.getPhoneNumber());
         }
     }

@@ -73,7 +73,10 @@ public class AgreementServiceImpl implements AgreementService {
     }
 
     @Override
-    public void update(Agreement agreement) {
+    public void update(Agreement agreement) throws EntityNotFoundException {
+        if (agreementRepository.findById(agreement.getId()).isEmpty()) {
+            throw new EntityNotFoundException("Agreement", agreement.getId());
+        }
         validate(agreement);
         agreementRepository.update(agreement);
     }

@@ -10,7 +10,7 @@ public interface AgreementService {
 
     void deleteById(long id);
 
-    void update(Agreement agreement);
+    void update(Agreement agreement) throws EntityNotFoundException;
 
     Agreement getById(long id) throws EntityNotFoundException;
 

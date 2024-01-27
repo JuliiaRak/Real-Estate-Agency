@@ -60,7 +60,10 @@ public class RealEstateServiceImpl implements RealEstateService {
     }
 
     @Override
-    public void update(RealEstate realEstate) {
+    public void update(RealEstate realEstate) throws EntityNotFoundException {
+        if (realEstateRepository.findById(realEstate.getId()).isEmpty()) {
+            throw new EntityNotFoundException("Real Estate", realEstate.getId());
+        }
         validate(realEstate);
         realEstateRepository.update(realEstate);
     }
@@ -74,14 +77,16 @@ public class RealEstateServiceImpl implements RealEstateService {
     public List<RealEstate> getAll() {
         return realEstateRepository.findAll();
     }
+
     @Override
     public List<RealEstate> getAllBySeller(Client seller) {
         return realEstateRepository.findAll().stream()
                 .filter(realEstate -> realEstate.getSeller().getId() == seller.getId())
                 .collect(Collectors.toList());
     }
+
     @Override
-    public List<RealEstate> getAllByType(RealEstateType realEstateType){
+    public List<RealEstate> getAllByType(RealEstateType realEstateType) {
         return realEstateRepository.findAll().stream()
                 .filter(realEstate -> realEstate.getRealEstateType() == realEstateType)
                 .collect(Collectors.toList());
@@ -90,6 +95,13 @@ public class RealEstateServiceImpl implements RealEstateService {
     @Override
     public boolean existsById(long id) {
         return realEstateRepository.findById(id).isPresent();
+    }
+
+    @Override
+    public void hideById(long id) throws EntityNotFoundException {
+        RealEstate realEstate = getById(id);
+        realEstate.setAvailable(false);
+        update(realEstate);
     }
 
     public void validate(RealEstate realEstate) {

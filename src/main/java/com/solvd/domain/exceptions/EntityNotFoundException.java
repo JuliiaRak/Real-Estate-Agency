@@ -9,4 +9,3 @@ public class EntityNotFoundException extends Exception {
         super(name + " not found");
     }
 }
-

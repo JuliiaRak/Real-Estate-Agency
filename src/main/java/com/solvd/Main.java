@@ -1,6 +1,7 @@
 package com.solvd;
 
 import com.solvd.domain.Address;
+import com.solvd.domain.Agreement;
 import com.solvd.domain.Client;
 import com.solvd.domain.RealEstate;
 import com.solvd.domain.enums.RealEstateType;
@@ -9,9 +10,11 @@ import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.domain.exceptions.LinkAlreadyExistsException;
 import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
 import com.solvd.service.AddressService;
+import com.solvd.service.AgreementService;
 import com.solvd.service.ClientService;
 import com.solvd.service.RealEstateService;
 import com.solvd.service.impl.AddressServiceImpl;
+import com.solvd.service.impl.AgreementServiceImpl;
 import com.solvd.service.impl.ClientServiceImpl;
 import com.solvd.service.impl.RealEstateServiceImpl;
 
@@ -24,6 +27,7 @@ public class Main {
     private static final ClientService CLIENT_SERVICE = new ClientServiceImpl();
     private static final AddressService ADDRESS_SERVICE = new AddressServiceImpl();
     private static final RealEstateService REAL_ESTATE_SERVICE = new RealEstateServiceImpl();
+    private static final  AgreementService AGREEMENT_SERVICE =  new AgreementServiceImpl();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -238,7 +242,7 @@ public class Main {
                     System.out.println(REAL_ESTATE_SERVICE.getAllBySeller(client));
                     break;
                 case "5":
-
+                    buyRealEstate(scanner, client);
                 case "6":
                     System.out.println("Do you really want to delete your account?");
                     System.out.println("Choose an action (write a number):");
@@ -267,6 +271,35 @@ public class Main {
 
             // Add more cases for other actions as needed
         }
+    }
+    public static void buyRealEstate(Scanner scanner, Client client){
+        System.out.println("Enter the id of Real Estate you want to buy");
+        String choice = scanner.nextLine();
+        RealEstate realEstate = null;
+        try {
+            realEstate = REAL_ESTATE_SERVICE.getById(Long.parseLong(choice));
+        } catch (EntityNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println("The price of Real Estate " + realEstate.getPrice());
+
+
+        Agreement agreement = new Agreement();
+        agreement.setRealEstate(realEstate);
+        agreement.setDate(new Date());
+        agreement.setDuration("3 months");
+        agreement.setAmount(realEstate.getPrice());
+        agreement.setClient(client);
+        agreement.setStatus("unpaid");
+        try {
+            AGREEMENT_SERVICE.create(agreement, realEstate.getId(), client.getId());
+        } catch (EntityNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println("Your agreement is ready ");
+        System.out.println(agreement);
+
     }
 
     // Define other methods for handling real estate actions, employee management, agreements, etc.

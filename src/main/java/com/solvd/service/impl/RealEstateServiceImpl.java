@@ -77,16 +77,14 @@ public class RealEstateServiceImpl implements RealEstateService {
     public List<RealEstate> getAll() {
         return realEstateRepository.findAll();
     }
-
     @Override
     public List<RealEstate> getAllBySeller(Client seller) {
         return realEstateRepository.findAll().stream()
                 .filter(realEstate -> realEstate.getSeller().getId() == seller.getId())
                 .collect(Collectors.toList());
     }
-
     @Override
-    public List<RealEstate> getAllByType(RealEstateType realEstateType) {
+    public List<RealEstate> getAllByType(RealEstateType realEstateType){
         return realEstateRepository.findAll().stream()
                 .filter(realEstate -> realEstate.getRealEstateType() == realEstateType)
                 .collect(Collectors.toList());

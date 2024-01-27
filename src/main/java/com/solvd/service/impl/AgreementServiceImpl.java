@@ -88,7 +88,7 @@ public class AgreementServiceImpl implements AgreementService {
     }
 
     @Override
-    public List<Agreement> getAll() {
+    public List<Agreement> getAll(){
         return agreementRepository.findAll();
     }
 }

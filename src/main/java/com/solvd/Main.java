@@ -195,7 +195,6 @@ public class Main {
                     System.out.print("5. Enter rooms: ");
                     String rooms = scanner.nextLine();
 
-
                     try {
                         realEstate.setPrice(BigDecimal.valueOf(Double.parseDouble(price)));
                         realEstate.setAvailable(true);

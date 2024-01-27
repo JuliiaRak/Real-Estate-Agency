@@ -1,26 +1,20 @@
 package com.solvd;
 
-import com.solvd.domain.Address;
-import com.solvd.domain.Agreement;
-import com.solvd.domain.Client;
-import com.solvd.domain.RealEstate;
+import com.solvd.domain.*;
 import com.solvd.domain.enums.RealEstateType;
 import com.solvd.domain.exceptions.EmailAlreadyExistsException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.domain.exceptions.LinkAlreadyExistsException;
 import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
-import com.solvd.service.AddressService;
-import com.solvd.service.AgreementService;
-import com.solvd.service.ClientService;
-import com.solvd.service.RealEstateService;
-import com.solvd.service.impl.AddressServiceImpl;
-import com.solvd.service.impl.AgreementServiceImpl;
-import com.solvd.service.impl.ClientServiceImpl;
-import com.solvd.service.impl.RealEstateServiceImpl;
+import com.solvd.service.*;
+import com.solvd.service.impl.*;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Main {
@@ -28,6 +22,8 @@ public class Main {
     private static final AddressService ADDRESS_SERVICE = new AddressServiceImpl();
     private static final RealEstateService REAL_ESTATE_SERVICE = new RealEstateServiceImpl();
     private static final  AgreementService AGREEMENT_SERVICE =  new AgreementServiceImpl();
+    private static final MeetingService MEETING_SERVICE =  new MeetingServiceImpl();
+    private static final EmployeeService EMPLOYEE_SERVICE =  new EmployeeServiceImpl();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -78,16 +74,18 @@ public class Main {
         Client client = builder.build();
         try {
             CLIENT_SERVICE.create(client);
-        } catch (PhoneNumberAlreadyExistsException | EmailAlreadyExistsException e) {
-            System.out.println(e.getMessage());
+        } catch (IllegalArgumentException | NullPointerException |
+                 PhoneNumberAlreadyExistsException | EmailAlreadyExistsException e) {
+            System.out.println("\n" + e.getMessage());
             return;
         }
 
-        System.out.println("Thank you for registration!");
+        System.out.println("\n" + "Thank you for registration!");
 
         try {
             userActions(scanner, client);
-        } catch (EntityNotFoundException | LinkAlreadyExistsException e) {
+        } catch (IllegalArgumentException | NullPointerException |
+                 EntityNotFoundException | LinkAlreadyExistsException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -117,7 +115,8 @@ public class Main {
                         System.out.println("Thank you for LogIn");
 
                         userActions(scanner, client);
-                    } catch (EntityNotFoundException | LinkAlreadyExistsException e) {
+                    } catch (IllegalArgumentException | NullPointerException |
+                             EntityNotFoundException | LinkAlreadyExistsException e) {
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -140,7 +139,10 @@ public class Main {
             System.out.println("4. View my real estates");
             System.out.println("5. Order real estate");
             System.out.println("6. Delete account.");
-            System.out.println("7. Exit");
+            System.out.println("7. View my ordered.");
+            System.out.println("8. Pay for agreement.");
+            System.out.println("9. Settings");
+            System.out.println("10. Exit");
             System.out.print("Enter your choice: ");
 
             String choice = scanner.nextLine();
@@ -209,7 +211,7 @@ public class Main {
                         realEstate.setSeller(client);
                         realEstate.setAddress(address);
                         REAL_ESTATE_SERVICE.create(realEstate, client.getId());
-                    } catch (Exception e) {
+                    } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -229,7 +231,7 @@ public class Main {
                             System.out.println(REAL_ESTATE_SERVICE.getAllByType(realEstateType));
                             break;
                         default:
-                            System.out.println("Invalid option. Please Enter '1' or '2' ");
+                            System.out.println("Invalid option.");
                     }
                     break;
                 case "3":
@@ -242,7 +244,23 @@ public class Main {
                     System.out.println(REAL_ESTATE_SERVICE.getAllBySeller(client));
                     break;
                 case "5":
-                    buyRealEstate(scanner, client);
+                    System.out.println("You want to create a meet to view Real Estate or you ready to buy?\n" +
+                            "1. Create a meeting\n" +
+                            "2. Create a order");
+                    String choose = scanner.nextLine();
+                    switch (choose) {
+                        case "1":
+                            createMeeting(scanner, client, chooseEmployee(scanner));
+                            break;
+                        case "2":
+                            try {
+                                orderRealEstate(scanner, client);
+                            } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
+                                System.out.println(e.getMessage());
+                            }
+                            break;
+                    }
+                    break;
                 case "6":
                     System.out.println("Do you really want to delete your account?");
                     System.out.println("Choose an action (write a number):");
@@ -254,36 +272,68 @@ public class Main {
                     switch (userInput) {
                         case "1":
                             CLIENT_SERVICE.deleteById(client.getId());
+                            exitLoop = true;
                             break;
                         case "2":
                             exitLoop = true;
                             break;
                         default:
+                            System.out.println("Invalid option.");
                             break;
                     }
                     break;
                 case "7":
+                    System.out.println(AGREEMENT_SERVICE.getByClientId(client.getId()));
+                    break;
+                case "8":
+                    try {
+                        payForAgreement(client);
+                    } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case "9":
+                    settings(scanner, client);
+                    break;
+                case "10":
                     exitLoop = true;
                     break;
                 default:
-                    System.out.println("Invalid option. Please enter '1', '2', '3' or '4'.");
+                    System.out.println("Invalid option.");
             }
 
             // Add more cases for other actions as needed
         }
     }
-    public static void buyRealEstate(Scanner scanner, Client client){
-        System.out.println("Enter the id of Real Estate you want to buy");
-        String choice = scanner.nextLine();
-        RealEstate realEstate = null;
-        try {
-            realEstate = REAL_ESTATE_SERVICE.getById(Long.parseLong(choice));
-        } catch (EntityNotFoundException e) {
-            System.out.println(e.getMessage());
+
+    private static void payForAgreement(Client client) throws EntityNotFoundException {
+        Optional<Agreement> agreement = AGREEMENT_SERVICE.getByClientId(client.getId());
+        if(agreement.isEmpty()) {
+            System.out.println("You cannot have more than one Real Estate AGREEMENT");
+            return;
         }
 
-        System.out.println("The price of Real Estate " + realEstate.getPrice());
+        System.out.println("Thank you for paying for agreement");
+        RealEstate realEstate = agreement.get().getRealEstate();
+        realEstate.setAvailable(false);
+        REAL_ESTATE_SERVICE.update(realEstate);
 
+        AGREEMENT_SERVICE.deleteById(agreement.get().getId());
+    }
+
+    public static void orderRealEstate(Scanner scanner, Client client) throws EntityNotFoundException {
+        if(AGREEMENT_SERVICE.getByClientId(client.getId()).isPresent()) {
+            System.out.println("You cannot have more than one Real Estate AGREEMENT");
+            return;
+        }
+
+        System.out.println("Enter the id of Real Estate you want to buy");
+        String choice = scanner.nextLine();
+
+        RealEstate realEstate;
+        realEstate = REAL_ESTATE_SERVICE.getById(Long.parseLong(choice));
+
+        System.out.println("The price of Real Estate " + realEstate.getPrice());
 
         Agreement agreement = new Agreement();
         agreement.setRealEstate(realEstate);
@@ -292,15 +342,84 @@ public class Main {
         agreement.setAmount(realEstate.getPrice());
         agreement.setClient(client);
         agreement.setStatus("unpaid");
-        try {
-            AGREEMENT_SERVICE.create(agreement, realEstate.getId(), client.getId());
-        } catch (EntityNotFoundException e) {
-            System.out.println(e.getMessage());
-        }
+
+        AGREEMENT_SERVICE.create(agreement, realEstate.getId(), client.getId());
+
         System.out.println("Your agreement is ready ");
         System.out.println(agreement);
+    }
+
+    public static void settings(Scanner scanner, Client client){
+        System.out.println("SETTINGS\n" +
+                            "1. Change phone  number\n" +
+                            "2. Change email");
+        String choice = scanner.nextLine();
+        switch (choice){
+            case "1":
+                System.out.println("Input your new phone number");
+                String phoneNumber = scanner.nextLine();
+                client.setPhoneNumber(phoneNumber);
+                try {
+                    CLIENT_SERVICE.update(client);
+                        Optional<Agreement> agreement = AGREEMENT_SERVICE.getByClientId(client.getId());
+                        if (agreement.isPresent()){
+                            agreement.get().setClient(client);
+                            AGREEMENT_SERVICE.update(agreement.get());
+                        }
+                } catch (EntityNotFoundException | EmailAlreadyExistsException | PhoneNumberAlreadyExistsException e) {
+                    System.out.println(e.getMessage());
+                }
+                break;
+            case "2":
+                System.out.println("Input your new email");
+                String email = scanner.nextLine();
+                client.setEmail(email);
+                try {
+                    CLIENT_SERVICE.update(client);
+                } catch (EntityNotFoundException | EmailAlreadyExistsException | PhoneNumberAlreadyExistsException e) {
+                    System.out.println(e.getMessage());
+                }
+                break;
+        }
+
 
     }
 
-    // Define other methods for handling real estate actions, employee management, agreements, etc.
+    public static void createMeeting(Scanner scanner, Client client, Employee employee){
+        Meeting meeting =  new Meeting();
+        RealEstate realEstate = null;
+        System.out.println("Input what date you want make a view");
+        String dateString = scanner.nextLine();
+        System.out.println("Enter the id of Real Estate you want to view");
+        String realEstateString = scanner.nextLine();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date utilDate = null;
+        try {
+            utilDate = dateFormat.parse(dateString);
+            realEstate = REAL_ESTATE_SERVICE.getById(Long.parseLong(realEstateString));
+        } catch (ParseException | EntityNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        java.sql.Date date = new java.sql.Date(utilDate.getTime());
+        meeting.setMeetingDateTime(date);
+        meeting.setInquiryDate(new Date());
+        meeting.setMeetingStatus("Pending");
+        meeting.setBuyer(client);
+        meeting.setRealEstate(realEstate);
+        meeting.setEmployee(employee);
+
+        System.out.println("Your meeting will be at " + date + " with " + employee.getFirstName() + " " + employee.getLastName());
+    }
+    public static Employee chooseEmployee(Scanner scanner) {
+        Employee employee = null;
+        try {
+            employee = EMPLOYEE_SERVICE.getById(1);
+        } catch (EntityNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        return employee;
+    }
+
+        // Define other methods for handling real estate actions, employee management, agreements, etc.
 }

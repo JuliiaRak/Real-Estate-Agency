@@ -166,7 +166,7 @@ public class Main {
 
                     RealEstate realEstate = new RealEstate();
 
-                    System.out.println("Please enter real estate address details:");
+                    System.out.println("Please enter real estate details:");
                     System.out.print("1. Enter price: ");
                     String price = scanner.nextLine();
                     System.out.print("2. Enter description: ");

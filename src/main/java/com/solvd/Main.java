@@ -230,8 +230,8 @@ public class Main {
                     break;
                 case "3":
                     List<RealEstate> realEstates =  REAL_ESTATE_SERVICE.getAll();
-                    for(RealEstate rlEsts: realEstates){
-                        System.out.println(rlEsts +"\n");
+                    for(RealEstate item : realEstates){
+                        System.out.println(item +"\n");
                     }
                     break;
                 case "4":

@@ -88,7 +88,7 @@ public class ClientServiceImpl implements ClientService {
         Validator<Object> objectValidator = new NotNullObjectValidator();
         objectValidator.validate("client", client);
 
-        PersonService.validate(client.getFirstName(), client.getFirstName(), client.getEmail(), client.getPhoneNumber());
+        PersonService.validate(client.getFirstName(), client.getLastName(), client.getEmail(), client.getPhoneNumber());
 
         Validator<Date> dateValidator = new PastDateValidator(new NotNullDateValidator());
         dateValidator.validate("registration date", client.getRegistrationDate());

@@ -86,10 +86,10 @@ public class MeetingServiceImpl implements MeetingService {
                 .orElseThrow(() -> new EntityNotFoundException("Meeting", id));
     }
     @Override
-    public Optional<Meeting> getByClient(Client client){
+    public Meeting getByClient(Client client) throws EntityNotFoundException {
         return meetingRepository.findAll().stream()
                 .filter(meeting -> meeting.getBuyer().getId() == client.getId())
-                .findFirst();
+                .findFirst().orElseThrow(() -> new EntityNotFoundException("meeting", client.getId()));
     }
 
     @Override

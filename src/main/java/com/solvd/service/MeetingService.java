@@ -16,6 +16,6 @@ public interface MeetingService {
 
     Meeting getById(long id) throws EntityNotFoundException;
 
-    Optional<Meeting> getByClient(Client client);
+    Meeting getByClient(Client client) throws EntityNotFoundException;
     List<Meeting> getAll();
 }

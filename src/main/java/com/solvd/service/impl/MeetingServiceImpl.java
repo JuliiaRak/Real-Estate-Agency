@@ -21,7 +21,7 @@ import lombok.AllArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @AllArgsConstructor
 public class MeetingServiceImpl implements MeetingService {
@@ -85,9 +85,8 @@ public class MeetingServiceImpl implements MeetingService {
         return meetingRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Meeting", id));
     }
-
     @Override
-    public Meeting getByClientId(Client client){
+    public Optional<Meeting> getByClient(Client client){
         return meetingRepository.findAll().stream()
                 .filter(meeting -> meeting.getBuyer().getId() == client.getId())
                 .findFirst();

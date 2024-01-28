@@ -290,7 +290,9 @@ public class Main {
                     System.out.println(AGREEMENT_SERVICE.getByClientId(client.getId()));
                     break;
                 case "8":
-                    Meeting meeting = MEETING_SERVICE.getByClient(client);
+                    Optional<Meeting> meetingOpt = MEETING_SERVICE.getByClient(client);
+                    Meeting meeting = meetingOpt.get();
+                    System.out.println(meeting);
                     System.out.println("If you need, you can change the date of meeting, or employee\n" +
                             "1. Change date \n" +
                             "2. Change employee\n" +

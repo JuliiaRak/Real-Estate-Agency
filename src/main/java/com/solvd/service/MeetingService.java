@@ -5,7 +5,6 @@ import com.solvd.domain.Meeting;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface MeetingService {
     void create(Meeting meeting, Long realEstateId, Long buyerId, Long employeeId) throws EntityNotFoundException;
@@ -16,6 +15,6 @@ public interface MeetingService {
 
     Meeting getById(long id) throws EntityNotFoundException;
 
-    Meeting getByClient(Client client) throws EntityNotFoundException;
+    List<Meeting> getByClient(Client client);
     List<Meeting> getAll();
 }

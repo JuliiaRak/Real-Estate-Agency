@@ -227,11 +227,17 @@ public class Main {
                     switch (typeChoice) {
                         case "1":
                             realEstateType = RealEstateType.APARTMENT;
-                            System.out.println(REAL_ESTATE_SERVICE.getAllByType(realEstateType));
+                            List<RealEstate> apartRealEstates = REAL_ESTATE_SERVICE.getAllByType(realEstateType);
+                            for(RealEstate rlSt : apartRealEstates){
+                                System.out.println(rlSt);
+                            }
                             break;
                         case "2":
                             realEstateType = RealEstateType.BUILDING;
-                            System.out.println(REAL_ESTATE_SERVICE.getAllByType(realEstateType));
+                            List<RealEstate> buildRealEstates = REAL_ESTATE_SERVICE.getAllByType(realEstateType);
+                            for(RealEstate rlSt : buildRealEstates){
+                                System.out.println(rlSt);
+                            }
                             break;
                         default:
                             System.out.println("Invalid option.");
@@ -244,7 +250,10 @@ public class Main {
                     }
                     break;
                 case "4":
-                    System.out.println(REAL_ESTATE_SERVICE.getAllBySeller(client));
+                    List<RealEstate> allRealEstates = REAL_ESTATE_SERVICE.getAllBySeller(client);
+                    for(RealEstate rlSt: allRealEstates){
+                        System.out.println(rlSt);
+                    }
                     break;
                 case "5":
                     System.out.println("You want to create a meet to view Real Estate or you ready to buy?\n" +
@@ -290,14 +299,20 @@ public class Main {
                     System.out.println(AGREEMENT_SERVICE.getByClientId(client.getId()));
                     break;
                 case "8":
-                    Meeting meetingOpt = MEETING_SERVICE.getByClient(client);
-                    System.out.println(meeting);
-                    System.out.println("If you need, you can change the date of meeting, or employee\n" +
+                    List<Meeting> meetings = MEETING_SERVICE.getByClient(client);
+                    System.out.println("All your meetings \n");
+                    for (Meeting meeting : meetings) {
+                        System.out.println(meeting);
+                    }
+                    System.out.println("Input the id of the meeting you want to change");
+                    String meetingId = scanner.nextLine();
+                    Meeting meeting = MEETING_SERVICE.getById(Long.parseLong(meetingId));
+                    System.out.println("If you need, you can change the date of the meeting, or employee\n" +
                             "1. Change date \n" +
                             "2. Change employee\n" +
-                            "3/ Exit");
+                            "3. Exit");
                     String choiceMeeting = scanner.nextLine();
-                    switch (choiceMeeting){
+                    switch (choiceMeeting) {
                         case "1":
                             System.out.println("Input the new date");
                             String dateString = scanner.nextLine();
@@ -317,6 +332,10 @@ public class Main {
                             Employee employee = chooseEmployee(scanner);
                             meeting.setEmployee(employee);
                             break;
+                        case "3":
+                            break;
+                        default:
+                            System.out.println("Invalid option");
                     }
                     MEETING_SERVICE.update(meeting, meeting.getRealEstate().getId(),
                             client.getId(), meeting.getEmployee().getId());

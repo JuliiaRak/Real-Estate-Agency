@@ -107,16 +107,21 @@ public class Main {
             String phoneNumber = scanner.nextLine();
 
             try {
-                CLIENT_SERVICE.getByEmail(email);
-                client = CLIENT_SERVICE.getByPhoneNumber(phoneNumber);
-                badCredencials = false;
+                Client clientByEmail = CLIENT_SERVICE.getByEmail(email);
+                Client clientByPhone = CLIENT_SERVICE.getByPhoneNumber(phoneNumber);
+                if(clientByEmail.getId() == clientByPhone.getId()) {
+                    badCredencials = false;
+                    client = CLIENT_SERVICE.getByEmail(email);
+                }
+                else System.out.println("Email and phone don`t match");
+
             } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
                 System.out.println("\n" + e.getMessage());
                 System.out.println("Please try again.");
             }
         } while (badCredencials);
 
-        System.out.println("\n" + "You've successfully Logged In!");
+        System.out.println("\n" + "You've successfully Logged In " + client.getFirstName() + " ! ");
 
         try {
             userActions(scanner, client);
@@ -262,8 +267,8 @@ public class Main {
                     String choose = scanner.nextLine();
                     switch (choose) {
                         case "1":
-                            Employee employee = chooseEmployee(scanner);
-                            createMeeting(scanner, client, employee);
+                            Optional<Employee> employee = chooseEmployee(scanner);
+                            createMeeting(scanner, client, employee.get());
                             break;
                         case "2":
                             try {
@@ -329,8 +334,8 @@ public class Main {
                             meeting.setMeetingDateTime(date);
                             break;
                         case "2":
-                            Employee employee = chooseEmployee(scanner);
-                            meeting.setEmployee(employee);
+                            Optional<Employee> employee = chooseEmployee(scanner);
+                            meeting.setEmployee(employee.get());
                             break;
                         case "3":
                             break;
@@ -467,14 +472,14 @@ public class Main {
 
             System.out.println("Your meeting will be at " + date + " with " + employee.getFirstName() + " " + employee.getLastName());
 
-        } catch (ParseException | EntityNotFoundException e) {
+        } catch (ParseException | EntityNotFoundException | NullPointerException | IllegalArgumentException e) {
             System.out.println(e.getMessage());
             System.out.println("Error occurred. Meeting could not be created.");
         }
     }
 
-    public static Employee chooseEmployee(Scanner scanner) {
-        Employee employee = null;
+    public static Optional<Employee> chooseEmployee(Scanner scanner) {
+        Optional<Employee> employee = null;
         System.out.println("Here the list of employees, choose the one");
         List<Employee> employees = EMPLOYEE_SERVICE.getAll();
         for(Employee empl: employees){
@@ -483,8 +488,8 @@ public class Main {
         System.out.println("Input the id of employee ");
         String emplId = scanner.nextLine();
         try {
-            employee = EMPLOYEE_SERVICE.getById(Long.parseLong(emplId));
-        } catch (EntityNotFoundException e) {
+             employee = Optional.ofNullable(EMPLOYEE_SERVICE.getById(Long.parseLong(emplId)));
+        } catch (EntityNotFoundException | NullPointerException | IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
         return employee;

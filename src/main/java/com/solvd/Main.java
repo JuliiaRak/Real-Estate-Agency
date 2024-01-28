@@ -130,7 +130,7 @@ public class Main {
     public static void userActions(Scanner scanner, Client client) throws EntityNotFoundException, LinkAlreadyExistsException {
         boolean exitLoop = false;
         while (!exitLoop) {
-            System.out.println("Now choose an action (write a number):");
+            System.out.println("\nNow choose an action (write a number):");
             System.out.println("1. Put new real estate up for sale.");
             System.out.println("2. View real estate by type.");
             System.out.println("3. View all real estates.");
@@ -214,15 +214,15 @@ public class Main {
                             REAL_ESTATE_SERVICE.create(realEstate, client.getId());
                             badCredencials = false;
                         } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
-                            System.out.println(e.getMessage());
+                            System.out.println("\n" + e.getMessage());
                             System.out.println("Please try again.");
                         }
                     } while (badCredencials);
                     break;
                 case "2":
                     System.out.println("Choose what type of Real Estate you are looking for (enter 1 or 2)\n" +
-                            "1. Apartament\n" +
-                            "2. Building");
+                            "\t1. Apartament\n" +
+                            "\t2. Building");
                     RealEstateType realEstateType;
                     String typeChoice = scanner.nextLine();
                     switch (typeChoice) {
@@ -252,6 +252,10 @@ public class Main {
                     break;
                 case "4":
                     List<RealEstate> allRealEstates = REAL_ESTATE_SERVICE.getAllBySeller(client);
+                    if (allRealEstates.isEmpty()) {
+                        System.out.println("You do not have real estates");
+                        break;
+                    }
                     for (RealEstate rlSt : allRealEstates) {
                         System.out.println(rlSt);
                     }
@@ -307,7 +311,7 @@ public class Main {
                     }
                     System.out.println("Input the id of the meeting you want to change");
                     String meetingId = scanner.nextLine();
-                    Meeting meeting = MEETING_SERVICE.getById(Long.parseLong(meetingId));
+                    Meeting meeting = MEETING_SERVICE.getById(parseLong(meetingId));
                     System.out.println("If you need, you can change the date of the meeting, or employee\n" +
                             "1. Change date \n" +
                             "2. Change employee\n" +
@@ -362,22 +366,6 @@ public class Main {
         }
     }
 
-    private static int parseInt(String rooms) {
-        try {
-            return Integer.parseInt(rooms);
-        } catch (NullPointerException | NumberFormatException e) {
-            throw new IllegalArgumentException(String.format("Specified incorrect rooms amount: %s", rooms), e);
-        }
-    }
-
-    private static BigDecimal parseDouble(String price) {
-        try {
-            return BigDecimal.valueOf(Double.parseDouble(price));
-        } catch (NullPointerException | NumberFormatException e) {
-            throw new IllegalArgumentException(String.format("Specified incorrect price: %s", price), e);
-        }
-    }
-
     private static void payForAgreement(Client client) throws EntityNotFoundException {
         Optional<Agreement> agreement = AGREEMENT_SERVICE.getByClientId(client.getId());
         if (agreement.isEmpty()) {
@@ -403,7 +391,7 @@ public class Main {
         String choice = scanner.nextLine();
 
         RealEstate realEstate;
-        realEstate = REAL_ESTATE_SERVICE.getById(Long.parseLong(choice));
+        realEstate = REAL_ESTATE_SERVICE.getById(parseLong(choice));
 
         System.out.println("The price of Real Estate " + realEstate.getPrice());
 
@@ -471,7 +459,7 @@ public class Main {
             Date utilDate = dateFormat.parse(dateString);
             java.sql.Date date = new java.sql.Date(utilDate.getTime());
 
-            realEstate = REAL_ESTATE_SERVICE.getById(Long.parseLong(realEstateString));
+            realEstate = REAL_ESTATE_SERVICE.getById(parseLong(realEstateString));
 
             meeting.setMeetingDateTime(date);
             meeting.setInquiryDate(new Date());
@@ -500,12 +488,35 @@ public class Main {
         System.out.println("Input the id of employee ");
         String emplId = scanner.nextLine();
         try {
-            employee = Optional.ofNullable(EMPLOYEE_SERVICE.getById(Long.parseLong(emplId)));
+            employee = Optional.ofNullable(EMPLOYEE_SERVICE.getById(parseLong(emplId)));
         } catch (EntityNotFoundException | NullPointerException | IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
         return employee;
     }
 
+    private static int parseInt(String rooms) {
+        try {
+            return Integer.parseInt(rooms);
+        } catch (NullPointerException | NumberFormatException e) {
+            throw new IllegalArgumentException(String.format("Specified incorrect rooms amount: %s", rooms), e);
+        }
+    }
+
+    private static long parseLong(String choice) {
+        try {
+            return Long.parseLong(choice);
+        } catch (NullPointerException | NumberFormatException e) {
+            throw new IllegalArgumentException(String.format("Specified incorrect id: %s", choice), e);
+        }
+    }
+
+    private static BigDecimal parseDouble(String price) {
+        try {
+            return BigDecimal.valueOf(Double.parseDouble(price));
+        } catch (NullPointerException | NumberFormatException e) {
+            throw new IllegalArgumentException(String.format("Specified incorrect price: %s", price), e);
+        }
+    }
     // Define other methods for handling real estate actions, employee management, agreements, etc.
 }

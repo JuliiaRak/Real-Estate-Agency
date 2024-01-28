@@ -195,7 +195,7 @@ public class Main {
                                 realEstate.setRealEstateType(RealEstateType.BUILDING);
                                 break;
                             default:
-                                System.out.println("Invalid option. Try again"); //TODO specify more detailed message
+                                System.out.println("Invalid real estate type. Try again");
                         }
                         if (realEstate.getRealEstateType() == null) {
                             break;
@@ -207,11 +207,11 @@ public class Main {
                         String rooms = scanner.nextLine();
 
                         try {
-                            realEstate.setPrice(BigDecimal.valueOf(Double.parseDouble(price))); //TODO handle number format exception (extend from IllegalArgumentException)
+                            realEstate.setPrice(parseDouble(price));
                             realEstate.setAvailable(true);
                             realEstate.setDescription(description);
                             realEstate.setMetrics(metrics);
-                            realEstate.setRooms(Integer.parseInt(rooms));
+                            realEstate.setRooms(parseInt(rooms));
                             realEstate.setSeller(client);
                             realEstate.setAddress(address);
                             REAL_ESTATE_SERVICE.create(realEstate, client.getId());
@@ -362,6 +362,22 @@ public class Main {
             }
 
             // Add more cases for other actions as needed
+        }
+    }
+
+    private static int parseInt(String rooms) {
+        try {
+            return Integer.parseInt(rooms);
+        } catch (NullPointerException | NumberFormatException e) {
+            throw new IllegalArgumentException(String.format("Specified incorrect rooms amount: %s", rooms), e);
+        }
+    }
+
+    private static BigDecimal parseDouble(String price) {
+        try {
+            return BigDecimal.valueOf(Double.parseDouble(price));
+        } catch (NullPointerException | NumberFormatException e) {
+            throw new IllegalArgumentException(String.format("Specified incorrect price: %s", price), e);
         }
     }
 

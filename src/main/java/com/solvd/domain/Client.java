@@ -15,6 +15,10 @@ public class Client {
     private String phoneNumber;
     private Date registrationDate;
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public static class Builder {
         private long id;
         private String firstName;

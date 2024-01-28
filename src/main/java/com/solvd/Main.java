@@ -54,9 +54,6 @@ public class Main {
     }
 
     private static void registerClient(Scanner scanner) {
-        Client client = new Client();
-
-
         System.out.println("Please enter your registration details:");
         System.out.print("1. Enter your first name: ");
         String firstName = scanner.nextLine();
@@ -67,14 +64,14 @@ public class Main {
         System.out.print("4. Enter your phone number: ");
         String phoneNumber = scanner.nextLine();
 
-        Client.Builder builder = new Client.Builder();
-        builder.setFirstName(firstName);
-        builder.setLastName(lastName);
-        builder.setEmail(email);
-        builder.setPhoneNumber(phoneNumber);
-        builder.setRegistrationDate(new Date());
+        Client client = Client.builder()
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setEmail(email)
+                .setPhoneNumber(phoneNumber)
+                .setRegistrationDate(new Date())
+                .build();
 
-        client = builder.build();
         try {
             CLIENT_SERVICE.create(client);
         } catch (IllegalArgumentException | NullPointerException |

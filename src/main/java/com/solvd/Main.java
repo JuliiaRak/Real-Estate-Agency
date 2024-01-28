@@ -111,7 +111,7 @@ public class Main {
                 Client clientByPhone = CLIENT_SERVICE.getByPhoneNumber(phoneNumber);
                 if(clientByEmail.getId() == clientByPhone.getId()) {
                     badCredencials = false;
-                    client = CLIENT_SERVICE.getByEmail(email);
+                    client = clientByEmail;
                 }
                 else System.out.println("Email and phone don`t match");
 

@@ -54,37 +54,36 @@ public class Main {
     }
 
     private static void registerClient(Scanner scanner) {
-        boolean badCredencials = true;
         Client client = new Client();
 
-        do {
-            System.out.println("Please enter your registration details:");
-            System.out.print("1. Enter your first name: ");
-            String firstName = scanner.nextLine();
-            System.out.print("2. Enter your last name: ");
-            String lastName = scanner.nextLine();
-            System.out.print("3. Enter your email: ");
-            String email = scanner.nextLine();
-            System.out.print("4. Enter your phone number: ");
-            String phoneNumber = scanner.nextLine();
 
-            Client.Builder builder = new Client.Builder();
-            builder.setFirstName(firstName);
-            builder.setLastName(lastName);
-            builder.setEmail(email);
-            builder.setPhoneNumber(phoneNumber);
-            builder.setRegistrationDate(new Date());
+        System.out.println("Please enter your registration details:");
+        System.out.print("1. Enter your first name: ");
+        String firstName = scanner.nextLine();
+        System.out.print("2. Enter your last name: ");
+        String lastName = scanner.nextLine();
+        System.out.print("3. Enter your email: ");
+        String email = scanner.nextLine();
+        System.out.print("4. Enter your phone number: ");
+        String phoneNumber = scanner.nextLine();
 
-            client = builder.build();
-            try {
-                CLIENT_SERVICE.create(client);
-                badCredencials = false;
-            } catch (IllegalArgumentException | NullPointerException |
-                     PhoneNumberAlreadyExistsException | EmailAlreadyExistsException e) {
-                System.out.println("\n" + e.getMessage());
-                System.out.println("Please try again.");
-            }
-        } while (badCredencials); //TODO викидувати юзера
+        Client.Builder builder = new Client.Builder();
+        builder.setFirstName(firstName);
+        builder.setLastName(lastName);
+        builder.setEmail(email);
+        builder.setPhoneNumber(phoneNumber);
+        builder.setRegistrationDate(new Date());
+
+        client = builder.build();
+        try {
+            CLIENT_SERVICE.create(client);
+        } catch (IllegalArgumentException | NullPointerException |
+                 PhoneNumberAlreadyExistsException | EmailAlreadyExistsException e) {
+            System.out.println("\n" + e.getMessage());
+            System.out.println("Please try again.");
+            return;
+        }
+
 
         System.out.println("\n" + "Thank you for registration!");
 
@@ -102,13 +101,13 @@ public class Main {
         System.out.println("Please enter your logIn details:");
         System.out.print("Please enter your email: ");
         String email = scanner.nextLine();
-        System.out.print("Please Enter your phone number: ");
+        System.out.print("Please enter your phone number: ");
         String phoneNumber = scanner.nextLine();
 
         try {
             Client clientByEmail = CLIENT_SERVICE.getByEmail(email);
             Client clientByPhone = CLIENT_SERVICE.getByPhoneNumber(phoneNumber);
-            if (clientByEmail.getId() != clientByPhone.getId()) {
+            if (clientByEmail.getId() == clientByPhone.getId()) {
                 client = clientByEmail;
             } else {
                 System.out.println("Email and phone don`t match");

@@ -71,7 +71,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Validator<Object> objectValidator = new NotNullObjectValidator();
         objectValidator.validate("employee", employee);
 
-        PersonService.validate(employee.getFirstName(), employee.getFirstName(), employee.getEmail(), employee.getPhoneNumber());
+        PersonService.validate(employee.getFirstName(), employee.getLastName(), employee.getEmail(), employee.getPhoneNumber());
 
         Validator<Date> dateValidator = new PastDateValidator(new NotNullDateValidator());
         dateValidator.validate("hire date", employee.getHireDate());

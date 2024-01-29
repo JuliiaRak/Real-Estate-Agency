@@ -1,5 +1,6 @@
 package com.solvd.service.impl;
 
+import com.solvd.domain.Client;
 import com.solvd.domain.Meeting;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.persistence.MeetingRepository;
@@ -20,6 +21,8 @@ import lombok.AllArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class MeetingServiceImpl implements MeetingService {
@@ -82,6 +85,12 @@ public class MeetingServiceImpl implements MeetingService {
     public Meeting getById(long id) throws EntityNotFoundException {
         return meetingRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Meeting", id));
+    }
+    @Override
+    public List<Meeting> getByClient(Client client){
+        return meetingRepository.findAll().stream()
+                .filter(meeting -> meeting.getBuyer().getId() == client.getId())
+                .collect(Collectors.toList());
     }
 
     @Override

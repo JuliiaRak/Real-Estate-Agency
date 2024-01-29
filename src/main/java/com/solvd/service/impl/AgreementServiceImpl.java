@@ -38,10 +38,9 @@ public class AgreementServiceImpl implements AgreementService {
         checkRealEstate(realEstateId);
         checkClient(clientId);
 
-        if(agreement.getClient().equals(realEstateService.getById(realEstateId).getSeller())){
-            throw new FieldValidationException("Error creating a agreement");
-        }
-        else {
+        if (agreement.getClient().equals(realEstateService.getById(realEstateId).getSeller())) {
+            throw new FieldValidationException("You cannot order your real estate");
+        } else {
             agreementRepository.create(agreement, realEstateId, clientId);
         }
 
@@ -95,7 +94,7 @@ public class AgreementServiceImpl implements AgreementService {
     }
 
     @Override
-    public List<Agreement> getAll(){
+    public List<Agreement> getAll() {
         return agreementRepository.findAll();
     }
 

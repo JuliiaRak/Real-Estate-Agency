@@ -444,10 +444,9 @@ public class Main {
         Optional<Agreement> agreement = AGREEMENT_SERVICE.getByClientId(client.getId());
 
         System.out.println("Thank you for paying for agreement");
-        RealEstate realEstate = agreement.get().getRealEstate();
-        realEstate.setAvailable(false);
-        REAL_ESTATE_SERVICE.update(realEstate);
 
+        RealEstate realEstate = agreement.get().getRealEstate();
+        REAL_ESTATE_SERVICE.hideById(realEstate.getId());
         AGREEMENT_SERVICE.deleteById(agreement.get().getId());
         for (Meeting meetingToDelete : MEETING_SERVICE.getByRealEstate(realEstate)) {
             MEETING_SERVICE.deleteById(meetingToDelete.getId());

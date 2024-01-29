@@ -47,29 +47,10 @@ public class MeetingServiceImpl implements MeetingService {
         checkBuyer(buyerId);
         checkEmployee(employeeId);
 
-        if(meeting.getBuyer().equals(realEstateService.getById(realEstateId).getSeller())){
-            throw new FieldValidationException("Error creating a meeting");
-        }
-        else {
+        if (meeting.getBuyer().equals(realEstateService.getById(realEstateId).getSeller())) {
+            throw new FieldValidationException(" You cannot set up meeting on your real estate");
+        } else {
             meetingRepository.create(meeting, realEstateId, buyerId, employeeId);
-        }
-    }
-
-    private void checkRealEstate(Long realEstateId) throws EntityNotFoundException {
-        if (!realEstateService.existsById(realEstateId)) {
-            throw new EntityNotFoundException("Real estate", realEstateId);
-        }
-    }
-
-    private void checkBuyer(Long buyerId) throws EntityNotFoundException {
-        if (!clientService.existsById(buyerId)) {
-            throw new EntityNotFoundException("Buyer", buyerId);
-        }
-    }
-
-    private void checkEmployee(Long employeeId) throws EntityNotFoundException {
-        if (!employeeService.existsById(employeeId)) {
-            throw new EntityNotFoundException("Employee", employeeId);
         }
     }
 
@@ -125,5 +106,24 @@ public class MeetingServiceImpl implements MeetingService {
 
         Validator<String> stringValidator = new SizeStringValidator(new NotEmptyStringValidator(new NotNullStringValidator()));
         stringValidator.validate("meeting status", meeting.getMeetingStatus());
+    }
+
+
+    private void checkRealEstate(Long realEstateId) throws EntityNotFoundException {
+        if (!realEstateService.existsById(realEstateId)) {
+            throw new EntityNotFoundException("Real estate", realEstateId);
+        }
+    }
+
+    private void checkBuyer(Long buyerId) throws EntityNotFoundException {
+        if (!clientService.existsById(buyerId)) {
+            throw new EntityNotFoundException("Buyer", buyerId);
+        }
+    }
+
+    private void checkEmployee(Long employeeId) throws EntityNotFoundException {
+        if (!employeeService.existsById(employeeId)) {
+            throw new EntityNotFoundException("Employee", employeeId);
+        }
     }
 }

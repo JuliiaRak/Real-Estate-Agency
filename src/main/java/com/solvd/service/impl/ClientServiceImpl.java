@@ -61,12 +61,12 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client getByEmail(String email) throws EntityNotFoundException {
-        return clientRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("Client"));
+        return clientRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("Client", "email"));
     }
 
     @Override
     public Client getByPhoneNumber(String phoneNumber) throws EntityNotFoundException {
-        return clientRepository.findByPhoneNumber(phoneNumber).orElseThrow(() -> new EntityNotFoundException("Client"));
+        return clientRepository.findByPhoneNumber(phoneNumber).orElseThrow(() -> new EntityNotFoundException("Client", "phone number"));
     }
 
     @Override
@@ -88,7 +88,7 @@ public class ClientServiceImpl implements ClientService {
         Validator<Object> objectValidator = new NotNullObjectValidator();
         objectValidator.validate("client", client);
 
-        PersonService.validate(client.getFirstName(), client.getFirstName(), client.getEmail(), client.getPhoneNumber());
+        PersonService.validate(client.getFirstName(), client.getLastName(), client.getEmail(), client.getPhoneNumber());
 
         Validator<Date> dateValidator = new PastDateValidator(new NotNullDateValidator());
         dateValidator.validate("registration date", client.getRegistrationDate());

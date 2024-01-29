@@ -37,20 +37,25 @@ public class AgreementServiceImpl implements AgreementService {
         checkRealEstate(realEstateId);
         checkClient(clientId);
 
-        agreementRepository.create(agreement, realEstateId, clientId);
+        if(agreement.getClient().equals(realEstateService.getById(realEstateId).getSeller())){
+            throw new EntityNotFoundException("agreement", agreement.getId());
+        }
+        else {
+            agreementRepository.create(agreement, realEstateId, clientId);
+        }
 
         realEstateService.hideById(realEstateId);
     }
 
     private void checkRealEstate(long realEstateId) throws EntityNotFoundException {
         if (!realEstateService.existsById(realEstateId)) {
-            throw new EntityNotFoundException("Real estate");
+            throw new EntityNotFoundException("Real estate", realEstateId);
         }
     }
 
     private void checkClient(long clientId) throws EntityNotFoundException {
         if (!clientService.existsById(clientId)) {
-            throw new EntityNotFoundException("Client");
+            throw new EntityNotFoundException("Client", clientId);
         }
     }
 

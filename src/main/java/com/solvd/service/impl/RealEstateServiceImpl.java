@@ -114,5 +114,6 @@ public class RealEstateServiceImpl implements RealEstateService {
         longValidator.validate("price", realEstate.getPrice().longValue());
         Validator<Integer> intValidator = new MinIntegerValidator(1, new NotNegativeIntegerValidator());
         intValidator.validate("rooms", realEstate.getRooms());
+
     }
 }

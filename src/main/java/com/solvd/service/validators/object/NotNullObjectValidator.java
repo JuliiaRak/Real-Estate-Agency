@@ -1,5 +1,6 @@
 package com.solvd.service.validators.object;
 
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.service.validators.Validator;
 
 public class NotNullObjectValidator implements Validator<Object> {
@@ -14,10 +15,10 @@ public class NotNullObjectValidator implements Validator<Object> {
     }
 
     @Override
-    public void validate(String fieldName, Object entity) {
+    public void validate(String fieldName, Object entity) throws FieldValidationException {
         validator.validate(fieldName, entity);
         if (entity == null) {
-            throw new NullPointerException(String.format("%s cannot be null", fieldName));
+            throw new FieldValidationException(String.format("%s cannot be null", fieldName));
         }
     }
 }

@@ -4,16 +4,17 @@ import com.solvd.domain.Client;
 import com.solvd.domain.RealEstate;
 import com.solvd.domain.enums.RealEstateType;
 import com.solvd.domain.exceptions.EntityNotFoundException;
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.domain.exceptions.LinkAlreadyExistsException;
 
 import java.util.List;
 
 public interface RealEstateService {
-    void create(RealEstate realEstate, long clientId) throws EntityNotFoundException, LinkAlreadyExistsException;
+    void create(RealEstate realEstate, long clientId) throws FieldValidationException;
 
     void deleteById(long realEstateId);
 
-    void update(RealEstate realEstate) throws EntityNotFoundException;
+    void update(RealEstate realEstate) throws EntityNotFoundException, FieldValidationException;
 
     RealEstate getById(long realEstateId) throws EntityNotFoundException;
 

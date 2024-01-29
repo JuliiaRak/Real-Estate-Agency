@@ -4,7 +4,7 @@ import com.solvd.domain.*;
 import com.solvd.domain.enums.RealEstateType;
 import com.solvd.domain.exceptions.EmailAlreadyExistsException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
-import com.solvd.domain.exceptions.LinkAlreadyExistsException;
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
 import com.solvd.service.*;
 import com.solvd.service.impl.*;
@@ -12,7 +12,10 @@ import com.solvd.service.impl.*;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.Scanner;
 
 public class Main {
     private static final ClientService CLIENT_SERVICE = new ClientServiceImpl();
@@ -71,8 +74,7 @@ public class Main {
 
         try {
             CLIENT_SERVICE.create(client);
-        } catch (IllegalArgumentException | NullPointerException |
-                 PhoneNumberAlreadyExistsException | EmailAlreadyExistsException e) {
+        } catch (FieldValidationException | PhoneNumberAlreadyExistsException | EmailAlreadyExistsException e) {
             System.out.println("\n" + e.getMessage());
             System.out.println("Please try again.");
             return;
@@ -82,8 +84,7 @@ public class Main {
 
         try {
             userActions(scanner, client);
-        } catch (IllegalArgumentException | NullPointerException |
-                 EntityNotFoundException | LinkAlreadyExistsException e) {
+        } catch (EntityNotFoundException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -107,7 +108,7 @@ public class Main {
                 return;
             }
 
-        } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             System.out.println("\n" + e.getMessage());
             System.out.println("Please try again.");
             return;
@@ -117,13 +118,12 @@ public class Main {
 
         try {
             userActions(scanner, client);
-        } catch (IllegalArgumentException | NullPointerException |
-                 EntityNotFoundException | LinkAlreadyExistsException e) {
+        } catch (EntityNotFoundException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public static void userActions(Scanner scanner, Client client) throws EntityNotFoundException, LinkAlreadyExistsException {
+    public static void userActions(Scanner scanner, Client client) throws EntityNotFoundException {
         boolean exitLoop = false;
         while (!exitLoop) {
             System.out.println("\nNow choose an action (write a number):");
@@ -177,7 +177,7 @@ public class Main {
                                 orderRealEstate(scanner, client);
                                 break;
                         }
-                    } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
+                    } catch (EntityNotFoundException | FieldValidationException e) {
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -190,14 +190,14 @@ public class Main {
                 case "8":
                     try {
                         viewClientsMeetings(scanner, client);
-                    } catch (EntityNotFoundException e) {
+                    } catch (EntityNotFoundException | FieldValidationException e) {
                         System.out.println(e.getMessage());
                     }
                     break;
                 case "9":
                     try {
                         payForAgreement(client);
-                    } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
+                    } catch (EntityNotFoundException e) {
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -283,8 +283,7 @@ public class Main {
             realEstate.setAddress(address);
             REAL_ESTATE_SERVICE.create(realEstate, client.getId());
             System.out.println("\n" + "Thanks! You've successfully created a real estate! ");
-        } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException |
-                 LinkAlreadyExistsException e) {
+        } catch (FieldValidationException e) {
             System.out.println("\n" + e.getMessage());
             System.out.println("Please try again.");
         }
@@ -344,7 +343,7 @@ public class Main {
         }
     }
 
-    private static void viewClientsMeetings(Scanner scanner, Client client) throws EntityNotFoundException {
+    private static void viewClientsMeetings(Scanner scanner, Client client) throws EntityNotFoundException, FieldValidationException {
         List<Meeting> meetings = MEETING_SERVICE.getByClient(client);
         System.out.println("All your meetings \n");
         for (Meeting meeting : meetings) {
@@ -399,14 +398,13 @@ public class Main {
         }
 
         System.out.println("Thank you for paying for agreement");
-        RealEstate realEstate = agreement.get().getRealEstate();
-        realEstate.setAvailable(false);
-        REAL_ESTATE_SERVICE.update(realEstate);
+
+        REAL_ESTATE_SERVICE.hideById(agreement.get().getRealEstate().getId());
 
         AGREEMENT_SERVICE.deleteById(agreement.get().getId());
     }
 
-    public static void orderRealEstate(Scanner scanner, Client client) throws EntityNotFoundException {
+    public static void orderRealEstate(Scanner scanner, Client client) throws EntityNotFoundException, FieldValidationException {
         if (AGREEMENT_SERVICE.getByClientId(client.getId()).isPresent()) {
             System.out.println("You cannot have more than one Real Estate AGREEMENT");
             return;
@@ -428,7 +426,11 @@ public class Main {
         agreement.setClient(client);
         agreement.setStatus("unpaid");
 
-        AGREEMENT_SERVICE.create(agreement, realEstate.getId(), client.getId());
+        try {
+            AGREEMENT_SERVICE.create(agreement, realEstate.getId(), client.getId());
+        } catch (FieldValidationException e) {
+            System.out.println(e.getMessage());
+        }
 
         System.out.println("Your agreement is ready ");
         System.out.println(agreement);
@@ -451,7 +453,8 @@ public class Main {
                         agreement.get().setClient(client);
                         AGREEMENT_SERVICE.update(agreement.get());
                     }
-                } catch (EntityNotFoundException | EmailAlreadyExistsException | PhoneNumberAlreadyExistsException e) {
+                } catch (FieldValidationException | EntityNotFoundException | EmailAlreadyExistsException |
+                         PhoneNumberAlreadyExistsException e) {
                     System.out.println(e.getMessage());
                 }
                 break;
@@ -461,7 +464,8 @@ public class Main {
                 client.setEmail(email);
                 try {
                     CLIENT_SERVICE.update(client);
-                } catch (EntityNotFoundException | EmailAlreadyExistsException | PhoneNumberAlreadyExistsException e) {
+                } catch (FieldValidationException | EntityNotFoundException | EmailAlreadyExistsException |
+                         PhoneNumberAlreadyExistsException e) {
                     System.out.println(e.getMessage());
                 }
                 break;
@@ -497,13 +501,13 @@ public class Main {
 
         } catch (ParseException e) {
             System.out.println("Enter your date in the yyyy-MM-dd format");
-        } catch (EntityNotFoundException | NullPointerException | IllegalArgumentException e) {
+        } catch (EntityNotFoundException | FieldValidationException e) {
             System.out.println(e.getMessage());
             System.out.println("Error occurred. Meeting could not be created.");
         }
     }
 
-    public static Employee chooseEmployee(Scanner scanner) throws EntityNotFoundException {
+    public static Employee chooseEmployee(Scanner scanner) throws EntityNotFoundException, FieldValidationException {
         System.out.println("Here the list of employees, choose the one");
         List<Employee> employees = EMPLOYEE_SERVICE.getAll();
         for (Employee empl : employees) {
@@ -514,27 +518,27 @@ public class Main {
         return EMPLOYEE_SERVICE.getById(parseLong(emplId));
     }
 
-    private static int parseInt(String rooms) {
+    private static int parseInt(String rooms) throws FieldValidationException {
         try {
             return Integer.parseInt(rooms);
         } catch (NullPointerException | NumberFormatException e) {
-            throw new IllegalArgumentException(String.format("Specified incorrect rooms amount: %s", rooms), e);
+            throw new FieldValidationException(String.format("Specified incorrect rooms amount: %s", rooms), e);
         }
     }
 
-    private static long parseLong(String choice) {
+    private static long parseLong(String choice) throws FieldValidationException {
         try {
             return Long.parseLong(choice);
         } catch (NullPointerException | NumberFormatException e) {
-            throw new IllegalArgumentException(String.format("Specified incorrect id: %s", choice), e);
+            throw new FieldValidationException(String.format("Specified incorrect id: %s", choice), e);
         }
     }
 
-    private static BigDecimal parseDouble(String price) {
+    private static BigDecimal parseDouble(String price) throws FieldValidationException {
         try {
             return BigDecimal.valueOf(Double.parseDouble(price));
         } catch (NullPointerException | NumberFormatException e) {
-            throw new IllegalArgumentException(String.format("Specified incorrect price: %s", price), e);
+            throw new FieldValidationException(String.format("Specified incorrect price: %s", price), e);
         }
     }
     // Define other methods for handling real estate actions, employee management, agreements, etc.

@@ -428,13 +428,14 @@ public class Main {
 
         try {
             AGREEMENT_SERVICE.create(agreement, realEstate.getId(), client.getId());
+            System.out.println("Your agreement is ready ");
+            System.out.println(agreement);
         } catch (FieldValidationException e) {
             System.out.println(e.getMessage());
+            System.out.println("Order cannot be created");
         }
-
-        System.out.println("Your agreement is ready ");
-        System.out.println(agreement);
     }
+
 
     public static void settings(Scanner scanner, Client client) {
         System.out.println("SETTINGS\n" +
@@ -503,7 +504,7 @@ public class Main {
             System.out.println("Enter your date in the yyyy-MM-dd format");
         } catch (EntityNotFoundException | FieldValidationException e) {
             System.out.println(e.getMessage());
-            System.out.println("Error occurred. Meeting could not be created.");
+            System.out.println("Error occurred. Meeting cannot be created.");
         }
     }
 

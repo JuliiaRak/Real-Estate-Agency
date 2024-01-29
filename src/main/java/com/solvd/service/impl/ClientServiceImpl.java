@@ -3,6 +3,7 @@ package com.solvd.service.impl;
 import com.solvd.domain.Client;
 import com.solvd.domain.exceptions.EmailAlreadyExistsException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
 import com.solvd.persistence.ClientRepository;
 import com.solvd.persistence.impl.ClientRepositoryMybatisImpl;
@@ -26,7 +27,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void create(Client client) throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException {
+    public void create(Client client) throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException, FieldValidationException {
         validate(client);
         checkEmailAndPhoneNumber(client);
 
@@ -39,7 +40,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void update(Client client) throws EntityNotFoundException, EmailAlreadyExistsException, PhoneNumberAlreadyExistsException {
+    public void update(Client client) throws EntityNotFoundException, EmailAlreadyExistsException, PhoneNumberAlreadyExistsException, FieldValidationException {
         if (clientRepository.findById(client.getId()).isEmpty()) {
             throw new EntityNotFoundException("Client", client.getId());
         }
@@ -84,7 +85,7 @@ public class ClientServiceImpl implements ClientService {
         }
     }
 
-    private void validate(Client client) {
+    private void validate(Client client) throws FieldValidationException {
         Validator<Object> objectValidator = new NotNullObjectValidator();
         objectValidator.validate("client", client);
 

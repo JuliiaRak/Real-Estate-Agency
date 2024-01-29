@@ -1,5 +1,6 @@
 package com.solvd.service.validators.date;
 
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.service.validators.Validator;
 
 import java.util.Date;
@@ -16,10 +17,10 @@ public class FutureDateValidator implements Validator<Date> {
     }
 
     @Override
-    public void validate(String fieldName, Date entity) {
+    public void validate(String fieldName, Date entity) throws FieldValidationException {
         validator.validate(fieldName, entity);
         if (entity.before(new Date())) {
-            throw new IllegalArgumentException(String.format("%s must be a future date", fieldName));
+            throw new FieldValidationException(String.format("%s must be a future date", fieldName));
         }
     }
 }

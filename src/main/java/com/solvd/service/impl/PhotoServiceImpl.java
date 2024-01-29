@@ -1,6 +1,7 @@
 package com.solvd.service.impl;
 
 import com.solvd.domain.Photo;
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.domain.exceptions.LinkAlreadyExistsException;
 import com.solvd.persistence.PhotoRepository;
 import com.solvd.persistence.impl.PhotoRepositoryMybatisImpl;
@@ -23,7 +24,7 @@ public class PhotoServiceImpl implements PhotoService {
     }
 
     @Override
-    public void create(Photo photo, long realEstateId) throws LinkAlreadyExistsException {
+    public void create(Photo photo, long realEstateId) throws LinkAlreadyExistsException, FieldValidationException {
         validate(photo);
         if (photoRepository.existsByLink(photo.getLink())) {
             throw new LinkAlreadyExistsException(String.format("This link is already exists: %s", photo.getLink()));
@@ -31,7 +32,7 @@ public class PhotoServiceImpl implements PhotoService {
         photoRepository.create(photo, realEstateId);
     }
 
-    private void validate(Photo photo) {
+    private void validate(Photo photo) throws FieldValidationException {
         Validator<Object> objectValidator = new NotNullObjectValidator();
         objectValidator.validate("photo", photo);
 

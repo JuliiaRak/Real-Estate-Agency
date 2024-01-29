@@ -2,6 +2,7 @@ package com.solvd.service.impl;
 
 import com.solvd.domain.Agreement;
 import com.solvd.domain.exceptions.EntityNotFoundException;
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.persistence.AgreementRepository;
 import com.solvd.persistence.impl.AgreementRepositoryMyBatisImpl;
 import com.solvd.service.AgreementService;
@@ -32,7 +33,7 @@ public class AgreementServiceImpl implements AgreementService {
     }
 
     @Override
-    public void create(Agreement agreement, long realEstateId, long clientId) throws EntityNotFoundException {
+    public void create(Agreement agreement, long realEstateId, long clientId) throws EntityNotFoundException, FieldValidationException {
         validate(agreement);
         checkRealEstate(realEstateId);
         checkClient(clientId);
@@ -54,7 +55,7 @@ public class AgreementServiceImpl implements AgreementService {
         }
     }
 
-    private void validate(Agreement agreement) {
+    private void validate(Agreement agreement) throws FieldValidationException {
         Validator<Object> notNullValidator = new NotNullObjectValidator();
         notNullValidator.validate("agreement", agreement);
         notNullValidator.validate("agreement amount", agreement.getAmount());
@@ -74,7 +75,7 @@ public class AgreementServiceImpl implements AgreementService {
     }
 
     @Override
-    public void update(Agreement agreement) throws EntityNotFoundException {
+    public void update(Agreement agreement) throws EntityNotFoundException, FieldValidationException {
         if (agreementRepository.findById(agreement.getId()).isEmpty()) {
             throw new EntityNotFoundException("Agreement", agreement.getId());
         }

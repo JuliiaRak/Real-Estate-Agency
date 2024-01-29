@@ -45,7 +45,12 @@ public class MeetingServiceImpl implements MeetingService {
         checkBuyer(buyerId);
         checkEmployee(employeeId);
 
-        meetingRepository.create(meeting, realEstateId, buyerId, employeeId);
+        if(meeting.getBuyer().equals(realEstateService.getById(realEstateId).getSeller())){
+            throw new EntityNotFoundException("meeting", meeting.getId());
+        }
+        else {
+            meetingRepository.create(meeting, realEstateId, buyerId, employeeId);
+        }
     }
 
     private void checkRealEstate(Long realEstateId) throws EntityNotFoundException {

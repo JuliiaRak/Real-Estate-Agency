@@ -148,76 +148,74 @@ public class Main {
 
             switch (choice) {
                 case "1":
-                    boolean badCredencials = true;
+
                     Address address = new Address();
                     RealEstate realEstate = new RealEstate();
 
-                    do {
-                        System.out.println("Please enter real estate address details:");
-                        System.out.print("1. Enter country: ");
-                        String country = scanner.nextLine();
-                        System.out.print("2. Enter region: ");
-                        String region = scanner.nextLine();
-                        System.out.print("3. Enter city: ");
-                        String city = scanner.nextLine();
-                        System.out.print("4. Enter street: ");
-                        String street = scanner.nextLine();
-                        System.out.print("5. Enter building: ");
-                        String building = scanner.nextLine();
-                        System.out.print("6. Enter apartment: ");
-                        String apartment = scanner.nextLine();
+                    System.out.println("Please enter real estate address details:");
+                    System.out.print("1. Enter country: ");
+                    String country = scanner.nextLine();
+                    System.out.print("2. Enter region: ");
+                    String region = scanner.nextLine();
+                    System.out.print("3. Enter city: ");
+                    String city = scanner.nextLine();
+                    System.out.print("4. Enter street: ");
+                    String street = scanner.nextLine();
+                    System.out.print("5. Enter building: ");
+                    String building = scanner.nextLine();
+                    System.out.print("6. Enter apartment: ");
+                    String apartment = scanner.nextLine();
 
-                        address.setCountry(country);
-                        address.setRegion(region);
-                        address.setCity(city);
-                        address.setStreet(street);
-                        address.setBuilding(building);
-                        address.setApartment(apartment);
+                    address.setCountry(country);
+                    address.setRegion(region);
+                    address.setCity(city);
+                    address.setStreet(street);
+                    address.setBuilding(building);
+                    address.setApartment(apartment);
 
-                        System.out.println("Please enter real estate details:");
-                        System.out.print("1. Enter price: ");
-                        String price = scanner.nextLine();
-                        System.out.print("2. Enter description: ");
-                        String description = scanner.nextLine();
-                        System.out.print("3. Enter Real Estate Type: ");
-                        System.out.println("Choose type of Real Estate. Enter 1 or 2.\n" +
-                                "\t1. Apartament\n" +
-                                "\t2. Building");
-                        String apartmentType = scanner.nextLine();
-                        switch (apartmentType) {
-                            case "1":
-                                realEstate.setRealEstateType(RealEstateType.APARTMENT);
-                                break;
-                            case "2":
-                                realEstate.setRealEstateType(RealEstateType.BUILDING);
-                                break;
-                            default:
-                                System.out.println("Invalid real estate type. Try again");
-                        }
-                        if (realEstate.getRealEstateType() == null) {
+                    System.out.println("Please enter real estate details:");
+                    System.out.print("1. Enter price: ");
+                    String price = scanner.nextLine();
+                    System.out.print("2. Enter description: ");
+                    String description = scanner.nextLine();
+                    System.out.print("3. Enter Real Estate Type: ");
+                    System.out.println("Choose type of Real Estate. Enter 1 or 2.\n" +
+                            "\t1. Apartament\n" +
+                            "\t2. Building");
+                    String apartmentType = scanner.nextLine();
+                    switch (apartmentType) {
+                        case "1":
+                            realEstate.setRealEstateType(RealEstateType.APARTMENT);
                             break;
-                        }
+                        case "2":
+                            realEstate.setRealEstateType(RealEstateType.BUILDING);
+                            break;
+                        default:
+                            System.out.println("Invalid real estate type. Try again");
+                    }
+                    if (realEstate.getRealEstateType() == null) {
+                        break;
+                    }
 
-                        System.out.print("4. Enter real estate metrics: ");
-                        String metrics = scanner.nextLine();
-                        System.out.print("5. Enter rooms: ");
-                        String rooms = scanner.nextLine();
+                    System.out.print("4. Enter real estate metrics: ");
+                    String metrics = scanner.nextLine();
+                    System.out.print("5. Enter rooms: ");
+                    String rooms = scanner.nextLine();
 
-                        try {
-                            realEstate.setPrice(parseDouble(price));
-                            realEstate.setAvailable(true);
-                            realEstate.setDescription(description);
-                            realEstate.setMetrics(metrics);
-                            realEstate.setRooms(parseInt(rooms));
-                            realEstate.setSeller(client);
-                            realEstate.setAddress(address);
-                            REAL_ESTATE_SERVICE.create(realEstate, client.getId());
-                            badCredencials = false;
-                        } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
-                            System.out.println("\n" + e.getMessage());
-                            System.out.println("Please try again.");
-                        }
-                    } while (badCredencials);
+                    try {
+                        realEstate.setPrice(parseDouble(price));
+                        realEstate.setAvailable(true);
+                        realEstate.setDescription(description);
+                        realEstate.setMetrics(metrics);
+                        realEstate.setRooms(parseInt(rooms));
+                        realEstate.setSeller(client);
+                        realEstate.setAddress(address);
+                        REAL_ESTATE_SERVICE.create(realEstate, client.getId());
+                        System.out.println("Real estate have been successfully created");
+                    } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
+                        System.out.println("\n" + e.getMessage());
+                        System.out.println("Please try again.");
+                    }
                     break;
                 case "2":
                     System.out.println("Choose what type of Real Estate you are looking for (enter 1 or 2)\n" +
@@ -293,7 +291,6 @@ public class Main {
                             exitLoop = true;
                             break;
                         case "2":
-                            exitLoop = true;
                             break;
                         default:
                             System.out.println("Invalid option.");

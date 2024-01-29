@@ -8,3 +8,11 @@ A real estate agency allows users to add, edit, and view real estate information
 * Java SDK
 * MySQL
 * Maven (for building the project)
+
+## Running with docker
+
+Firstly, make sure that you have specified `config.docker.properties` as properties at `mybatis-config.xml`
+
+Build docker compose with `docker compose build` command
+
+Run docker compose in interactive mode for 'api' service with command `docker compose run --rm api`

@@ -248,21 +248,28 @@ public class Main {
         String price = scanner.nextLine();
         System.out.print("2. Enter description: ");
         String description = scanner.nextLine();
-        System.out.print("3. Enter Real Estate Type: ");
-        System.out.println("Choose type of Real Estate. Enter 1 or 2.\n" +
-                "\t1. Apartament\n" +
-                "\t2. Building");
-        String apartmentType = scanner.nextLine();
-        switch (apartmentType) {
-            case "1":
-                realEstate.setRealEstateType(RealEstateType.APARTMENT);
-                break;
-            case "2":
-                realEstate.setRealEstateType(RealEstateType.BUILDING);
-                break;
-            default:
-                System.out.println("Invalid real estate type. Try again");
-        }
+
+        boolean badType = true;
+        do {
+            System.out.print("3. Enter Real Estate Type: ");
+            System.out.println("Choose type of Real Estate. Enter 1 or 2.\n" +
+                    "\t1. Apartament\n" +
+                    "\t2. Building");
+            String apartmentType = scanner.nextLine();
+            switch (apartmentType) {
+                case "1":
+                    realEstate.setRealEstateType(RealEstateType.APARTMENT);
+                    badType = false;
+                    break;
+                case "2":
+                    realEstate.setRealEstateType(RealEstateType.BUILDING);
+                    badType = false;
+                    break;
+                default:
+                    System.out.println("Invalid real estate type. Try again");
+            }
+        } while (badType);
+
 
         System.out.print("4. Enter real estate metrics: ");
         String metrics = scanner.nextLine();

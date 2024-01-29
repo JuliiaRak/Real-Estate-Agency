@@ -1,5 +1,6 @@
 package com.solvd.service.validators.string;
 
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.service.validators.Validator;
 
 public class SizeStringValidator implements Validator<String> {
@@ -25,10 +26,10 @@ public class SizeStringValidator implements Validator<String> {
     }
 
     @Override
-    public void validate(String fieldName, String entity) {
+    public void validate(String fieldName, String entity) throws FieldValidationException {
         validator.validate(fieldName, entity);
         if (entity.length() > size) {
-            throw new IllegalArgumentException(String.format("%s is too long. Maximum size is %d", fieldName, size));
+            throw new FieldValidationException(String.format("%s is too long. Maximum size is %d", fieldName, size));
         }
     }
 }

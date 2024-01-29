@@ -1,5 +1,6 @@
 package com.solvd.service.validators.string;
 
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.service.validators.Validator;
 
 public class EmailStringValidator implements Validator<String> {
@@ -15,10 +16,10 @@ public class EmailStringValidator implements Validator<String> {
     }
 
     @Override
-    public void validate(String fieldName, String entity) {
+    public void validate(String fieldName, String entity) throws FieldValidationException {
         validator.validate(fieldName, entity);
         if (!entity.matches(EMAIL_REGEX)) {
-            throw new IllegalArgumentException(String.format("Enter correct email. Entered: %s", entity));
+            throw new FieldValidationException(String.format("Enter correct email. Entered: %s", entity));
         }
     }
 }

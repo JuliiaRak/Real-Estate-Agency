@@ -1,6 +1,7 @@
 package com.solvd.service.impl;
 
 import com.solvd.domain.Tag;
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.persistence.TagRepository;
 import com.solvd.persistence.impl.TagRepositoryMybatisImpl;
 import com.solvd.service.TagService;
@@ -22,7 +23,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void assignToRealEstate(Tag tag, long realEstateId) {
+    public void assignToRealEstate(Tag tag, long realEstateId) throws FieldValidationException {
         validate(tag);
         if (!tagRepository.existsByName(tag.getName())) {
             tagRepository.create(tag);
@@ -35,7 +36,7 @@ public class TagServiceImpl implements TagService {
         tagRepository.allocateFromRealEstate(tag, realEstateId);
     }
 
-    private void validate(Tag tag) {
+    private void validate(Tag tag) throws FieldValidationException {
         Validator<Object> objectValidator = new NotNullObjectValidator();
         objectValidator.validate("tag", tag);
 

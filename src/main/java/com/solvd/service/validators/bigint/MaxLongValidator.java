@@ -1,5 +1,6 @@
 package com.solvd.service.validators.bigint;
 
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.service.validators.Validator;
 
 public class MaxLongValidator implements Validator<Long> {
@@ -25,10 +26,10 @@ public class MaxLongValidator implements Validator<Long> {
     }
 
     @Override
-    public void validate(String fieldName, Long entity) {
+    public void validate(String fieldName, Long entity) throws FieldValidationException {
         validator.validate(fieldName, entity);
         if (entity > bound) {
-            throw new IllegalArgumentException(String.format("%s cannot be more than %d", fieldName, bound));
+            throw new FieldValidationException(String.format("%s cannot be more than %d", fieldName, bound));
         }
     }
 }

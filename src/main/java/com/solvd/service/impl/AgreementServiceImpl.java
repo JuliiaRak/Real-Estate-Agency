@@ -44,13 +44,13 @@ public class AgreementServiceImpl implements AgreementService {
 
     private void checkRealEstate(long realEstateId) throws EntityNotFoundException {
         if (!realEstateService.existsById(realEstateId)) {
-            throw new EntityNotFoundException("Real estate");
+            throw new EntityNotFoundException("Real estate", realEstateId);
         }
     }
 
     private void checkClient(long clientId) throws EntityNotFoundException {
         if (!clientService.existsById(clientId)) {
-            throw new EntityNotFoundException("Client");
+            throw new EntityNotFoundException("Client", clientId);
         }
     }
 

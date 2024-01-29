@@ -22,15 +22,16 @@ public class Main {
     private static final AddressService ADDRESS_SERVICE = new AddressServiceImpl();
     private static final RealEstateService REAL_ESTATE_SERVICE = new RealEstateServiceImpl();
     private static final AgreementService AGREEMENT_SERVICE = new AgreementServiceImpl();
-    private static final MeetingService MEETING_SERVICE =  new MeetingServiceImpl();
-    private static final EmployeeService EMPLOYEE_SERVICE =  new EmployeeServiceImpl();
+    private static final MeetingService MEETING_SERVICE = new MeetingServiceImpl();
+    private static final EmployeeService EMPLOYEE_SERVICE = new EmployeeServiceImpl();
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         boolean exitLoop = false;
+        System.out.println("Welcome to the Real Estate Agency console app. Please choose an action");
 
         while (!exitLoop) {
-            System.out.println("Welcome to the Real Estate Agency console app. Please choose an action");
-            System.out.println("Enter '0' to register as a new client");
+            System.out.println("\nEnter '0' to register as a new client");
             System.out.println("Enter '1' to login and confirm your identity.");
             System.out.println("Enter '2' to Exit.");
 
@@ -53,37 +54,33 @@ public class Main {
     }
 
     private static void registerClient(Scanner scanner) {
-        boolean badCredencials = true;
-        Client client = new Client();
+        System.out.println("Please enter your registration details:");
+        System.out.print("1. Enter your first name: ");
+        String firstName = scanner.nextLine();
+        System.out.print("2. Enter your last name: ");
+        String lastName = scanner.nextLine();
+        System.out.print("3. Enter your email: ");
+        String email = scanner.nextLine();
+        System.out.print("4. Enter your phone number: ");
+        String phoneNumber = scanner.nextLine();
 
-        do {
-            System.out.println("Please enter your registration details:");
-            System.out.print("1. Enter your first name: ");
-            String firstName = scanner.nextLine();
-            System.out.print("2. Enter your last name: ");
-            String lastName = scanner.nextLine();
-            System.out.print("3. Enter your email: ");
-            String email = scanner.nextLine();
-            System.out.print("4. Enter your phone number: ");
-            String phoneNumber = scanner.nextLine();
+        Client client = Client.builder()
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setEmail(email)
+                .setPhoneNumber(phoneNumber)
+                .setRegistrationDate(new Date())
+                .build();
 
-            Client.Builder builder = new Client.Builder();
-            builder.setFirstName(firstName);
-            builder.setLastName(lastName);
-            builder.setEmail(email);
-            builder.setPhoneNumber(phoneNumber);
-            builder.setRegistrationDate(new Date());
+        try {
+            CLIENT_SERVICE.create(client);
+        } catch (IllegalArgumentException | NullPointerException |
+                 PhoneNumberAlreadyExistsException | EmailAlreadyExistsException e) {
+            System.out.println("\n" + e.getMessage());
+            System.out.println("Please try again.");
+            return;
+        }
 
-            client = builder.build();
-            try {
-                CLIENT_SERVICE.create(client);
-                badCredencials = false;
-            } catch (IllegalArgumentException | NullPointerException |
-                     PhoneNumberAlreadyExistsException | EmailAlreadyExistsException e) {
-                System.out.println("\n" + e.getMessage());
-                System.out.println("Please try again.");
-            }
-        } while (badCredencials);
 
         System.out.println("\n" + "Thank you for registration!");
 
@@ -96,30 +93,29 @@ public class Main {
     }
 
     private static void login(Scanner scanner) {
-        boolean badCredencials = true;
         Client client = new Client();
 
-        do {
-            System.out.println("Please enter your logIn details:");
-            System.out.print("Please enter your email: ");
-            String email = scanner.nextLine();
-            System.out.print("Please Enter your phone number: ");
-            String phoneNumber = scanner.nextLine();
+        System.out.println("Please enter your logIn details:");
+        System.out.print("Please enter your email: ");
+        String email = scanner.nextLine();
+        System.out.print("Please enter your phone number: ");
+        String phoneNumber = scanner.nextLine();
 
-            try {
-                Client clientByEmail = CLIENT_SERVICE.getByEmail(email);
-                Client clientByPhone = CLIENT_SERVICE.getByPhoneNumber(phoneNumber);
-                if(clientByEmail.getId() == clientByPhone.getId()) {
-                    badCredencials = false;
-                    client = clientByEmail;
-                }
-                else System.out.println("Email and phone don`t match");
-
-            } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
-                System.out.println("\n" + e.getMessage());
-                System.out.println("Please try again.");
+        try {
+            Client clientByEmail = CLIENT_SERVICE.getByEmail(email);
+            Client clientByPhone = CLIENT_SERVICE.getByPhoneNumber(phoneNumber);
+            if (clientByEmail.getId() == clientByPhone.getId()) {
+                client = clientByEmail;
+            } else {
+                System.out.println("Email and phone don`t match");
+                return;
             }
-        } while (badCredencials);
+
+        } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
+            System.out.println("\n" + e.getMessage());
+            System.out.println("Please try again.");
+            return;
+        }
 
         System.out.println("\n" + "You've successfully Logged In " + client.getFirstName() + " ! ");
 
@@ -134,7 +130,7 @@ public class Main {
     public static void userActions(Scanner scanner, Client client) throws EntityNotFoundException, LinkAlreadyExistsException {
         boolean exitLoop = false;
         while (!exitLoop) {
-            System.out.println("Now choose an action (write a number):");
+            System.out.println("\nNow choose an action (write a number):");
             System.out.println("1. Put new real estate up for sale.");
             System.out.println("2. View real estate by type.");
             System.out.println("3. View all real estates.");
@@ -152,95 +148,93 @@ public class Main {
 
             switch (choice) {
                 case "1":
-                    boolean badCredencials = true;
+
                     Address address = new Address();
                     RealEstate realEstate = new RealEstate();
 
-                    do {
-                        System.out.println("Please enter real estate address details:");
-                        System.out.print("1. Enter country: ");
-                        String country = scanner.nextLine();
-                        System.out.print("2. Enter region: ");
-                        String region = scanner.nextLine();
-                        System.out.print("3. Enter city: ");
-                        String city = scanner.nextLine();
-                        System.out.print("4. Enter street: ");
-                        String street = scanner.nextLine();
-                        System.out.print("5. Enter building: ");
-                        String building = scanner.nextLine();
-                        System.out.print("6. Enter apartment: ");
-                        String apartment = scanner.nextLine();
+                    System.out.println("Please enter real estate address details:");
+                    System.out.print("1. Enter country: ");
+                    String country = scanner.nextLine();
+                    System.out.print("2. Enter region: ");
+                    String region = scanner.nextLine();
+                    System.out.print("3. Enter city: ");
+                    String city = scanner.nextLine();
+                    System.out.print("4. Enter street: ");
+                    String street = scanner.nextLine();
+                    System.out.print("5. Enter building: ");
+                    String building = scanner.nextLine();
+                    System.out.print("6. Enter apartment: ");
+                    String apartment = scanner.nextLine();
 
-                        address.setCountry(country);
-                        address.setRegion(region);
-                        address.setCity(city);
-                        address.setStreet(street);
-                        address.setBuilding(building);
-                        address.setApartment(apartment);
+                    address.setCountry(country);
+                    address.setRegion(region);
+                    address.setCity(city);
+                    address.setStreet(street);
+                    address.setBuilding(building);
+                    address.setApartment(apartment);
 
-                        System.out.println("Please enter real estate details:");
-                        System.out.print("1. Enter price: ");
-                        String price = scanner.nextLine();
-                        System.out.print("2. Enter description: ");
-                        String description = scanner.nextLine();
-                        System.out.print("3. Enter Real Estate Type: ");
-                        System.out.println("Choose type of Real Estate. Enter 1 or 2.\n" +
-                                "1. Apartament\n" +
-                                "2. Building");
-                        String apartmentType = scanner.nextLine();
-                        switch (apartmentType) {
-                            case "1":
-                                realEstate.setRealEstateType(RealEstateType.APARTMENT);
-                                break;
-                            case "2":
-                                realEstate.setRealEstateType(RealEstateType.BUILDING);
-                                break;
-                            default:
-                                System.out.println("Invalid option. Try again");
-                        }
-                        if (realEstate.getRealEstateType() == null) {
+                    System.out.println("Please enter real estate details:");
+                    System.out.print("1. Enter price: ");
+                    String price = scanner.nextLine();
+                    System.out.print("2. Enter description: ");
+                    String description = scanner.nextLine();
+                    System.out.print("3. Enter Real Estate Type: ");
+                    System.out.println("Choose type of Real Estate. Enter 1 or 2.\n" +
+                            "\t1. Apartament\n" +
+                            "\t2. Building");
+                    String apartmentType = scanner.nextLine();
+                    switch (apartmentType) {
+                        case "1":
+                            realEstate.setRealEstateType(RealEstateType.APARTMENT);
                             break;
-                        }
+                        case "2":
+                            realEstate.setRealEstateType(RealEstateType.BUILDING);
+                            break;
+                        default:
+                            System.out.println("Invalid real estate type. Try again");
+                    }
+                    if (realEstate.getRealEstateType() == null) {
+                        break;
+                    }
 
-                        System.out.print("4. Enter real estate metrics: ");
-                        String metrics = scanner.nextLine();
-                        System.out.print("5. Enter rooms: ");
-                        String rooms = scanner.nextLine();
+                    System.out.print("4. Enter real estate metrics: ");
+                    String metrics = scanner.nextLine();
+                    System.out.print("5. Enter rooms: ");
+                    String rooms = scanner.nextLine();
 
-                        try {
-                            realEstate.setPrice(BigDecimal.valueOf(Double.parseDouble(price)));
-                            realEstate.setAvailable(true);
-                            realEstate.setDescription(description);
-                            realEstate.setMetrics(metrics);
-                            realEstate.setRooms(Integer.parseInt(rooms));
-                            realEstate.setSeller(client);
-                            realEstate.setAddress(address);
-                            REAL_ESTATE_SERVICE.create(realEstate, client.getId());
-                            badCredencials = false;
-                        } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
-                            System.out.println(e.getMessage());
-                            System.out.println("Please try again.");
-                        }
-                    } while (badCredencials);
+                    try {
+                        realEstate.setPrice(parseDouble(price));
+                        realEstate.setAvailable(true);
+                        realEstate.setDescription(description);
+                        realEstate.setMetrics(metrics);
+                        realEstate.setRooms(parseInt(rooms));
+                        realEstate.setSeller(client);
+                        realEstate.setAddress(address);
+                        REAL_ESTATE_SERVICE.create(realEstate, client.getId());
+                        System.out.println("Real estate have been successfully created");
+                    } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
+                        System.out.println("\n" + e.getMessage());
+                        System.out.println("Please try again.");
+                    }
                     break;
                 case "2":
                     System.out.println("Choose what type of Real Estate you are looking for (enter 1 or 2)\n" +
-                            "1. Apartament\n" +
-                            "2. Building");
+                            "\t1. Apartament\n" +
+                            "\t2. Building");
                     RealEstateType realEstateType;
                     String typeChoice = scanner.nextLine();
                     switch (typeChoice) {
                         case "1":
                             realEstateType = RealEstateType.APARTMENT;
                             List<RealEstate> apartRealEstates = REAL_ESTATE_SERVICE.getAllByType(realEstateType);
-                            for(RealEstate rlSt : apartRealEstates){
+                            for (RealEstate rlSt : apartRealEstates) {
                                 System.out.println(rlSt);
                             }
                             break;
                         case "2":
                             realEstateType = RealEstateType.BUILDING;
                             List<RealEstate> buildRealEstates = REAL_ESTATE_SERVICE.getAllByType(realEstateType);
-                            for(RealEstate rlSt : buildRealEstates){
+                            for (RealEstate rlSt : buildRealEstates) {
                                 System.out.println(rlSt);
                             }
                             break;
@@ -256,7 +250,11 @@ public class Main {
                     break;
                 case "4":
                     List<RealEstate> allRealEstates = REAL_ESTATE_SERVICE.getAllBySeller(client);
-                    for(RealEstate rlSt: allRealEstates){
+                    if (allRealEstates.isEmpty()) {
+                        System.out.println("You do not have real estates");
+                        break;
+                    }
+                    for (RealEstate rlSt : allRealEstates) {
                         System.out.println(rlSt);
                     }
                     break;
@@ -265,18 +263,18 @@ public class Main {
                             "1. Create a meeting\n" +
                             "2. Create a order");
                     String choose = scanner.nextLine();
-                    switch (choose) {
-                        case "1":
-                            Optional<Employee> employee = chooseEmployee(scanner);
-                            createMeeting(scanner, client, employee.get());
-                            break;
-                        case "2":
-                            try {
+                    try {
+                        switch (choose) {
+                            case "1":
+                                Employee employee = chooseEmployee(scanner);
+                                createMeeting(scanner, client, employee);
+                                break;
+                            case "2":
                                 orderRealEstate(scanner, client);
-                            } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
-                                System.out.println(e.getMessage());
-                            }
-                            break;
+                                break;
+                        }
+                    } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
+                        System.out.println(e.getMessage());
                     }
                     break;
                 case "6":
@@ -293,7 +291,6 @@ public class Main {
                             exitLoop = true;
                             break;
                         case "2":
-                            exitLoop = true;
                             break;
                         default:
                             System.out.println("Invalid option.");
@@ -311,7 +308,7 @@ public class Main {
                     }
                     System.out.println("Input the id of the meeting you want to change");
                     String meetingId = scanner.nextLine();
-                    Meeting meeting = MEETING_SERVICE.getById(Long.parseLong(meetingId));
+                    Meeting meeting = MEETING_SERVICE.getById(parseLong(meetingId));
                     System.out.println("If you need, you can change the date of the meeting, or employee\n" +
                             "1. Change date \n" +
                             "2. Change employee\n" +
@@ -327,15 +324,15 @@ public class Main {
                             try {
                                 utilDate = dateFormat.parse(dateString);
                             } catch (ParseException e) {
-                                System.out.println(e.getMessage());
+                                System.out.println("Enter your date in the yyyy-MM-dd format");
                             }
                             java.sql.Date date = new java.sql.Date(utilDate.getTime());
 
                             meeting.setMeetingDateTime(date);
                             break;
                         case "2":
-                            Optional<Employee> employee = chooseEmployee(scanner);
-                            meeting.setEmployee(employee.get());
+                            Employee employee = chooseEmployee(scanner);
+                            meeting.setEmployee(employee);
                             break;
                         case "3":
                             break;
@@ -368,7 +365,7 @@ public class Main {
 
     private static void payForAgreement(Client client) throws EntityNotFoundException {
         Optional<Agreement> agreement = AGREEMENT_SERVICE.getByClientId(client.getId());
-        if(agreement.isEmpty()) {
+        if (agreement.isEmpty()) {
             System.out.println("You cannot have more than one Real Estate AGREEMENT");
             return;
         }
@@ -382,7 +379,7 @@ public class Main {
     }
 
     public static void orderRealEstate(Scanner scanner, Client client) throws EntityNotFoundException {
-        if(AGREEMENT_SERVICE.getByClientId(client.getId()).isPresent()) {
+        if (AGREEMENT_SERVICE.getByClientId(client.getId()).isPresent()) {
             System.out.println("You cannot have more than one Real Estate AGREEMENT");
             return;
         }
@@ -391,7 +388,7 @@ public class Main {
         String choice = scanner.nextLine();
 
         RealEstate realEstate;
-        realEstate = REAL_ESTATE_SERVICE.getById(Long.parseLong(choice));
+        realEstate = REAL_ESTATE_SERVICE.getById(parseLong(choice));
 
         System.out.println("The price of Real Estate " + realEstate.getPrice());
 
@@ -409,23 +406,23 @@ public class Main {
         System.out.println(agreement);
     }
 
-    public static void settings(Scanner scanner, Client client){
+    public static void settings(Scanner scanner, Client client) {
         System.out.println("SETTINGS\n" +
-                            "1. Change phone  number\n" +
-                            "2. Change email");
+                "1. Change phone  number\n" +
+                "2. Change email");
         String choice = scanner.nextLine();
-        switch (choice){
+        switch (choice) {
             case "1":
                 System.out.println("Input your new phone number");
                 String phoneNumber = scanner.nextLine();
                 client.setPhoneNumber(phoneNumber);
                 try {
                     CLIENT_SERVICE.update(client);
-                        Optional<Agreement> agreement = AGREEMENT_SERVICE.getByClientId(client.getId());
-                        if (agreement.isPresent()){
-                            agreement.get().setClient(client);
-                            AGREEMENT_SERVICE.update(agreement.get());
-                        }
+                    Optional<Agreement> agreement = AGREEMENT_SERVICE.getByClientId(client.getId());
+                    if (agreement.isPresent()) {
+                        agreement.get().setClient(client);
+                        AGREEMENT_SERVICE.update(agreement.get());
+                    }
                 } catch (EntityNotFoundException | EmailAlreadyExistsException | PhoneNumberAlreadyExistsException e) {
                     System.out.println(e.getMessage());
                 }
@@ -441,8 +438,6 @@ public class Main {
                 }
                 break;
         }
-
-
     }
 
     public static void createMeeting(Scanner scanner, Client client, Employee employee) {
@@ -459,7 +454,7 @@ public class Main {
             Date utilDate = dateFormat.parse(dateString);
             java.sql.Date date = new java.sql.Date(utilDate.getTime());
 
-            realEstate = REAL_ESTATE_SERVICE.getById(Long.parseLong(realEstateString));
+            realEstate = REAL_ESTATE_SERVICE.getById(parseLong(realEstateString));
 
             meeting.setMeetingDateTime(date);
             meeting.setInquiryDate(new Date());
@@ -472,28 +467,47 @@ public class Main {
 
             System.out.println("Your meeting will be at " + date + " with " + employee.getFirstName() + " " + employee.getLastName());
 
-        } catch (ParseException | EntityNotFoundException | NullPointerException | IllegalArgumentException e) {
+        } catch (ParseException e) {
+            System.out.println("Enter your date in the yyyy-MM-dd format");
+        } catch (EntityNotFoundException | NullPointerException | IllegalArgumentException e) {
             System.out.println(e.getMessage());
             System.out.println("Error occurred. Meeting could not be created.");
         }
     }
 
-    public static Optional<Employee> chooseEmployee(Scanner scanner) {
-        Optional<Employee> employee = null;
+    public static Employee chooseEmployee(Scanner scanner) throws EntityNotFoundException {
         System.out.println("Here the list of employees, choose the one");
         List<Employee> employees = EMPLOYEE_SERVICE.getAll();
-        for(Employee empl: employees){
+        for (Employee empl : employees) {
             System.out.println(empl + "\n");
         }
         System.out.println("Input the id of employee ");
         String emplId = scanner.nextLine();
-        try {
-             employee = Optional.ofNullable(EMPLOYEE_SERVICE.getById(Long.parseLong(emplId)));
-        } catch (EntityNotFoundException | NullPointerException | IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
-        return employee;
+        return EMPLOYEE_SERVICE.getById(parseLong(emplId));
     }
 
-        // Define other methods for handling real estate actions, employee management, agreements, etc.
+    private static int parseInt(String rooms) {
+        try {
+            return Integer.parseInt(rooms);
+        } catch (NullPointerException | NumberFormatException e) {
+            throw new IllegalArgumentException(String.format("Specified incorrect rooms amount: %s", rooms), e);
+        }
+    }
+
+    private static long parseLong(String choice) {
+        try {
+            return Long.parseLong(choice);
+        } catch (NullPointerException | NumberFormatException e) {
+            throw new IllegalArgumentException(String.format("Specified incorrect id: %s", choice), e);
+        }
+    }
+
+    private static BigDecimal parseDouble(String price) {
+        try {
+            return BigDecimal.valueOf(Double.parseDouble(price));
+        } catch (NullPointerException | NumberFormatException e) {
+            throw new IllegalArgumentException(String.format("Specified incorrect price: %s", price), e);
+        }
+    }
+    // Define other methods for handling real estate actions, employee management, agreements, etc.
 }

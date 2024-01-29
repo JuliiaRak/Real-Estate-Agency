@@ -1,14 +1,11 @@
 package com.solvd.service;
 
 import com.solvd.service.validators.Validator;
-import com.solvd.service.validators.string.EmailStringValidator;
-import com.solvd.service.validators.string.NotEmptyStringValidator;
-import com.solvd.service.validators.string.NotNullStringValidator;
-import com.solvd.service.validators.string.PhoneNumberStringValidator;
+import com.solvd.service.validators.string.*;
 
 public interface PersonService {
     static void validate(String firstName, String lastName, String email, String phoneNumber) {
-        Validator<String> notEmptyStringValidator = new NotEmptyStringValidator(new NotNullStringValidator());
+        Validator<String> notEmptyStringValidator = new SizeStringValidator(new NotEmptyStringValidator(new NotNullStringValidator()));
         notEmptyStringValidator.validate("first name", firstName);
         notEmptyStringValidator.validate("last name", lastName);
 

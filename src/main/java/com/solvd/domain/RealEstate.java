@@ -38,4 +38,19 @@ public class RealEstate {
     public void removeTag(Tag tag) {
         tags.remove(tag);
     }
+
+    @Override
+    public String toString() {
+        return "RealEstate{" +
+                "\tid=" + id +
+                "\tprice=" + price +
+                "\tisAvailable=" + isAvailable +
+                "\tdescription='" + description + '\'' +
+                "\trealEstateType=" + realEstateType +
+                "\tmetrics='" + metrics + '\'' +
+                "\trooms=" + rooms +
+                "\taddress=" + address +
+                "\tseller=" + seller +
+                "}";
+    }
 }

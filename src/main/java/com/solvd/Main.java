@@ -135,8 +135,9 @@ public class Main {
             System.out.println("6. Delete account.");
             System.out.println("7. View my ordered.");
             System.out.println("8. View my meetings.");
-            System.out.println("9. Settings.");
-            System.out.println("10. Exit.");
+            System.out.println("9. Pay for agreement.");
+            System.out.println("10. Settings.");
+            System.out.println("11. Exit.");
             System.out.print("Enter your choice: ");
 
             String choice = scanner.nextLine();
@@ -194,9 +195,16 @@ public class Main {
                     }
                     break;
                 case "9":
-                    settings(scanner, client);
+                    try {
+                        payForAgreement(client);
+                    } catch (EntityNotFoundException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 case "10":
+                    settings(scanner, client);
+                    break;
+                case "11":
                     exitLoop = true;
                     break;
                 default:

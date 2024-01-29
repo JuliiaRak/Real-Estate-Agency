@@ -12,10 +12,7 @@ import com.solvd.service.impl.*;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     private static final ClientService CLIENT_SERVICE = new ClientServiceImpl();
@@ -302,20 +299,21 @@ public class Main {
         switch (typeChoice) {
             case "1":
                 realEstateType = RealEstateType.APARTMENT;
-                List<RealEstate> apartRealEstates = REAL_ESTATE_SERVICE.getAllByType(realEstateType);
-                for (RealEstate rlSt : apartRealEstates) {
-                    System.out.println(rlSt);
-                }
                 break;
             case "2":
                 realEstateType = RealEstateType.BUILDING;
-                List<RealEstate> buildRealEstates = REAL_ESTATE_SERVICE.getAllByType(realEstateType);
-                for (RealEstate rlSt : buildRealEstates) {
-                    System.out.println(rlSt);
-                }
                 break;
             default:
                 System.out.println("Invalid option.");
+                return;
+        }
+        List<RealEstate> realEstates = REAL_ESTATE_SERVICE.getAllByType(realEstateType);
+        if (realEstates.isEmpty()) {
+            System.out.println("\nNo real estates by this type");
+        } else {
+            for (RealEstate rlSt : realEstates) {
+                System.out.println(rlSt);
+            }
         }
     }
 

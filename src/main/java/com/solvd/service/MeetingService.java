@@ -2,6 +2,7 @@ package com.solvd.service;
 
 import com.solvd.domain.Client;
 import com.solvd.domain.Meeting;
+import com.solvd.domain.RealEstate;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.domain.exceptions.FieldValidationException;
 
@@ -17,5 +18,6 @@ public interface MeetingService {
     Meeting getById(long id) throws EntityNotFoundException;
 
     List<Meeting> getByClient(Client client);
+    List<Meeting> getByRealEstate(RealEstate realEstate);
     List<Meeting> getAll();
 }

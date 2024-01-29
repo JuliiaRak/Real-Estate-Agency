@@ -382,20 +382,6 @@ public class Main {
                 client.getId(), meeting.getEmployee().getId());
     }
 
-//    private static void payForAgreement(Client client) throws EntityNotFoundException {
-//        Optional<Agreement> agreement = AGREEMENT_SERVICE.getByClientId(client.getId());
-//        if (agreement.isEmpty()) {
-//            System.out.println("You cannot have more than one Real Estate AGREEMENT");
-//            return;
-//        }
-//
-//        System.out.println("Thank you for paying for agreement");
-//
-//        REAL_ESTATE_SERVICE.hideById(agreement.get().getRealEstate().getId());
-//
-//        AGREEMENT_SERVICE.deleteById(agreement.get().getId());
-//    }
-
     public static void orderRealEstate(Scanner scanner, Client client) throws EntityNotFoundException, FieldValidationException {
         if (AGREEMENT_SERVICE.getByClientId(client.getId()).isPresent()) {
             System.out.println("You cannot have more than one Real Estate AGREEMENT open. Please pay for your agreement");
@@ -421,8 +407,11 @@ public class Main {
 
         try {
             AGREEMENT_SERVICE.create(agreement, realEstate.getId(), client.getId());
+            System.out.println("Your agreement is ready ");
+            System.out.println(agreement);
         } catch (FieldValidationException e) {
             System.out.println(e.getMessage());
+            System.out.println("Order cannot be created");
         }
 
         System.out.println("Your agreement is ready ");
@@ -532,7 +521,7 @@ public class Main {
             System.out.println("Enter your date in the yyyy-MM-dd format");
         } catch (EntityNotFoundException | FieldValidationException e) {
             System.out.println(e.getMessage());
-            System.out.println("Error occurred. Meeting could not be created.");
+            System.out.println("Error occurred. Meeting cannot be created.");
         }
     }
 

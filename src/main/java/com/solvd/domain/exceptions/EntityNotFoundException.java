@@ -9,3 +9,4 @@ public class EntityNotFoundException extends Exception {
         super(name + " have not been found by " + fieldName);
     }
 }
+

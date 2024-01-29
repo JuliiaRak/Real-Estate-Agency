@@ -265,18 +265,18 @@ public class Main {
                             "1. Create a meeting\n" +
                             "2. Create a order");
                     String choose = scanner.nextLine();
-                    switch (choose) {
-                        case "1":
-                            Optional<Employee> employee = chooseEmployee(scanner);
-                            createMeeting(scanner, client, employee.get());
-                            break;
-                        case "2":
-                            try {
+                    try {
+                        switch (choose) {
+                            case "1":
+                                Employee employee = chooseEmployee(scanner);
+                                createMeeting(scanner, client, employee);
+                                break;
+                            case "2":
                                 orderRealEstate(scanner, client);
-                            } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
-                                System.out.println(e.getMessage());
-                            }
-                            break;
+                                break;
+                        }
+                    } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
+                        System.out.println(e.getMessage());
                     }
                     break;
                 case "6":
@@ -327,15 +327,15 @@ public class Main {
                             try {
                                 utilDate = dateFormat.parse(dateString);
                             } catch (ParseException e) {
-                                System.out.println(e.getMessage());
+                                System.out.println("Enter your date in the yyyy-MM-dd format");
                             }
                             java.sql.Date date = new java.sql.Date(utilDate.getTime());
 
                             meeting.setMeetingDateTime(date);
                             break;
                         case "2":
-                            Optional<Employee> employee = chooseEmployee(scanner);
-                            meeting.setEmployee(employee.get());
+                            Employee employee = chooseEmployee(scanner);
+                            meeting.setEmployee(employee);
                             break;
                         case "3":
                             break;
@@ -441,8 +441,6 @@ public class Main {
                 }
                 break;
         }
-
-
     }
 
     public static void createMeeting(Scanner scanner, Client client, Employee employee) {
@@ -472,14 +470,15 @@ public class Main {
 
             System.out.println("Your meeting will be at " + date + " with " + employee.getFirstName() + " " + employee.getLastName());
 
-        } catch (ParseException | EntityNotFoundException | NullPointerException | IllegalArgumentException e) {
+        } catch (ParseException e) {
+            System.out.println("Enter your date in the yyyy-MM-dd format");
+        } catch (EntityNotFoundException | NullPointerException | IllegalArgumentException e) {
             System.out.println(e.getMessage());
             System.out.println("Error occurred. Meeting could not be created.");
         }
     }
 
-    public static Optional<Employee> chooseEmployee(Scanner scanner) {
-        Optional<Employee> employee = null;
+    public static Employee chooseEmployee(Scanner scanner) throws EntityNotFoundException {
         System.out.println("Here the list of employees, choose the one");
         List<Employee> employees = EMPLOYEE_SERVICE.getAll();
         for (Employee empl : employees) {
@@ -487,12 +486,7 @@ public class Main {
         }
         System.out.println("Input the id of employee ");
         String emplId = scanner.nextLine();
-        try {
-            employee = Optional.ofNullable(EMPLOYEE_SERVICE.getById(parseLong(emplId)));
-        } catch (EntityNotFoundException | NullPointerException | IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
-        return employee;
+        return EMPLOYEE_SERVICE.getById(parseLong(emplId));
     }
 
     private static int parseInt(String rooms) {

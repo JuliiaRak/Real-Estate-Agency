@@ -47,7 +47,7 @@ public class MeetingServiceImpl implements MeetingService {
         checkEmployee(employeeId);
 
         if(meeting.getBuyer().equals(realEstateService.getById(realEstateId).getSeller())){
-            throw new FieldValidationException(String.format("Error creating a meeting"));
+            throw new FieldValidationException("Error creating a meeting");
         }
         else {
             meetingRepository.create(meeting, realEstateId, buyerId, employeeId);

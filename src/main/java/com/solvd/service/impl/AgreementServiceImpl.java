@@ -39,7 +39,7 @@ public class AgreementServiceImpl implements AgreementService {
         checkClient(clientId);
 
         if(agreement.getClient().equals(realEstateService.getById(realEstateId).getSeller())){
-            throw new FieldValidationException(String.format("Error creating a agreement"));
+            throw new FieldValidationException("Error creating a agreement");
         }
         else {
             agreementRepository.create(agreement, realEstateId, clientId);

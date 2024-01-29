@@ -196,7 +196,7 @@ public class Main {
                     } catch (EntityNotFoundException e) {
                         System.out.println(e.getMessage());
                     }
-                    break;
+                   break;
                 case "9":
                     try {
                         payForAgreement(client);
@@ -219,11 +219,9 @@ public class Main {
     }
 
     public static void createRealEstate(Scanner scanner, Client client){
-        boolean badCredencials = true;
         Address address = new Address();
         RealEstate realEstate = new RealEstate();
 
-        do {
             System.out.println("Please enter real estate address details:");
             System.out.print("1. Enter country: ");
             String country = scanner.nextLine();
@@ -265,9 +263,6 @@ public class Main {
                 default:
                     System.out.println("Invalid real estate type. Try again");
             }
-            if (realEstate.getRealEstateType() == null) {
-                break;
-            }
 
             System.out.print("4. Enter real estate metrics: ");
             String metrics = scanner.nextLine();
@@ -283,14 +278,12 @@ public class Main {
                 realEstate.setSeller(client);
                 realEstate.setAddress(address);
                 REAL_ESTATE_SERVICE.create(realEstate, client.getId());
-                badCredencials = false;
                 System.out.println("\n" + "Thanks! You've successfully created a real estate! ");
             } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException |
                      LinkAlreadyExistsException e) {
                 System.out.println("\n" + e.getMessage());
                 System.out.println("Please try again.");
             }
-        } while (badCredencials);
     }
 
     private static void viewRealEstateByType (Scanner scanner) {
@@ -337,10 +330,8 @@ public class Main {
         switch (userInput) {
             case "1":
                 CLIENT_SERVICE.deleteById(client.getId());
-                exitLoop = true;
                 break;
             case "2":
-                exitLoop = true;
                 break;
             default:
                 System.out.println("Invalid option.");

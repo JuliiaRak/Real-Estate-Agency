@@ -411,10 +411,8 @@ public class Main {
             System.out.println(agreement);
         } catch (FieldValidationException e) {
             System.out.println(e.getMessage());
-            System.out.println("Order cannot be created");
         }
 
-        System.out.println("Your agreement is ready ");
         askForPayment(scanner, client);
         System.out.println(agreement);
     }
@@ -427,8 +425,7 @@ public class Main {
             case "1":
                 try {
                     payForAgreement(client);
-                } catch (IllegalArgumentException | NullPointerException |
-                         EntityNotFoundException | FieldValidationException e) {
+                } catch (EntityNotFoundException e) {
                     System.out.println(e.getMessage());
                 }
                 break;
@@ -440,7 +437,7 @@ public class Main {
         }
     }
 
-    private static void payForAgreement(Client client) throws EntityNotFoundException, FieldValidationException {
+    private static void payForAgreement(Client client) throws EntityNotFoundException {
         Optional<Agreement> agreement = AGREEMENT_SERVICE.getByClientId(client.getId());
 
         System.out.println("Thank you for paying for agreement");

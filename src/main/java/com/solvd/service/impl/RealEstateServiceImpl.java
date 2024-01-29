@@ -6,6 +6,7 @@ import com.solvd.domain.RealEstate;
 import com.solvd.domain.Tag;
 import com.solvd.domain.enums.RealEstateType;
 import com.solvd.domain.exceptions.EntityNotFoundException;
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.domain.exceptions.LinkAlreadyExistsException;
 import com.solvd.persistence.RealEstateRepository;
 import com.solvd.persistence.impl.RealEstateRepositoryMybatisImpl;
@@ -31,27 +32,17 @@ import java.util.stream.Collectors;
 public class RealEstateServiceImpl implements RealEstateService {
     private final RealEstateRepository realEstateRepository;
     private final AddressService addressService;
-    private final PhotoService photoService;
-    private final TagService tagService;
 
     public RealEstateServiceImpl() {
         this.realEstateRepository = new RealEstateRepositoryMybatisImpl();
         this.addressService = new AddressServiceImpl();
-        this.photoService = new PhotoServiceImpl();
-        this.tagService = new TagServiceImpl();
     }
 
     @Override
-    public void create(RealEstate realEstate, long clientId) throws EntityNotFoundException, LinkAlreadyExistsException {
+    public void create(RealEstate realEstate, long clientId) throws FieldValidationException {
         validate(realEstate);
         addressService.create(realEstate.getAddress());
         realEstateRepository.create(realEstate, clientId);
-        for (Photo photo : realEstate.getPhotos()) {
-            photoService.create(photo, realEstate.getId());
-        }
-        for (Tag tag : realEstate.getTags()) {
-            tagService.assignToRealEstate(tag, realEstate.getId());
-        }
     }
 
     @Override
@@ -60,7 +51,7 @@ public class RealEstateServiceImpl implements RealEstateService {
     }
 
     @Override
-    public void update(RealEstate realEstate) throws EntityNotFoundException {
+    public void update(RealEstate realEstate) throws EntityNotFoundException, FieldValidationException {
         if (realEstateRepository.findById(realEstate.getId()).isEmpty()) {
             throw new EntityNotFoundException("Real Estate", realEstate.getId());
         }
@@ -99,10 +90,10 @@ public class RealEstateServiceImpl implements RealEstateService {
     public void hideById(long id) throws EntityNotFoundException {
         RealEstate realEstate = getById(id);
         realEstate.setAvailable(false);
-        update(realEstate);
+        realEstateRepository.update(realEstate);
     }
 
-    public void validate(RealEstate realEstate) {
+    public void validate(RealEstate realEstate) throws FieldValidationException {
         Validator<Object> objectValidator = new NotNullObjectValidator();
         objectValidator.validate("real estate", realEstate);
         objectValidator.validate("price", realEstate.getPrice());

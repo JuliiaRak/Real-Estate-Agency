@@ -1,5 +1,6 @@
 package com.solvd.service.validators.string;
 
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.service.validators.Validator;
 
 public class NotEmptyStringValidator implements Validator<String> {
@@ -14,10 +15,10 @@ public class NotEmptyStringValidator implements Validator<String> {
     }
 
     @Override
-    public void validate(String fieldName, String entity) {
+    public void validate(String fieldName, String entity) throws FieldValidationException {
         validator.validate(fieldName, entity);
         if (entity.matches("\\s*")) {
-            throw new IllegalArgumentException(String.format("Specify %s", fieldName));
+            throw new FieldValidationException(String.format("Specify %s", fieldName));
         }
     }
 }

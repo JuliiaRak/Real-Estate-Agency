@@ -3,6 +3,7 @@ package com.solvd.service.impl;
 import com.solvd.domain.Client;
 import com.solvd.domain.Meeting;
 import com.solvd.domain.exceptions.EntityNotFoundException;
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.persistence.MeetingRepository;
 import com.solvd.persistence.impl.MeetingRepositoryMybatisImpl;
 import com.solvd.service.ClientService;
@@ -39,14 +40,14 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public void create(Meeting meeting, Long realEstateId, Long buyerId, Long employeeId) throws EntityNotFoundException {
+    public void create(Meeting meeting, Long realEstateId, Long buyerId, Long employeeId) throws EntityNotFoundException, FieldValidationException {
         validate(meeting);
         checkRealEstate(realEstateId);
         checkBuyer(buyerId);
         checkEmployee(employeeId);
 
         if(meeting.getBuyer().equals(realEstateService.getById(realEstateId).getSeller())){
-            throw new EntityNotFoundException("meeting", meeting.getId());
+            throw new FieldValidationException(String.format("Error creating a meeting"));
         }
         else {
             meetingRepository.create(meeting, realEstateId, buyerId, employeeId);
@@ -77,7 +78,7 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public void update(Meeting meeting, Long realEstateId, Long buyerId, Long employeeId) throws EntityNotFoundException {
+    public void update(Meeting meeting, Long realEstateId, Long buyerId, Long employeeId) throws EntityNotFoundException, FieldValidationException {
         if (meetingRepository.findById(meeting.getId()).isEmpty()) {
             throw new EntityNotFoundException("Meeting", meeting.getId());
         }
@@ -103,7 +104,7 @@ public class MeetingServiceImpl implements MeetingService {
         return meetingRepository.findAll();
     }
 
-    private void validate(Meeting meeting) {
+    private void validate(Meeting meeting) throws FieldValidationException {
         Validator<Object> objectValidator = new NotNullObjectValidator();
         objectValidator.validate("meeting", meeting);
 

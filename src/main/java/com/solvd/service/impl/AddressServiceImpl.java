@@ -2,6 +2,7 @@ package com.solvd.service.impl;
 
 import com.solvd.domain.Address;
 import com.solvd.domain.exceptions.EntityNotFoundException;
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.persistence.AddressRepository;
 import com.solvd.persistence.impl.AddressRepositoryMybatisImpl;
 import com.solvd.service.AddressService;
@@ -23,7 +24,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public void create(Address address) {
+    public void create(Address address) throws FieldValidationException {
         validate(address);
         addressRepository.create(address);
     }
@@ -34,7 +35,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public void update(Address address) throws EntityNotFoundException {
+    public void update(Address address) throws EntityNotFoundException, FieldValidationException {
         if (addressRepository.findById(address.getId()).isEmpty()) {
             throw new EntityNotFoundException("Address", address.getId());
         }
@@ -52,7 +53,7 @@ public class AddressServiceImpl implements AddressService {
         return addressRepository.findAll();
     }
 
-    private void validate(Address address) {
+    private void validate(Address address) throws FieldValidationException {
         Validator<Object> objectValidator = new NotNullObjectValidator();
         objectValidator.validate("address", address);
 

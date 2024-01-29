@@ -135,9 +135,8 @@ public class Main {
             System.out.println("6. Delete account.");
             System.out.println("7. View my ordered.");
             System.out.println("8. View my meetings.");
-            System.out.println("9. Pay for agreement.");
-            System.out.println("10. Settings.");
-            System.out.println("11. Exit.");
+            System.out.println("9. Settings.");
+            System.out.println("10. Exit.");
             System.out.print("Enter your choice: ");
 
             String choice = scanner.nextLine();
@@ -195,16 +194,9 @@ public class Main {
                     }
                     break;
                 case "9":
-                    try {
-                        payForAgreement(client);
-                    } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
-                        System.out.println(e.getMessage());
-                    }
-                    break;
-                case "10":
                     settings(scanner, client);
                     break;
-                case "11":
+                case "10":
                     exitLoop = true;
                     break;
                 default:
@@ -391,27 +383,10 @@ public class Main {
                 client.getId(), meeting.getEmployee().getId());
     }
 
-    private static void payForAgreement(Client client) throws EntityNotFoundException {
-        Optional<Agreement> agreement = AGREEMENT_SERVICE.getByClientId(client.getId());
-        if (agreement.isEmpty()) {
-            System.out.println("You cannot have more than one Real Estate AGREEMENT");
-            return;
-        }
-
-        System.out.println("Thank you for paying for agreement");
-        RealEstate realEstate = agreement.get().getRealEstate();
-        realEstate.setAvailable(false);
-        REAL_ESTATE_SERVICE.update(realEstate);
-
-        AGREEMENT_SERVICE.deleteById(agreement.get().getId());
-        for (Meeting meetingToDelete : MEETING_SERVICE.getByRealEstate(realEstate)) {
-            MEETING_SERVICE.deleteById(meetingToDelete.getId());
-        }
-    }
-
     public static void orderRealEstate(Scanner scanner, Client client) throws EntityNotFoundException {
         if (AGREEMENT_SERVICE.getByClientId(client.getId()).isPresent()) {
-            System.out.println("You cannot have more than one Real Estate AGREEMENT");
+            System.out.println("You cannot have more than one Real Estate AGREEMENT open. Please pay for your agreement");
+            askForPayment(scanner, client);
             return;
         }
 
@@ -434,7 +409,42 @@ public class Main {
         AGREEMENT_SERVICE.create(agreement, realEstate.getId(), client.getId());
 
         System.out.println("Your agreement is ready ");
+        askForPayment(scanner, client);
         System.out.println(agreement);
+    }
+
+    private static void askForPayment(Scanner scanner, Client client) {
+        System.out.println("Please pay for your agreement");
+        System.out.println("Enter 1 to pay, or 0 to exit");
+        String choiceToPay = scanner.nextLine();
+        switch (choiceToPay) {
+            case "1":
+                try {
+                    payForAgreement(client);
+                } catch (IllegalArgumentException | NullPointerException | EntityNotFoundException e) {
+                    System.out.println(e.getMessage());
+                }
+                break;
+            case "0":
+                break;
+            default:
+                System.out.println("Invalid option");
+                break;
+        }
+    }
+
+        private static void payForAgreement(Client client) throws EntityNotFoundException {
+        Optional<Agreement> agreement = AGREEMENT_SERVICE.getByClientId(client.getId());
+
+        System.out.println("Thank you for paying for agreement");
+        RealEstate realEstate = agreement.get().getRealEstate();
+        realEstate.setAvailable(false);
+        REAL_ESTATE_SERVICE.update(realEstate);
+
+        AGREEMENT_SERVICE.deleteById(agreement.get().getId());
+        for (Meeting meetingToDelete : MEETING_SERVICE.getByRealEstate(realEstate)) {
+            MEETING_SERVICE.deleteById(meetingToDelete.getId());
+        }
     }
 
     public static void settings(Scanner scanner, Client client) {

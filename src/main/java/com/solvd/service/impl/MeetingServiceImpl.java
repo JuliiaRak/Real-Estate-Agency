@@ -2,6 +2,7 @@ package com.solvd.service.impl;
 
 import com.solvd.domain.Client;
 import com.solvd.domain.Meeting;
+import com.solvd.domain.RealEstate;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.persistence.MeetingRepository;
 import com.solvd.persistence.impl.MeetingRepositoryMybatisImpl;
@@ -90,6 +91,13 @@ public class MeetingServiceImpl implements MeetingService {
     public List<Meeting> getByClient(Client client) {
         return meetingRepository.findAll().stream()
                 .filter(meeting -> meeting.getBuyer().getId() == client.getId())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Meeting> getByRealEstate(RealEstate realEstate) {
+        return meetingRepository.findAll().stream()
+                .filter(meeting -> meeting.getRealEstate().getId() == realEstate.getId())
                 .collect(Collectors.toList());
     }
 

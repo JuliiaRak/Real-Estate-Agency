@@ -406,6 +406,9 @@ public class Main {
         REAL_ESTATE_SERVICE.update(realEstate);
 
         AGREEMENT_SERVICE.deleteById(agreement.get().getId());
+        for (Meeting meetingToDelete : MEETING_SERVICE.getByRealEstate(realEstate)) {
+            MEETING_SERVICE.deleteById(meetingToDelete.getId());
+        }
     }
 
     public static void orderRealEstate(Scanner scanner, Client client) throws EntityNotFoundException {

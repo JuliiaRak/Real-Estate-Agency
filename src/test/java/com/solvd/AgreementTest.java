@@ -1,162 +1,97 @@
 package com.solvd;
 
-import com.solvd.domain.Address;
 import com.solvd.domain.Agreement;
 import com.solvd.domain.Client;
 import com.solvd.domain.RealEstate;
-import com.solvd.domain.enums.RealEstateType;
-import com.solvd.domain.exceptions.EmailAlreadyExistsException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
-import com.solvd.domain.exceptions.LinkAlreadyExistsException;
-import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
-import com.solvd.persistence.AddressRepository;
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.persistence.AgreementRepository;
-import com.solvd.persistence.ClientRepository;
 import com.solvd.persistence.RealEstateRepository;
-import com.solvd.persistence.impl.AddressRepositoryMybatisImpl;
 import com.solvd.persistence.impl.AgreementRepositoryMyBatisImpl;
-import com.solvd.persistence.impl.ClientRepositoryMybatisImpl;
 import com.solvd.persistence.impl.RealEstateRepositoryMybatisImpl;
-import com.solvd.service.AddressService;
 import com.solvd.service.AgreementService;
-import com.solvd.service.ClientService;
 import com.solvd.service.RealEstateService;
-import com.solvd.service.impl.AddressServiceImpl;
 import com.solvd.service.impl.AgreementServiceImpl;
 import com.solvd.service.impl.ClientServiceImpl;
 import com.solvd.service.impl.RealEstateServiceImpl;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
-
 public class AgreementTest {
 
-    public static void main(String[] args) throws EntityNotFoundException, LinkAlreadyExistsException, PhoneNumberAlreadyExistsException, EmailAlreadyExistsException {
-        //creating instances
-        Client client = new Client();
-        Client seller = new Client();
-        client.setEmail("00aj20121890231129@gmail.com");
-        client.setPhoneNumber("0851000012");
-        client.setEmail("aj2619@gmail.com");
-        client.setPhoneNumber("008082");
-        client.setFirstName("Anna");
-        client.setLastName("Polichuk");
-        client.setRegistrationDate(new Date());
+    private static final AgreementRepository AGREEMENT_REPOSITORY = new AgreementRepositoryMyBatisImpl();
+    private static final RealEstateRepository REAL_ESTATE_REPOSITORY = new RealEstateRepositoryMybatisImpl();
+    private static AgreementService agreementService = new AgreementServiceImpl
+            (AGREEMENT_REPOSITORY, new RealEstateServiceImpl(), new ClientServiceImpl());
+    private static final RealEstateService realEstateService = new RealEstateServiceImpl();
 
-                seller.setFirstName("Ivan");
-                seller.setLastName("Kulikov");
-                seller.setEmail("ikd0004233124003v@gmail.com");
-                seller.setPhoneNumber("1202-1252342");
-                seller.setEmail("ikd46778ev@gmail.com");
-                seller.setPhoneNumber("+232-2542");
-                seller.setRegistrationDate(new Date());
+    @Test
+    public void createAgreementTest() throws FieldValidationException, EntityNotFoundException {
+        Agreement agreement = createSimpleAgreement();
+        agreementService.create(agreement, 1, 2);
+        Agreement retrievedAgreement = AGREEMENT_REPOSITORY.findById(agreement.getId()).orElse(null);
 
-                Address address = new Address();
-                address.setCountry("Ukraine");
-                address.setRegion("central region");
-                address.setCity("Kyiv");
-                address.setStreet("Kyiv street");
-                address.setBuilding("2");
-                address.setApartment("99");
+        Assertions.assertNotNull(agreement.getId());
+        Assertions.assertNotNull(retrievedAgreement);
+        Assertions.assertEquals(agreement, retrievedAgreement);
+        agreementService.deleteById(agreement.getId());
+        setRealEstateAvailable();
+    }
 
-                RealEstate realEstate = new RealEstate();
-                realEstate.setRealEstateType(RealEstateType.APARTMENT);
-                realEstate.setPrice(BigDecimal.valueOf(156000));
-                realEstate.setMetrics("3245");
-                realEstate.setDescription("Very cool apartment");
-                realEstate.setRooms(5);
-                realEstate.setAvailable(true);
-                realEstate.setAddress(address);
-                realEstate.setSeller(seller);
+    @Test
+    public void deleteAgreementByIdTest() throws FieldValidationException, EntityNotFoundException {
+        Agreement agreement = createSimpleAgreement();
+        agreementService.create(agreement, 1, 2);
+        agreementService.deleteById(agreement.getId());
 
+        Assertions.assertFalse(AGREEMENT_REPOSITORY.findById(agreement.getId()).isPresent());
+        setRealEstateAvailable();
+    }
 
-                Agreement agreement = new Agreement();
-                Agreement agreement2 =  new Agreement();
-                agreement.setAmount(BigDecimal.valueOf(37218));
-                agreement.setDate(new Date());
-                agreement.setClient(client);
-                agreement.setStatus("Paid");
-                agreement.setRealEstate(realEstate);
-                agreement.setDuration("Indefinite");
-
-                agreement2.setAmount(BigDecimal.valueOf(500));
-                agreement2.setDate(new Date(2023-11-02));
-                agreement2.setClient(client);
-                agreement2.setStatus("unpaid");
-                agreement2.setRealEstate(realEstate);
-                agreement2.setDuration("3 months");
-                agreement.setDuration("3 month");
-
-                //creating repositories, services
-
-                ClientRepository clientRepository = new ClientRepositoryMybatisImpl();
-                ClientService clientService = new ClientServiceImpl();
-                clientService.create(client);
-                clientService.create(seller);
-                try {
-                        clientService.create(client);
-                        clientService.create(seller);
-                } catch (EmailAlreadyExistsException | PhoneNumberAlreadyExistsException e) {
-                        throw new RuntimeException(e);
-                }
-                System.out.println(client);
-
-                AddressRepository addressRepository = new AddressRepositoryMybatisImpl();
-                AddressService addressService = new AddressServiceImpl();
-                addressService.create(address);
-
-                System.out.println(address);
-
-                RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
-                RealEstateService realEstateService = new RealEstateServiceImpl();
-                realEstateService.create(realEstate, client.getId());
-                //System.out.println(realEstate);
-
-                AgreementRepository agreementRepository = new AgreementRepositoryMyBatisImpl();
-                AgreementService agreementService = new AgreementServiceImpl();
-
-                //check CRUD operations
-
-        /*agreement.setDuration("4 months");
+    @Test
+    public void updateAgreementTest() throws FieldValidationException, EntityNotFoundException {
+        Agreement agreement = createSimpleAgreement();
+        agreementService.create(agreement, 1, 2);
+        agreement.setDuration("24 months");
+        agreement.setAmount(new BigDecimal("150000.00"));
         agreementService.update(agreement);
+        Agreement updatedAgreement = AGREEMENT_REPOSITORY.findById(agreement.getId()).orElse(null);
 
-        System.out.println(agreementService.getById(5));
+        Assertions.assertNotNull(updatedAgreement);
+        Assertions.assertEquals(agreement.getDuration(), updatedAgreement.getDuration());
+        Assertions.assertEquals(agreement.getAmount(), updatedAgreement.getAmount());
+        agreementService.deleteById(agreement.getId());
+        setRealEstateAvailable();
+    }
 
-        System.out.println(realEstate);
+    @Test
+    public void getByIdAgreementTest() throws FieldValidationException, EntityNotFoundException {
+        Agreement agreement = createSimpleAgreement();
+        agreementService.create(agreement, 1, 2);
+        Agreement agreementFind = agreementService.getById(agreement.getId());
 
-        AgreementRepository agreementRepository = new AgreementRepositoryMyBatisImpl();
-        AgreementService agreementService = new AgreementServiceImpl(agreementRepository);
-        agreementService.create(agreement, realEstate.getId(), client.getId());
-        System.out.println(agreement);
+        Assertions.assertEquals(agreement, agreementFind);
+        agreementService.deleteById(agreement.getId());
+        setRealEstateAvailable();
+    }
 
-        //check CRUD operations
+    private Agreement createSimpleAgreement() {
+        return new Agreement(0, new Date(), new BigDecimal("100000.00"),
+                "12 months", "Active", new RealEstate(), new Client());
+    }
 
-        agreement.setDuration("4 months");
-        agreementService.update(agreement);
-
-        System.out.println(agreementService.getById(5));
-
-        agreementService.deleteById(1);
-        agreementService.deleteById(2);
-        agreementService.deleteById(3);
-        agreementService.deleteById(4);
-
-        List<Agreement> agreements = agreementService.getAll();
-        for (Agreement agrm : agreements) {
-            System.out.println(agrm);
-        }*/
-
-                //check the validation
-                agreementService.create(agreement2, realEstate.getId(), client.getId());
-                System.out.println(realEstateService.getById(realEstate.getId()));
-
-                System.out.println(agreement2);
-
-                //List<Agreement> agreements = agreementService.getAll();
-                //for (Agreement agrm : agreements) {
-                //   System.out.println(agrm);
-                // }
+    private void setRealEstateAvailable(){
+        RealEstate realEstate = null;
+        try {
+            realEstate = REAL_ESTATE_REPOSITORY.findById(1L).get();
+            realEstate.setAvailable(true);
+            realEstateService.update(realEstate);
+        } catch (EntityNotFoundException | FieldValidationException e) {
+            throw new RuntimeException(e);
         }
-
+    }
 }

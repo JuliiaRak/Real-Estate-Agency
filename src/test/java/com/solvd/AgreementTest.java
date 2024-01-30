@@ -2,9 +2,12 @@ package com.solvd;
 
 import com.solvd.domain.Agreement;
 import com.solvd.domain.Client;
+import com.solvd.domain.Employee;
 import com.solvd.domain.RealEstate;
+import com.solvd.domain.exceptions.EmailAlreadyExistsException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.domain.exceptions.FieldValidationException;
+import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
 import com.solvd.persistence.AgreementRepository;
 import com.solvd.persistence.impl.AgreementRepositoryMyBatisImpl;
 import com.solvd.service.AgreementService;
@@ -17,6 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 
 public class AgreementTest {
@@ -28,7 +32,6 @@ public class AgreementTest {
 
     @Test
     public void createAgreementTest() throws FieldValidationException, EntityNotFoundException {
-
         Agreement agreement = createSampleAgreement();
         agreementService.create(agreement, 1, 1);
         Assertions.assertNotNull(agreement.getId());
@@ -39,7 +42,7 @@ public class AgreementTest {
 
     @Test
     public void deleteAgreementByIdTest() throws FieldValidationException, EntityNotFoundException {
-        Agreement agreement = createSampleAgreement();
+        Agreement agreement = createSimpleAgreement();
         agreementService.create(agreement, 1, 1);
 
         agreementService.deleteById(agreement.getId());
@@ -67,15 +70,16 @@ public class AgreementTest {
 
     @Test
     public void getByIdAgreementTest() throws FieldValidationException, EntityNotFoundException {
-        Agreement agreement = createSampleAgreement();
-        agreementService.create(agreement, 1, 1);
+        Agreement agreement = createSimpleAgreement();
+        agreementService.create(agreement, 11, 1);
 
         Agreement agreementFind = agreementService.getById(agreement.getId());
         Assertions.assertEquals(agreement, agreementFind);
     }
 
 
-    private Agreement createSampleAgreement() {
+
+    private Agreement createSimpleAgreement() {
         return new Agreement(0, new Date(), new BigDecimal("100000.00"),
                 "12 months", "Active", new RealEstate(), new Client());
     }

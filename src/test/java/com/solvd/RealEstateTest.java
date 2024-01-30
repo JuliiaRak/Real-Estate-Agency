@@ -65,7 +65,6 @@ public class RealEstateTest {
 
         Assertions.assertNotNull(createdRealEstate);
         Assertions.assertEquals(realEstate, createdRealEstate);
-
         realEstateService.deleteById(realEstate.getId());
         clientService.deleteById(client.getId());
         addressService.deleteById(createdRealEstate.getAddress().getId());
@@ -98,7 +97,6 @@ public class RealEstateTest {
         address.setApartment("55");
         realEstate.setAddress(address);
         realEstate.setSeller(client);
-
         realEstateService.create(realEstate, client.getId());
 
         realEstate.setPrice(BigDecimal.valueOf(150000));
@@ -106,14 +104,12 @@ public class RealEstateTest {
         realEstate.setRealEstateType(RealEstateType.APARTMENT);
         realEstate.setMetrics("50");
         realEstate.setRooms(4);
-
         realEstateService.update(realEstate);
 
         RealEstate updatedRealEstate = realEstateService.getAvailableById(realEstate.getId());
 
         Assertions.assertNotNull(updatedRealEstate);
         Assertions.assertEquals(realEstate, updatedRealEstate);
-
         realEstateService.deleteById(realEstate.getId());
         clientService.deleteById(client.getId());
         addressService.deleteById(updatedRealEstate.getAddress().getId());
@@ -174,7 +170,6 @@ public class RealEstateTest {
         address2.setApartment("N/A");
         realEstate2.setAddress(address2);
         realEstate2.setSeller(client2);
-
         realEstateService.create(realEstate2, client2.getId());
 
         List<RealEstate> availableRealEstates = realEstateService.getAll();

@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 public class ClientTest {
+
     private ClientService clientService = new ClientServiceImpl();
 
     @Test
@@ -51,10 +52,9 @@ public class ClientTest {
             System.out.println("An invalid object was created: " + e.getMessage());
         }
         Client client = builder.build();
-
         clientService.create(client);
-
         Client retrievedClient = clientService.getById(client.getId());
+
         Assertions.assertEquals(client, retrievedClient);
         clientService.deleteById(retrievedClient.getId());
     }
@@ -86,12 +86,10 @@ public class ClientTest {
 
         clientService.create(client1);
         clientService.create(client2);
-
         List<Client> allClients = clientService.getAll();
 
         Assertions.assertTrue(allClients.contains(client1));
         Assertions.assertTrue(allClients.contains(client2));
-
         clientService.deleteById(client1.getId());
         clientService.deleteById(client2.getId());
     }
@@ -110,17 +108,14 @@ public class ClientTest {
         }
 
         Client client = builder.build();
-
         clientService.create(client);
-
         client.setEmail("dkulikov@ukr.net");
         client.setPhoneNumber("+380991234533");
         clientService.update(client);
-
         Client updatedClient = clientService.getById(client.getId());
+
         Assertions.assertEquals("dkulikov@ukr.net", updatedClient.getEmail());
         Assertions.assertEquals("+380991234533", updatedClient.getPhoneNumber());
-
         clientService.deleteById(client.getId());
     }
 
@@ -138,7 +133,6 @@ public class ClientTest {
         }
         Client client = builder.build();
         clientService.create(client);
-
         clientService.deleteById(client.getId());
         Client retrievedClient = null;
         try {
@@ -146,6 +140,7 @@ public class ClientTest {
         } catch (EntityNotFoundException e) {
             System.out.println(e);
         }
+
         Assertions.assertNull(retrievedClient);
     }
 }

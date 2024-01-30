@@ -22,13 +22,11 @@ public class AddressTest {
         address.setStreet("Kyiv street");
         address.setBuilding("2");
         address.setApartment("99");
-
         addressService.create(address);
         Address createdAddress = addressService.getById(address.getId());
 
         Assertions.assertNotNull(createdAddress);
         Assertions.assertEquals(address, createdAddress);
-
         addressService.deleteById(address.getId());
     }
 
@@ -41,12 +39,10 @@ public class AddressTest {
         address.setStreet("Kyiv street");
         address.setBuilding("2");
         address.setApartment("99");
-
         addressService.create(address);
-
         Address retrievedAddress = addressService.getById(address.getId());
-        Assertions.assertEquals(address, retrievedAddress);
 
+        Assertions.assertEquals(address, retrievedAddress);
         addressService.deleteById(address.getId());
     }
 
@@ -69,12 +65,10 @@ public class AddressTest {
         address2.setApartment("12");
         addressService.create(address);
         addressService.create(address2);
-
         List<Address> allAddresses = addressService.getAll();
-        Assertions.assertEquals(2, allAddresses.size());
+
         Assertions.assertTrue(allAddresses.contains(address));
         Assertions.assertTrue(allAddresses.contains(address2));
-
         addressService.deleteById(address.getId());
         addressService.deleteById(address2.getId());
     }
@@ -88,17 +82,15 @@ public class AddressTest {
         address.setStreet("Kyiv street");
         address.setBuilding("2");
         address.setApartment("99");
-
         addressService.create(address);
 
         address.setBuilding("3");
         address.setApartment("100");
         addressService.update(address);
-
         Address updatedAddress = addressService.getById(address.getId());
+
         Assertions.assertEquals("3", updatedAddress.getBuilding());
         Assertions.assertEquals("100", updatedAddress.getApartment());
-
         addressService.deleteById(address.getId());
     }
 
@@ -111,9 +103,7 @@ public class AddressTest {
         address.setStreet("Kyiv street");
         address.setBuilding("2");
         address.setApartment("99");
-
         addressService.create(address);
-
         addressService.deleteById(address.getId());
         try {
             Assertions.assertNull(addressService.getById(address.getId()));

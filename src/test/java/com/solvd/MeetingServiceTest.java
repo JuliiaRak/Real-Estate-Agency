@@ -23,7 +23,7 @@ public class MeetingServiceTest {
     private static final EmployeeService EMPLOYEE_SERVICE = new EmployeeServiceImpl();
 
     private Meeting createSampleMeeting() throws EntityNotFoundException {
-        RealEstate realEstate = REAL_ESTATE_SERVICE.getAvailableById(4L);
+        RealEstate realEstate = REAL_ESTATE_SERVICE.getAvailableById(2L);
         Client client = CLIENT_SERVICE.getById(1L);
         Employee employee = EMPLOYEE_SERVICE.getById(1L);
         return new Meeting(new Date(2024-1900, Calendar.APRIL, 22), new Date(), "status", realEstate, client, employee);
@@ -33,7 +33,7 @@ public class MeetingServiceTest {
     public void createMeetingTest() {
         try {
             Meeting meeting = createSampleMeeting();
-            MEETING_SERVICE.create(meeting, 4L, 1L, 1L);
+            MEETING_SERVICE.create(meeting, 2L, 1L, 1L);
             Meeting retrievedMeeting = MEETING_SERVICE.getById(meeting.getId());
 
             Assertions.assertNotNull(meeting.getId());
@@ -48,7 +48,7 @@ public class MeetingServiceTest {
     public void deleteMeetingByIdTest() {
         try {
             Meeting meeting = createSampleMeeting();
-            MEETING_SERVICE.create(meeting, 4L, 1L, 1L);
+            MEETING_SERVICE.create(meeting, 2L, 1L, 1L);
             MEETING_SERVICE.deleteById(meeting.getId());
 
             Assertions.assertThrowsExactly(EntityNotFoundException.class, () -> {
@@ -63,9 +63,9 @@ public class MeetingServiceTest {
     public void updateMeetingTest() {
         try {
             Meeting meeting = createSampleMeeting();
-            MEETING_SERVICE.create(meeting, 4L, 1L, 1L);
+            MEETING_SERVICE.create(meeting, 2L, 1L, 1L);
             meeting.setMeetingStatus("test status");
-            MEETING_SERVICE.update(meeting, 4L, 1L, 1L);
+            MEETING_SERVICE.update(meeting, 2L, 1L, 1L);
             Meeting retrievedUpdatedMeeting = MEETING_SERVICE.getById(meeting.getId());
 
             Assertions.assertNotNull(retrievedUpdatedMeeting);
@@ -80,7 +80,7 @@ public class MeetingServiceTest {
     public void getByIdMeetingTest() {
         try {
             Meeting meeting = createSampleMeeting();
-            MEETING_SERVICE.create(meeting, 4L, 1L, 1L);
+            MEETING_SERVICE.create(meeting, 2L, 1L, 1L);
             Meeting retrievedMeeting = MEETING_SERVICE.getById(meeting.getId());
 
             Assertions.assertNotNull(retrievedMeeting);

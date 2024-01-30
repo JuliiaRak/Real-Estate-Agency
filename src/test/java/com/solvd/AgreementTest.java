@@ -2,21 +2,24 @@ package com.solvd;
 
 import com.solvd.domain.Agreement;
 import com.solvd.domain.Client;
+import com.solvd.domain.Employee;
 import com.solvd.domain.RealEstate;
+import com.solvd.domain.exceptions.EmailAlreadyExistsException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.domain.exceptions.FieldValidationException;
+import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
 import com.solvd.persistence.AgreementRepository;
 import com.solvd.persistence.impl.AgreementRepositoryMyBatisImpl;
 import com.solvd.service.AgreementService;
 import com.solvd.service.impl.AgreementServiceImpl;
 import com.solvd.service.impl.ClientServiceImpl;
 import com.solvd.service.impl.RealEstateServiceImpl;
-import org.apache.logging.log4j.core.util.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 
 public class AgreementTest {
@@ -29,7 +32,7 @@ public class AgreementTest {
     @Test
     public void createAgreementTest() throws FieldValidationException, EntityNotFoundException {
 
-        Agreement agreement = createSampleAgreement();
+        Agreement agreement = createSimpleAgreement();
         agreementService.create(agreement, 6, 1);
         Assertions.assertNotNull(agreement.getId());
         Agreement retrievedAgreement = AGREEMENT_REPOSITORY.findById(agreement.getId()).orElse(null);
@@ -39,7 +42,7 @@ public class AgreementTest {
 
     @Test
     public void deleteAgreementByIdTest() throws FieldValidationException, EntityNotFoundException {
-        Agreement agreement = createSampleAgreement();
+        Agreement agreement = createSimpleAgreement();
         agreementService.create(agreement, 1, 1);
 
         agreementService.deleteById(agreement.getId());
@@ -67,15 +70,25 @@ public class AgreementTest {
 
     @Test
     public void getByIdAgreementTest() throws FieldValidationException, EntityNotFoundException {
-        Agreement agreement = createSampleAgreement();
+        Agreement agreement = createSimpleAgreement();
         agreementService.create(agreement, 11, 1);
 
         Agreement agreementFind = agreementService.getById(agreement.getId());
         Assertions.assertEquals(agreement, agreementFind);
     }
+    @Test
+    public void getAllAgreementsTest() throws FieldValidationException, EmailAlreadyExistsException, PhoneNumberAlreadyExistsException, EntityNotFoundException {
+        Agreement agreement =  createSimpleAgreement();
+        agreementService.create(agreement, 6, 1);
+
+        List<Agreement> agreements = agreementService.getAll();
+        Assertions.assertEquals(1, agreements.size());
+        Assertions.assertTrue(agreements.contains(agreement));
+    }
 
 
-    private Agreement createSampleAgreement() {
+
+    private Agreement createSimpleAgreement() {
         return new Agreement(0, new Date(), new BigDecimal("100000.00"),
                 "12 months", "Active", new RealEstate(), new Client());
     }

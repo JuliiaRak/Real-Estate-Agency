@@ -18,6 +18,8 @@ public interface MeetingService {
     Meeting getById(long id) throws EntityNotFoundException;
 
     List<Meeting> getByClient(Client client);
+
     List<Meeting> getByRealEstate(RealEstate realEstate);
+
     List<Meeting> getAll();
 }

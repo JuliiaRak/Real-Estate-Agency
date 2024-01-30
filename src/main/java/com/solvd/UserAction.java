@@ -60,6 +60,7 @@ public class UserAction {
             System.out.println(e.getMessage());
         }
     }
+
     public static void login(Scanner scanner) {
         Client client = new Client();
 
@@ -177,7 +178,7 @@ public class UserAction {
                     break;
                 case "9":
                     try {
-                        PaymnetAction.payForAgreement(client);
+                        PaymentAction.payForAgreement(client);
                     } catch (EntityNotFoundException e) {
                         System.out.println(e.getMessage());
                     }
@@ -213,6 +214,7 @@ public class UserAction {
                 break;
         }
     }
+
     public static void settings(Scanner scanner, Client client) {
         System.out.println("SETTINGS\n" +
                 "1. Change phone  number\n" +

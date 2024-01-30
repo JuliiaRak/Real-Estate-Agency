@@ -68,7 +68,7 @@ public class RealEstateServiceImpl implements RealEstateService {
 
     @Override
     public List<RealEstate> getAllAvailable() {
-        return  realEstateRepository.findAll().stream()
+        return realEstateRepository.findAll().stream()
                 .filter(RealEstate::isAvailable)
                 .collect(Collectors.toList());
     }
@@ -79,8 +79,9 @@ public class RealEstateServiceImpl implements RealEstateService {
                 .filter(realEstate -> realEstate.getSeller().getId() == seller.getId())
                 .collect(Collectors.toList());
     }
+
     @Override
-    public List<RealEstate> getAllAvailableByType(RealEstateType realEstateType){
+    public List<RealEstate> getAllAvailableByType(RealEstateType realEstateType) {
         return realEstateRepository.findAll().stream()
                 .filter(RealEstate::isAvailable)
                 .filter(realEstate -> realEstate.getRealEstateType() == realEstateType)

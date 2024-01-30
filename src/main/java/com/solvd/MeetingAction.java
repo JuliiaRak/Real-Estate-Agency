@@ -6,10 +6,8 @@ import com.solvd.domain.Meeting;
 import com.solvd.domain.RealEstate;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.domain.exceptions.FieldValidationException;
-import com.solvd.service.AgreementService;
 import com.solvd.service.MeetingService;
 import com.solvd.service.RealEstateService;
-import com.solvd.service.impl.AgreementServiceImpl;
 import com.solvd.service.impl.MeetingServiceImpl;
 import com.solvd.service.impl.RealEstateServiceImpl;
 

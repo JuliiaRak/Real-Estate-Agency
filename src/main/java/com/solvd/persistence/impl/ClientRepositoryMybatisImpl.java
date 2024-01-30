@@ -1,8 +1,8 @@
 package com.solvd.persistence.impl;
 
 import com.solvd.domain.Client;
-import com.solvd.persistence.Config;
 import com.solvd.persistence.ClientRepository;
+import com.solvd.persistence.Config;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;

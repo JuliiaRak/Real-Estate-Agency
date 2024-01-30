@@ -10,9 +10,14 @@ import java.util.List;
 
 public interface EmployeeService {
     void create(Employee employee) throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException, FieldValidationException;
+
     void deleteById(long id);
+
     void update(Employee employee) throws EmailAlreadyExistsException, EntityNotFoundException, PhoneNumberAlreadyExistsException, FieldValidationException;
+
     Employee getById(long id) throws EntityNotFoundException;
+
     List<Employee> getAll();
+
     boolean existsById(long id);
 }

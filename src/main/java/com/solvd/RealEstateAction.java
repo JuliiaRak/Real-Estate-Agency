@@ -20,6 +20,7 @@ import java.util.Scanner;
 public class RealEstateAction {
     private static final RealEstateService REAL_ESTATE_SERVICE = new RealEstateServiceImpl();
     private static final AgreementService AGREEMENT_SERVICE = new AgreementServiceImpl();
+
     public static void createRealEstate(Scanner scanner, Client client) {
         Address address = new Address();
         RealEstate realEstate = new RealEstate();
@@ -55,7 +56,7 @@ public class RealEstateAction {
         do {
             System.out.print("3. Enter Real Estate Type: ");
             System.out.println("Choose type of Real Estate. Enter 1 or 2.\n" +
-                    "\t1. Apartament\n" +
+                    "\t1. Apartment\n" +
                     "\t2. Building");
             System.out.print("\tEnter your choice:");
             String apartmentType = scanner.nextLine();
@@ -98,7 +99,7 @@ public class RealEstateAction {
 
     public static void viewRealEstateByType(Scanner scanner) {
         System.out.println("Choose what type of Real Estate you are looking for (enter 1 or 2)\n" +
-                "\t1. Apartament\n" +
+                "\t1. Apartment\n" +
                 "\t2. Building");
         RealEstateType realEstateType;
         String typeChoice = scanner.nextLine();
@@ -131,10 +132,11 @@ public class RealEstateAction {
             System.out.println(item);
         }
     }
+
     public static void orderRealEstate(Scanner scanner, Client client) throws EntityNotFoundException, FieldValidationException {
         if (AGREEMENT_SERVICE.getByClientId(client.getId()).isPresent()) {
             System.out.println("You cannot have more than one Real Estate AGREEMENT open. Please pay for your agreement");
-            PaymnetAction.askForPayment(scanner, client);
+            PaymentAction.askForPayment(scanner, client);
             return;
         }
 
@@ -173,7 +175,7 @@ public class RealEstateAction {
             System.out.println(e.getMessage());
         }
 
-        PaymnetAction.askForPayment(scanner, client);
+        PaymentAction.askForPayment(scanner, client);
     }
 
     private static int parseInt(String rooms) throws FieldValidationException {
@@ -191,6 +193,7 @@ public class RealEstateAction {
             throw new FieldValidationException(String.format("Specified incorrect price: %s", price), e);
         }
     }
+
     private static long parseLong(String choice) throws FieldValidationException {
         try {
             return Long.parseLong(choice);

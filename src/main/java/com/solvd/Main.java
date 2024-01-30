@@ -306,7 +306,7 @@ public class Main {
                 System.out.println("Invalid option.");
                 return;
         }
-        List<RealEstate> realEstates = REAL_ESTATE_SERVICE.getAllByType(realEstateType);
+        List<RealEstate> realEstates = REAL_ESTATE_SERVICE.getAllAvailableByType(realEstateType);
         if (realEstates.isEmpty()) {
             System.out.println("\nNo real estates by this type");
         } else {
@@ -317,7 +317,7 @@ public class Main {
     }
 
     private static void viewAllRealEstates() {
-        List<RealEstate> realEstates = REAL_ESTATE_SERVICE.getAll();
+        List<RealEstate> realEstates = REAL_ESTATE_SERVICE.getAllAvailable();
         for (RealEstate item : realEstates) {
             System.out.println(item + "\n");
         }
@@ -390,23 +390,10 @@ public class Main {
                 client.getId(), meeting.getEmployee().getId());
     }
 
-    private static void payForAgreement(Client client) throws EntityNotFoundException {
-        Optional<Agreement> agreement = AGREEMENT_SERVICE.getByClientId(client.getId());
-        if (agreement.isEmpty()) {
-            System.out.println("You cannot have more than one Real Estate AGREEMENT");
-            return;
-        }
-
-        System.out.println("Thank you for paying for agreement");
-
-        REAL_ESTATE_SERVICE.hideById(agreement.get().getRealEstate().getId());
-
-        AGREEMENT_SERVICE.deleteById(agreement.get().getId());
-    }
-
     public static void orderRealEstate(Scanner scanner, Client client) throws EntityNotFoundException, FieldValidationException {
         if (AGREEMENT_SERVICE.getByClientId(client.getId()).isPresent()) {
-            System.out.println("You cannot have more than one Real Estate AGREEMENT");
+            System.out.println("You cannot have more than one Real Estate AGREEMENT open. Please pay for your agreement");
+            askForPayment(scanner, client);
             return;
         }
 
@@ -414,7 +401,7 @@ public class Main {
         String choice = scanner.nextLine();
 
         RealEstate realEstate;
-        realEstate = REAL_ESTATE_SERVICE.getById(parseLong(choice));
+        realEstate = REAL_ESTATE_SERVICE.getAvailableById(parseLong(choice));
 
         System.out.println("The price of Real Estate " + realEstate.getPrice());
 
@@ -432,10 +419,44 @@ public class Main {
             System.out.println(agreement);
         } catch (FieldValidationException e) {
             System.out.println(e.getMessage());
-            System.out.println("Order cannot be created");
+        }
+
+        askForPayment(scanner, client);
+        System.out.println(agreement);
+    }
+
+    private static void askForPayment(Scanner scanner, Client client) {
+        System.out.println("Please pay for your agreement");
+        System.out.println("Enter 1 to pay, or 0 to exit");
+        String choiceToPay = scanner.nextLine();
+        switch (choiceToPay) {
+            case "1":
+                try {
+                    payForAgreement(client);
+                } catch (EntityNotFoundException e) {
+                    System.out.println(e.getMessage());
+                }
+                break;
+            case "0":
+                break;
+            default:
+                System.out.println("Invalid option");
+                break;
         }
     }
 
+    private static void payForAgreement(Client client) throws EntityNotFoundException {
+        Optional<Agreement> agreement = AGREEMENT_SERVICE.getByClientId(client.getId());
+
+        System.out.println("Thank you for paying for agreement");
+
+        RealEstate realEstate = agreement.get().getRealEstate();
+        REAL_ESTATE_SERVICE.hideById(realEstate.getId());
+        AGREEMENT_SERVICE.deleteById(agreement.get().getId());
+        for (Meeting meetingToDelete : MEETING_SERVICE.getByRealEstate(realEstate)) {
+            MEETING_SERVICE.deleteById(meetingToDelete.getId());
+        }
+    }
 
     public static void settings(Scanner scanner, Client client) {
         System.out.println("SETTINGS\n" +
@@ -487,7 +508,7 @@ public class Main {
             Date utilDate = dateFormat.parse(dateString);
             java.sql.Date date = new java.sql.Date(utilDate.getTime());
 
-            realEstate = REAL_ESTATE_SERVICE.getById(parseLong(realEstateString));
+            realEstate = REAL_ESTATE_SERVICE.getAvailableById(parseLong(realEstateString));
 
             meeting.setMeetingDateTime(date);
             meeting.setInquiryDate(new Date());

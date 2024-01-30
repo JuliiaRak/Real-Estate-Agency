@@ -3,6 +3,7 @@ package com.solvd;
 import com.solvd.domain.Client;
 import com.solvd.domain.exceptions.EmailAlreadyExistsException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
 import com.solvd.persistence.ClientRepository;
 import com.solvd.persistence.impl.ClientRepositoryMybatisImpl;
@@ -12,7 +13,7 @@ import com.solvd.service.impl.ClientServiceImpl;
 import java.util.Date;
 
 public class ClientTest {
-    public static void main(String[] args) throws EntityNotFoundException, EmailAlreadyExistsException, PhoneNumberAlreadyExistsException {
+    public static void main(String[] args) throws EntityNotFoundException, EmailAlreadyExistsException, PhoneNumberAlreadyExistsException, FieldValidationException {
         Client.Builder builder = new Client.Builder();
         try {
             builder.setFirstName("Denys");
@@ -43,6 +44,8 @@ public class ClientTest {
             throw new RuntimeException(e);
         } catch (PhoneNumberAlreadyExistsException e) {
             System.out.println(e.getMessage());
+        } catch (FieldValidationException e) {
+            throw new RuntimeException(e);
         }
 
         client.setEmail("dkulikov@ukr.net");

@@ -4,10 +4,7 @@ import com.solvd.domain.Address;
 import com.solvd.domain.Client;
 import com.solvd.domain.RealEstate;
 import com.solvd.domain.enums.RealEstateType;
-import com.solvd.domain.exceptions.EmailAlreadyExistsException;
-import com.solvd.domain.exceptions.EntityNotFoundException;
-import com.solvd.domain.exceptions.LinkAlreadyExistsException;
-import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
+import com.solvd.domain.exceptions.*;
 import com.solvd.persistence.AddressRepository;
 import com.solvd.persistence.ClientRepository;
 import com.solvd.persistence.RealEstateRepository;
@@ -31,7 +28,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class RealEstateTest {
-    public static void main(String[] args) throws PhoneNumberAlreadyExistsException, EmailAlreadyExistsException, EntityNotFoundException, LinkAlreadyExistsException {
+    public static void main(String[] args) throws PhoneNumberAlreadyExistsException, EmailAlreadyExistsException, EntityNotFoundException, LinkAlreadyExistsException, FieldValidationException {
         PhotoService photoService = new PhotoServiceImpl(new PhotoRepositoryMybatisImpl());
         TagService tagService = new TagServiceImpl(new TagRepositoryMybatisImpl());
 
@@ -73,7 +70,7 @@ public class RealEstateTest {
         AddressService addressService = new AddressServiceImpl(addressRepository);
 
         RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
-        RealEstateService realEstateService = new RealEstateServiceImpl(realEstateRepository, addressService, photoService, tagService);
+        RealEstateService realEstateService = new RealEstateServiceImpl();
         realEstate.setSeller(client);
         realEstate.setAddress(address);
         realEstateService.create(realEstate, client.getId());
@@ -90,7 +87,7 @@ public class RealEstateTest {
         realEstate.setMetrics("100 square meters");
         realEstate.setRooms(3);
         realEstateService.update(realEstate);
-        System.out.println(realEstateService.getById(realEstate.getId()));
+        System.out.println(realEstateService.getAvailableById(realEstate.getId()));
         System.out.println(realEstateService.getAll());
 
         realEstateService.deleteById(realEstate.getId());

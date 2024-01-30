@@ -5,10 +5,7 @@ import com.solvd.domain.Agreement;
 import com.solvd.domain.Client;
 import com.solvd.domain.RealEstate;
 import com.solvd.domain.enums.RealEstateType;
-import com.solvd.domain.exceptions.EmailAlreadyExistsException;
-import com.solvd.domain.exceptions.EntityNotFoundException;
-import com.solvd.domain.exceptions.LinkAlreadyExistsException;
-import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
+import com.solvd.domain.exceptions.*;
 import com.solvd.persistence.AddressRepository;
 import com.solvd.persistence.AgreementRepository;
 import com.solvd.persistence.ClientRepository;
@@ -32,7 +29,7 @@ import java.util.Date;
 
 public class AgreementTest {
 
-    public static void main(String[] args) throws EntityNotFoundException, LinkAlreadyExistsException, PhoneNumberAlreadyExistsException, EmailAlreadyExistsException {
+    public static void main(String[] args) throws EntityNotFoundException, LinkAlreadyExistsException, PhoneNumberAlreadyExistsException, EmailAlreadyExistsException, FieldValidationException {
         //creating instances
         Client client = new Client();
         Client seller = new Client();
@@ -149,7 +146,7 @@ public class AgreementTest {
 
                 //check the validation
                 agreementService.create(agreement2, realEstate.getId(), client.getId());
-                System.out.println(realEstateService.getById(realEstate.getId()));
+                System.out.println(realEstateService.getAvailableById(realEstate.getId()));
 
                 System.out.println(agreement2);
 

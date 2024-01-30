@@ -5,8 +5,6 @@ import com.solvd.domain.exceptions.EmailAlreadyExistsException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
-import com.solvd.persistence.ClientRepository;
-import com.solvd.persistence.impl.ClientRepositoryMybatisImpl;
 import com.solvd.service.ClientService;
 import com.solvd.service.impl.ClientServiceImpl;
 import org.junit.jupiter.api.Assertions;

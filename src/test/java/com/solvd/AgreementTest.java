@@ -28,6 +28,7 @@ public class AgreementTest {
     @Test
     public void createAgreementTest() throws FieldValidationException, EntityNotFoundException {
         Agreement agreement = createSimpleAgreement();
+
         agreementService.create(agreement, 1, 1);
         Assertions.assertNotNull(agreement.getId());
         Agreement retrievedAgreement = AGREEMENT_REPOSITORY.findById(agreement.getId()).orElse(null);

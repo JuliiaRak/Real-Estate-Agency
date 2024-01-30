@@ -19,6 +19,17 @@ public class Client {
         return new Builder();
     }
 
+    public static String getTableHeader() {
+        return String.format("\033[1m| %-8s | %-10s | %-10s |\033[0m",
+                "ClientID", "First name", "Last name");
+    }
+
+    @Override
+    public String toString() {
+        return String.format("| %-8s | %-10s | %-10s |",
+                id, firstName, lastName);
+    }
+
     public static class Builder {
         private long id;
         private String firstName;
@@ -68,16 +79,5 @@ public class Client {
             client.registrationDate = this.registrationDate;
             return client;
         }
-    }
-
-    @Override
-    public String toString() {
-        return String.format("| %-8s | %-10s | %-10s |",
-                id, firstName, lastName);
-    }
-
-    public static String getTableHeader() {
-        return String.format("\033[1m| %-8s | %-10s | %-10s |\033[0m",
-                "ClientID", "First name", "Last name");
     }
 }

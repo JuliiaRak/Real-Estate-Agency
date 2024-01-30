@@ -7,6 +7,8 @@ import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
 import com.solvd.service.ClientService;
 import com.solvd.service.impl.ClientServiceImpl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -14,8 +16,9 @@ import java.util.Date;
 import java.util.List;
 
 public class ClientTest {
+    private static final Logger LOGGER = LogManager.getLogger(ClientTest.class);
 
-    private ClientService clientService = new ClientServiceImpl();
+    private final ClientService clientService = new ClientServiceImpl();
 
     @Test
     public void createClientTest() throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException, EntityNotFoundException, FieldValidationException {
@@ -69,7 +72,7 @@ public class ClientTest {
             builder.setPhoneNumber("+380991234567");
             builder.setRegistrationDate(new Date());
         } catch (IllegalArgumentException e) {
-            System.out.println("An invalid object was created: " + e.getMessage());
+            LOGGER.error("An invalid object was created: " + e.getMessage());
         }
         Client client1 = builder.build();
 
@@ -80,7 +83,7 @@ public class ClientTest {
             builder.setPhoneNumber("+380922234567");
             builder.setRegistrationDate(new Date());
         } catch (IllegalArgumentException e) {
-            System.out.println("An invalid object was created: " + e.getMessage());
+            LOGGER.error("An invalid object was created: " + e.getMessage());
         }
         Client client2 = builder.build();
 
@@ -104,7 +107,7 @@ public class ClientTest {
             builder.setPhoneNumber("+380991234567");
             builder.setRegistrationDate(new Date());
         } catch (IllegalArgumentException e) {
-            System.out.println("An invalid object was created: " + e.getMessage());
+            LOGGER.error("An invalid object was created: " + e.getMessage());
         }
 
         Client client = builder.build();
@@ -129,7 +132,7 @@ public class ClientTest {
             builder.setPhoneNumber("+380991234567");
             builder.setRegistrationDate(new Date());
         } catch (IllegalArgumentException e) {
-            System.out.println("An invalid object was created: " + e.getMessage());
+            LOGGER.error("An invalid object was created: " + e.getMessage());
         }
         Client client = builder.build();
         clientService.create(client);
@@ -138,7 +141,7 @@ public class ClientTest {
         try {
             retrievedClient = clientService.getById(client.getId());
         } catch (EntityNotFoundException e) {
-            System.out.println(e);
+            LOGGER.error(e.getMessage());
         }
 
         Assertions.assertNull(retrievedClient);

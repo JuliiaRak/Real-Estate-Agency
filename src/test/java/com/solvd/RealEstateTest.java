@@ -14,6 +14,8 @@ import com.solvd.service.RealEstateService;
 import com.solvd.service.impl.AddressServiceImpl;
 import com.solvd.service.impl.ClientServiceImpl;
 import com.solvd.service.impl.RealEstateServiceImpl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -22,9 +24,11 @@ import java.util.Date;
 import java.util.List;
 
 public class RealEstateTest {
-    private RealEstateService realEstateService = new RealEstateServiceImpl();
-    private ClientService clientService = new ClientServiceImpl();
-    private AddressService addressService = new AddressServiceImpl();
+    private static final Logger LOGGER = LogManager.getLogger(RealEstateTest.class);
+
+    private final RealEstateService realEstateService = new RealEstateServiceImpl();
+    private final ClientService clientService = new ClientServiceImpl();
+    private final AddressService addressService = new AddressServiceImpl();
 
     @Test
     public void createRealEstateTest() throws EntityNotFoundException, EmailAlreadyExistsException, PhoneNumberAlreadyExistsException, FieldValidationException {
@@ -36,7 +40,7 @@ public class RealEstateTest {
             builder.setPhoneNumber("+380991234567");
             builder.setRegistrationDate(new Date());
         } catch (IllegalArgumentException e) {
-            System.out.println("An invalid object was created: " + e.getMessage());
+            LOGGER.error("An invalid object was created: " + e.getMessage());
         }
         Client client = builder.build();
 
@@ -195,7 +199,7 @@ public class RealEstateTest {
             builder.setPhoneNumber("+380991234567");
             builder.setRegistrationDate(new Date());
         } catch (IllegalArgumentException e) {
-            System.out.println("An invalid object was created: " + e.getMessage());
+            LOGGER.error("An invalid object was created: " + e.getMessage());
         }
         Client client = builder.build();
 
@@ -229,7 +233,7 @@ public class RealEstateTest {
         try {
             Assertions.assertNull(realEstateService.getAvailableById(createdRealEstate.getId()));
         } catch (EntityNotFoundException e) {
-            System.out.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
     }
 }

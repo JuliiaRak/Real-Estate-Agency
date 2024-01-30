@@ -14,7 +14,8 @@ import com.solvd.service.RealEstateService;
 import com.solvd.service.impl.AgreementServiceImpl;
 import com.solvd.service.impl.ClientServiceImpl;
 import com.solvd.service.impl.RealEstateServiceImpl;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -22,18 +23,19 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class AgreementTest {
+    private static final Logger LOGGER = LogManager.getLogger(AgreementTest.class);
 
-    private static final AgreementRepository AGREEMENT_REPOSITORY = new AgreementRepositoryMyBatisImpl();
-    private static final RealEstateRepository REAL_ESTATE_REPOSITORY = new RealEstateRepositoryMybatisImpl();
-    private static AgreementService agreementService = new AgreementServiceImpl
-            (AGREEMENT_REPOSITORY, new RealEstateServiceImpl(), new ClientServiceImpl());
-    private static final RealEstateService realEstateService = new RealEstateServiceImpl();
+    private final AgreementRepository agreementRepository = new AgreementRepositoryMyBatisImpl();
+    private final RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
+    private final AgreementService agreementService = new AgreementServiceImpl
+            (agreementRepository, new RealEstateServiceImpl(), new ClientServiceImpl());
+    private final RealEstateService realEstateService = new RealEstateServiceImpl();
 
     @Test
     public void createAgreementTest() throws FieldValidationException, EntityNotFoundException {
         Agreement agreement = createSimpleAgreement();
         agreementService.create(agreement, 1, 2);
-        Agreement retrievedAgreement = AGREEMENT_REPOSITORY.findById(agreement.getId()).orElse(null);
+        Agreement retrievedAgreement = agreementRepository.findById(agreement.getId()).orElse(null);
 
         Assertions.assertNotNull(agreement.getId());
         Assertions.assertNotNull(retrievedAgreement);
@@ -48,7 +50,7 @@ public class AgreementTest {
         agreementService.create(agreement, 1, 2);
         agreementService.deleteById(agreement.getId());
 
-        Assertions.assertFalse(AGREEMENT_REPOSITORY.findById(agreement.getId()).isPresent());
+        Assertions.assertFalse(agreementRepository.findById(agreement.getId()).isPresent());
         setRealEstateAvailable();
     }
 
@@ -59,7 +61,7 @@ public class AgreementTest {
         agreement.setDuration("24 months");
         agreement.setAmount(new BigDecimal("150000.00"));
         agreementService.update(agreement);
-        Agreement updatedAgreement = AGREEMENT_REPOSITORY.findById(agreement.getId()).orElse(null);
+        Agreement updatedAgreement = agreementRepository.findById(agreement.getId()).orElse(null);
 
         Assertions.assertNotNull(updatedAgreement);
         Assertions.assertEquals(agreement.getDuration(), updatedAgreement.getDuration());
@@ -84,13 +86,14 @@ public class AgreementTest {
                 "12 months", "Active", new RealEstate(), new Client());
     }
 
-    private void setRealEstateAvailable(){
+    private void setRealEstateAvailable() {
         RealEstate realEstate = null;
         try {
-            realEstate = REAL_ESTATE_REPOSITORY.findById(1L).get();
+            realEstate = realEstateRepository.findById(1L).get();
             realEstate.setAvailable(true);
             realEstateService.update(realEstate);
         } catch (EntityNotFoundException | FieldValidationException e) {
+            LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }

@@ -7,9 +7,53 @@ import com.solvd.persistence.AddressRepository;
 import com.solvd.persistence.impl.AddressRepositoryMybatisImpl;
 import com.solvd.service.AddressService;
 import com.solvd.service.impl.AddressServiceImpl;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 public class AddressTest {
-    public static void main(String[] args) throws EntityNotFoundException, FieldValidationException {
+    private AddressService addressService = new AddressServiceImpl();
+
+    @Test
+    public void createAddressTest() throws EntityNotFoundException, FieldValidationException {
+        Address address = new Address();
+        address.setCountry("Ukraine");
+        address.setRegion("central region");
+        address.setCity("Kyiv");
+        address.setStreet("Kyiv street");
+        address.setBuilding("2");
+        address.setApartment("99");
+
+        addressService.create(address);
+        Address createdAddress = addressService.getById(address.getId());
+
+        Assertions.assertNotNull(createdAddress);
+        Assertions.assertEquals(address, createdAddress);
+
+        addressService.deleteById(address.getId());
+    }
+
+    @Test
+    public void getAddressByIdTest() throws EntityNotFoundException, FieldValidationException {
+        Address address = new Address();
+        address.setCountry("Ukraine");
+        address.setRegion("central region");
+        address.setCity("Kyiv");
+        address.setStreet("Kyiv street");
+        address.setBuilding("2");
+        address.setApartment("99");
+
+        addressService.create(address);
+
+        Address retrievedAddress = addressService.getById(address.getId());
+        Assertions.assertEquals(address, retrievedAddress);
+
+        addressService.deleteById(address.getId());
+    }
+
+    @Test
+    public void getAllAddressesTest() throws FieldValidationException {
         Address address = new Address();
         Address address2 = new Address();
         address.setCountry("Ukraine");
@@ -25,20 +69,58 @@ public class AddressTest {
         address2.setStreet("Lviv street");
         address2.setBuilding("3");
         address2.setApartment("12");
-
-        AddressRepository addressRepository = new AddressRepositoryMybatisImpl();
-        AddressService addressService = new AddressServiceImpl(addressRepository);
         addressService.create(address);
         addressService.create(address2);
-        System.out.println(addressService.getById(address.getId()));
-        System.out.println(addressService.getAll());
+
+        List<Address> allAddresses = addressService.getAll();
+        Assertions.assertEquals(2, allAddresses.size());
+        Assertions.assertTrue(allAddresses.contains(address));
+        Assertions.assertTrue(allAddresses.contains(address2));
+
+        addressService.deleteById(address.getId());
+        addressService.deleteById(address2.getId());
+    }
+
+    @Test
+    public void updateAddressTest() throws EntityNotFoundException, FieldValidationException {
+        Address address = new Address();
+        address.setCountry("Ukraine");
+        address.setRegion("central region");
+        address.setCity("Kyiv");
+        address.setStreet("Kyiv street");
+        address.setBuilding("2");
+        address.setApartment("99");
+
+        addressService.create(address);
 
         address.setBuilding("3");
         address.setApartment("100");
         addressService.update(address);
-        System.out.println(addressService.getById(address.getId()));
+
+        Address updatedAddress = addressService.getById(address.getId());
+        Assertions.assertEquals("3", updatedAddress.getBuilding());
+        Assertions.assertEquals("100", updatedAddress.getApartment());
 
         addressService.deleteById(address.getId());
-        addressService.deleteById(address2.getId());
+    }
+
+    @Test
+    public void deleteAddressTest() throws FieldValidationException {
+        Address address = new Address();
+        address.setCountry("Ukraine");
+        address.setRegion("central region");
+        address.setCity("Kyiv");
+        address.setStreet("Kyiv street");
+        address.setBuilding("2");
+        address.setApartment("99");
+
+        addressService.create(address);
+
+        addressService.deleteById(address.getId());
+        try {
+            Assertions.assertNull(addressService.getById(address.getId()));
+        } catch (EntityNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

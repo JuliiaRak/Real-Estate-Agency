@@ -71,6 +71,7 @@ public class AddressTest {
         addressService.create(address2);
 
         List<Address> allAddresses = addressService.getAll();
+
         Assertions.assertTrue(allAddresses.contains(address));
         Assertions.assertTrue(allAddresses.contains(address2));
 

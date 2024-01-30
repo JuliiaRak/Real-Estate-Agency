@@ -1,7 +1,6 @@
 package com.solvd.persistence.impl;
 
 import com.solvd.domain.Employee;
-import com.solvd.persistence.ClientRepository;
 import com.solvd.persistence.Config;
 import com.solvd.persistence.EmployeeRepository;
 import org.apache.ibatis.session.SqlSession;
@@ -59,10 +58,10 @@ public class EmployeeRepositoryMybatisImpl implements EmployeeRepository {
     }
 
     @Override
-    public Optional<Employee> findByPhoneNumber(String phoneNember) {
+    public Optional<Employee> findByPhoneNumber(String phoneNumber) {
         try (SqlSession sqlSession = Config.getSessionFactory().openSession(true)) {
             EmployeeRepository employeeRepository = sqlSession.getMapper(EmployeeRepository.class);
-            return employeeRepository.findByPhoneNumber(phoneNember);
+            return employeeRepository.findByPhoneNumber(phoneNumber);
         }
     }
 }

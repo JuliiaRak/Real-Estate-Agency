@@ -13,9 +13,10 @@ import com.solvd.service.impl.MeetingServiceImpl;
 import java.util.Optional;
 import java.util.Scanner;
 
-public class PaymnetAction {
+public class PaymentAction {
     private static final AgreementService AGREEMENT_SERVICE = new AgreementServiceImpl();
     private static final MeetingService MEETING_SERVICE = new MeetingServiceImpl();
+
     public static void askForPayment(Scanner scanner, Client client) {
         System.out.println("Please pay for your agreement");
         System.out.println("Enter 1 to pay, or 0 to exit");

@@ -8,8 +8,12 @@ import java.util.List;
 
 public interface AddressService {
     void create(Address address) throws FieldValidationException;
+
     void deleteById(long id);
+
     void update(Address address) throws EntityNotFoundException, FieldValidationException;
+
     Address getById(long id) throws EntityNotFoundException;
+
     List<Address> getAll();
 }

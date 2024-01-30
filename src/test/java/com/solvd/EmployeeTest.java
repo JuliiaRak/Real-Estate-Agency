@@ -15,8 +15,9 @@ import org.junit.jupiter.api.Test;
 import java.util.Date;
 
 public class EmployeeTest {
-    private static EmployeeRepository employeeRepository = new EmployeeRepositoryMybatisImpl();
-    private static EmployeeService employeeService = new EmployeeServiceImpl(employeeRepository);
+
+    private final EmployeeRepository employeeRepository = new EmployeeRepositoryMybatisImpl();
+    private final EmployeeService employeeService = new EmployeeServiceImpl(employeeRepository);
 
     @Test
     public void createEmployeeTest() throws FieldValidationException, EmailAlreadyExistsException, PhoneNumberAlreadyExistsException {

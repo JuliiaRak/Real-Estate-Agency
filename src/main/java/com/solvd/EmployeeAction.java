@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 public class EmployeeAction {
     private static final EmployeeService EMPLOYEE_SERVICE = new EmployeeServiceImpl();
+
     public static Employee chooseEmployee(Scanner scanner) throws EntityNotFoundException, FieldValidationException {
         System.out.println("Here the list of employees, choose one to show you the property");
         List<Employee> employees = EMPLOYEE_SERVICE.getAll();

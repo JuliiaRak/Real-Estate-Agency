@@ -5,13 +5,17 @@ import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.service.AddressService;
 import com.solvd.service.impl.AddressServiceImpl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 public class AddressTest {
-    private AddressService addressService = new AddressServiceImpl();
+    private static final Logger LOGGER = LogManager.getLogger(AddressTest.class);
+
+    private final AddressService addressService = new AddressServiceImpl();
 
     @Test
     public void createAddressTest() throws EntityNotFoundException, FieldValidationException {
@@ -108,7 +112,7 @@ public class AddressTest {
         try {
             Assertions.assertNull(addressService.getById(address.getId()));
         } catch (EntityNotFoundException e) {
-            System.out.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
     }
 }

@@ -28,4 +28,15 @@ public class Employee {
         this.hireDate = hireDate;
         this.salary = salary;
     }
+
+    @Override
+    public String toString() {
+        return String.format("| %-10s | %-10s | %-10s | %-11s |",
+                id, firstName, lastName, position);
+    }
+
+    public static String getTableHeader() {
+        return String.format("\033[1m| %-10s | %-10s | %-10s | %-11s |\033[0m",
+                "EmployeeID", "First name", "Last name", "Position");
+    }
 }

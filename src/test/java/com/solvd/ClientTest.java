@@ -44,6 +44,8 @@ public class ClientTest {
             throw new RuntimeException(e);
         } catch (PhoneNumberAlreadyExistsException | FieldValidationException e) {
             System.out.println(e.getMessage());
+        } catch (FieldValidationException e) {
+            throw new RuntimeException(e);
         }
 
         client.setEmail("dkulikov@ukr.net");

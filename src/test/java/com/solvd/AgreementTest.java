@@ -11,8 +11,9 @@ import com.solvd.service.AgreementService;
 import com.solvd.service.impl.AgreementServiceImpl;
 import com.solvd.service.impl.ClientServiceImpl;
 import com.solvd.service.impl.RealEstateServiceImpl;
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -30,10 +31,10 @@ public class AgreementTest {
 
         Agreement agreement = createSampleAgreement();
         agreementService.create(agreement, 1, 1);
-        Assert.assertNotNull(agreement.getId());
+        Assertions.assertNotNull(agreement.getId());
         Agreement retrievedAgreement = AGREEMENT_REPOSITORY.findById(agreement.getId()).orElse(null);
-        Assert.assertNotNull(retrievedAgreement);
-        Assert.assertEquals(agreement, retrievedAgreement);
+        Assertions.assertNotNull(retrievedAgreement);
+        Assertions.assertEquals(agreement, retrievedAgreement);
     }
 
     @Test
@@ -43,7 +44,7 @@ public class AgreementTest {
 
         agreementService.deleteById(agreement.getId());
 
-        Assert.assertFalse(AGREEMENT_REPOSITORY.findById(agreement.getId()).isPresent()); // Перевірте, чи агрімент був видалений
+        Assertions.assertFalse(AGREEMENT_REPOSITORY.findById(agreement.getId()).isPresent()); // Перевірте, чи агрімент був видалений
     }
 
     @Test
@@ -59,9 +60,9 @@ public class AgreementTest {
 
         Agreement updatedAgreement = AGREEMENT_REPOSITORY.findById(agreement.getId()).orElse(null);
 
-        Assert.assertNotNull(updatedAgreement);
-        Assert.assertEquals(agreement.getDuration(), updatedAgreement.getDuration());
-        Assert.assertEquals(agreement.getAmount(), updatedAgreement.getAmount());
+        Assertions.assertNotNull(updatedAgreement);
+        Assertions.assertEquals(agreement.getDuration(), updatedAgreement.getDuration());
+        Assertions.assertEquals(agreement.getAmount(), updatedAgreement.getAmount());
     }
 
     @Test
@@ -70,7 +71,7 @@ public class AgreementTest {
         agreementService.create(agreement, 1, 1);
 
         Agreement agreementFind = agreementService.getById(agreement.getId());
-        Assert.assertEquals(agreement, agreementFind);
+        Assertions.assertEquals(agreement, agreementFind);
     }
 
 

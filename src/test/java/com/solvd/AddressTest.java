@@ -3,8 +3,6 @@ package com.solvd;
 import com.solvd.domain.Address;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.domain.exceptions.FieldValidationException;
-import com.solvd.persistence.AddressRepository;
-import com.solvd.persistence.impl.AddressRepositoryMybatisImpl;
 import com.solvd.service.AddressService;
 import com.solvd.service.impl.AddressServiceImpl;
 import org.junit.jupiter.api.Assertions;

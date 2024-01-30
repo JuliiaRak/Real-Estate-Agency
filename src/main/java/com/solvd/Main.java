@@ -306,7 +306,7 @@ public class Main {
                 System.out.println("Invalid option.");
                 return;
         }
-        List<RealEstate> realEstates = REAL_ESTATE_SERVICE.getAllByType(realEstateType);
+        List<RealEstate> realEstates = REAL_ESTATE_SERVICE.getAllAvailableByType(realEstateType);
         if (realEstates.isEmpty()) {
             System.out.println("\nNo real estates by this type");
         } else {
@@ -317,7 +317,7 @@ public class Main {
     }
 
     private static void viewAllRealEstates() {
-        List<RealEstate> realEstates = REAL_ESTATE_SERVICE.getAll();
+        List<RealEstate> realEstates = REAL_ESTATE_SERVICE.getAllAvailable();
         for (RealEstate item : realEstates) {
             System.out.println(item + "\n");
         }
@@ -401,7 +401,7 @@ public class Main {
         String choice = scanner.nextLine();
 
         RealEstate realEstate;
-        realEstate = REAL_ESTATE_SERVICE.getById(parseLong(choice));
+        realEstate = REAL_ESTATE_SERVICE.getAvailableById(parseLong(choice));
 
         System.out.println("The price of Real Estate " + realEstate.getPrice());
 
@@ -508,7 +508,7 @@ public class Main {
             Date utilDate = dateFormat.parse(dateString);
             java.sql.Date date = new java.sql.Date(utilDate.getTime());
 
-            realEstate = REAL_ESTATE_SERVICE.getById(parseLong(realEstateString));
+            realEstate = REAL_ESTATE_SERVICE.getAvailableById(parseLong(realEstateString));
 
             meeting.setMeetingDateTime(date);
             meeting.setInquiryDate(new Date());

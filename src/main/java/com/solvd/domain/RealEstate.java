@@ -38,4 +38,15 @@ public class RealEstate {
     public void removeTag(Tag tag) {
         tags.remove(tag);
     }
+
+    @Override
+    public String toString() {
+        return String.format("| %-3d | %-10s | %-31s | %-9s | %-7s | %-5s | %-8s | %-30s",
+                id, realEstateType, description, price, metrics, rooms, seller.getId(), address);
+    }
+
+    public static String getTableHeader() {
+        return String.format("\033[1m| %-3s | %-10s | %-31s | %-9s | %-7s | %-5s | %-8s | %-10s\033[0m",
+                "ID", "Type", "Description", "Price", "Metrics", "Rooms", "SellerID", "Address");
+    }
 }

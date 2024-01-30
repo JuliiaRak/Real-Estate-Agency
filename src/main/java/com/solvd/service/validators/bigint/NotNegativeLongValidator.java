@@ -1,5 +1,6 @@
 package com.solvd.service.validators.bigint;
 
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.service.validators.Validator;
 
 public class NotNegativeLongValidator implements Validator<Long> {
@@ -14,10 +15,10 @@ public class NotNegativeLongValidator implements Validator<Long> {
     }
 
     @Override
-    public void validate(String fieldName, Long entity) {
+    public void validate(String fieldName, Long entity) throws FieldValidationException {
         validator.validate(fieldName, entity);
         if (entity < 0) {
-            throw new IllegalArgumentException(String.format("%s must not be negative", fieldName));
+            throw new FieldValidationException(String.format("%s must not be negative", fieldName));
         }
     }
 }

@@ -3,6 +3,7 @@ package com.solvd;
 import com.solvd.domain.Client;
 import com.solvd.domain.exceptions.EmailAlreadyExistsException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
 import com.solvd.persistence.ClientRepository;
 import com.solvd.persistence.impl.ClientRepositoryMybatisImpl;
@@ -18,7 +19,7 @@ public class ClientTest {
     private ClientService clientService = new ClientServiceImpl();
 
     @Test
-    public void createClientTest() throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException, EntityNotFoundException {
+    public void createClientTest() throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException, EntityNotFoundException, FieldValidationException {
         Client.Builder builder = new Client.Builder();
         try {
             builder.setFirstName("Denys");
@@ -40,7 +41,7 @@ public class ClientTest {
     }
 
     @Test
-    public void getClientByIdTest() throws EntityNotFoundException, EmailAlreadyExistsException, PhoneNumberAlreadyExistsException {
+    public void getClientByIdTest() throws EntityNotFoundException, EmailAlreadyExistsException, PhoneNumberAlreadyExistsException, FieldValidationException {
         Client.Builder builder = new Client.Builder();
         try {
             builder.setFirstName("Denys");
@@ -61,7 +62,7 @@ public class ClientTest {
     }
 
     @Test
-    public void getAllClientsTest() throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException {
+    public void getAllClientsTest() throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException, FieldValidationException {
         Client.Builder builder = new Client.Builder();
         try {
             builder.setFirstName("Denys");
@@ -98,7 +99,7 @@ public class ClientTest {
     }
 
     @Test
-    public void updateClientTest() throws EntityNotFoundException, EmailAlreadyExistsException, PhoneNumberAlreadyExistsException {
+    public void updateClientTest() throws EntityNotFoundException, EmailAlreadyExistsException, PhoneNumberAlreadyExistsException, FieldValidationException {
         Client.Builder builder = new Client.Builder();
         try {
             builder.setFirstName("Denys");
@@ -111,6 +112,7 @@ public class ClientTest {
         }
 
         Client client = builder.build();
+
         clientService.create(client);
 
         client.setEmail("dkulikov@ukr.net");
@@ -125,7 +127,7 @@ public class ClientTest {
     }
 
     @Test
-    public void deleteClientTest() throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException {
+    public void deleteClientTest() throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException, FieldValidationException {
         Client.Builder builder = new Client.Builder();
         try {
             builder.setFirstName("Denys");

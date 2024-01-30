@@ -2,6 +2,7 @@ package com.solvd.service.impl;
 
 import com.solvd.domain.Agreement;
 import com.solvd.domain.exceptions.EntityNotFoundException;
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.persistence.AgreementRepository;
 import com.solvd.persistence.impl.AgreementRepositoryMyBatisImpl;
 import com.solvd.service.AgreementService;
@@ -32,29 +33,33 @@ public class AgreementServiceImpl implements AgreementService {
     }
 
     @Override
-    public void create(Agreement agreement, long realEstateId, long clientId) throws EntityNotFoundException {
+    public void create(Agreement agreement, long realEstateId, long clientId) throws EntityNotFoundException, FieldValidationException {
         validate(agreement);
         checkRealEstate(realEstateId);
         checkClient(clientId);
 
-        agreementRepository.create(agreement, realEstateId, clientId);
+        if (agreement.getClient().equals(realEstateService.getAvailableById(realEstateId).getSeller())) {
+            throw new FieldValidationException("You cannot order your real estate");
+        } else {
+            agreementRepository.create(agreement, realEstateId, clientId);
+        }
 
         realEstateService.hideById(realEstateId);
     }
 
     private void checkRealEstate(long realEstateId) throws EntityNotFoundException {
-        if (!realEstateService.existsById(realEstateId)) {
-            throw new EntityNotFoundException("Real estate");
+        if (!realEstateService.existsAvailableById(realEstateId)) {
+            throw new EntityNotFoundException("Real estate", realEstateId);
         }
     }
 
     private void checkClient(long clientId) throws EntityNotFoundException {
         if (!clientService.existsById(clientId)) {
-            throw new EntityNotFoundException("Client");
+            throw new EntityNotFoundException("Client", clientId);
         }
     }
 
-    private void validate(Agreement agreement) {
+    private void validate(Agreement agreement) throws FieldValidationException {
         Validator<Object> notNullValidator = new NotNullObjectValidator();
         notNullValidator.validate("agreement", agreement);
         notNullValidator.validate("agreement amount", agreement.getAmount());
@@ -74,7 +79,7 @@ public class AgreementServiceImpl implements AgreementService {
     }
 
     @Override
-    public void update(Agreement agreement) throws EntityNotFoundException {
+    public void update(Agreement agreement) throws EntityNotFoundException, FieldValidationException {
         if (agreementRepository.findById(agreement.getId()).isEmpty()) {
             throw new EntityNotFoundException("Agreement", agreement.getId());
         }
@@ -89,7 +94,7 @@ public class AgreementServiceImpl implements AgreementService {
     }
 
     @Override
-    public List<Agreement> getAll(){
+    public List<Agreement> getAll() {
         return agreementRepository.findAll();
     }
 

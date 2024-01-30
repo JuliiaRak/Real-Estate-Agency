@@ -3,16 +3,17 @@ package com.solvd.service;
 import com.solvd.domain.Client;
 import com.solvd.domain.exceptions.EmailAlreadyExistsException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
 
 import java.util.List;
 
 public interface ClientService {
-    void create(Client client) throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException;
+    void create(Client client) throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException, FieldValidationException;
 
     void deleteById(long id);
 
-    void update(Client client) throws EntityNotFoundException, EmailAlreadyExistsException, PhoneNumberAlreadyExistsException;
+    void update(Client client) throws EntityNotFoundException, EmailAlreadyExistsException, PhoneNumberAlreadyExistsException, FieldValidationException;
 
     Client getById(long id) throws EntityNotFoundException;
 

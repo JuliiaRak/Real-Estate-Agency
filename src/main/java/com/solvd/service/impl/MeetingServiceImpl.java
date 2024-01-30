@@ -2,7 +2,9 @@ package com.solvd.service.impl;
 
 import com.solvd.domain.Client;
 import com.solvd.domain.Meeting;
+import com.solvd.domain.RealEstate;
 import com.solvd.domain.exceptions.EntityNotFoundException;
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.persistence.MeetingRepository;
 import com.solvd.persistence.impl.MeetingRepositoryMybatisImpl;
 import com.solvd.service.ClientService;
@@ -21,7 +23,6 @@ import lombok.AllArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -40,30 +41,16 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public void create(Meeting meeting, Long realEstateId, Long buyerId, Long employeeId) throws EntityNotFoundException {
+    public void create(Meeting meeting, Long realEstateId, Long buyerId, Long employeeId) throws EntityNotFoundException, FieldValidationException {
         validate(meeting);
         checkRealEstate(realEstateId);
         checkBuyer(buyerId);
         checkEmployee(employeeId);
 
-        meetingRepository.create(meeting, realEstateId, buyerId, employeeId);
-    }
-
-    private void checkRealEstate(Long realEstateId) throws EntityNotFoundException {
-        if (!realEstateService.existsById(realEstateId)) {
-            throw new EntityNotFoundException("Real estate");
-        }
-    }
-
-    private void checkBuyer(Long buyerId) throws EntityNotFoundException {
-        if (!clientService.existsById(buyerId)) {
-            throw new EntityNotFoundException("Buyer");
-        }
-    }
-
-    private void checkEmployee(Long employeeId) throws EntityNotFoundException {
-        if (!employeeService.existsById(employeeId)) {
-            throw new EntityNotFoundException("Employee");
+        if (meeting.getBuyer().equals(realEstateService.getAvailableById(realEstateId).getSeller())) {
+            throw new FieldValidationException(" You cannot set up meeting on your real estate");
+        } else {
+            meetingRepository.create(meeting, realEstateId, buyerId, employeeId);
         }
     }
 
@@ -73,7 +60,7 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public void update(Meeting meeting, Long realEstateId, Long buyerId, Long employeeId) throws EntityNotFoundException {
+    public void update(Meeting meeting, Long realEstateId, Long buyerId, Long employeeId) throws EntityNotFoundException, FieldValidationException {
         if (meetingRepository.findById(meeting.getId()).isEmpty()) {
             throw new EntityNotFoundException("Meeting", meeting.getId());
         }
@@ -86,10 +73,18 @@ public class MeetingServiceImpl implements MeetingService {
         return meetingRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Meeting", id));
     }
+
     @Override
-    public List<Meeting> getByClient(Client client){
+    public List<Meeting> getByClient(Client client) {
         return meetingRepository.findAll().stream()
                 .filter(meeting -> meeting.getBuyer().getId() == client.getId())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Meeting> getByRealEstate(RealEstate realEstate) {
+        return meetingRepository.findAll().stream()
+                .filter(meeting -> meeting.getRealEstate().getId() == realEstate.getId())
                 .collect(Collectors.toList());
     }
 
@@ -98,7 +93,7 @@ public class MeetingServiceImpl implements MeetingService {
         return meetingRepository.findAll();
     }
 
-    private void validate(Meeting meeting) {
+    private void validate(Meeting meeting) throws FieldValidationException {
         Validator<Object> objectValidator = new NotNullObjectValidator();
         objectValidator.validate("meeting", meeting);
 
@@ -111,5 +106,24 @@ public class MeetingServiceImpl implements MeetingService {
 
         Validator<String> stringValidator = new SizeStringValidator(new NotEmptyStringValidator(new NotNullStringValidator()));
         stringValidator.validate("meeting status", meeting.getMeetingStatus());
+    }
+
+
+    private void checkRealEstate(Long realEstateId) throws EntityNotFoundException {
+        if (!realEstateService.existsAvailableById(realEstateId)) {
+            throw new EntityNotFoundException("Real estate", realEstateId);
+        }
+    }
+
+    private void checkBuyer(Long buyerId) throws EntityNotFoundException {
+        if (!clientService.existsById(buyerId)) {
+            throw new EntityNotFoundException("Buyer", buyerId);
+        }
+    }
+
+    private void checkEmployee(Long employeeId) throws EntityNotFoundException {
+        if (!employeeService.existsById(employeeId)) {
+            throw new EntityNotFoundException("Employee", employeeId);
+        }
     }
 }

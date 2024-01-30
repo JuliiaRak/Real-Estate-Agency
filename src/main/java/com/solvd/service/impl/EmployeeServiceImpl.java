@@ -3,6 +3,7 @@ package com.solvd.service.impl;
 import com.solvd.domain.Employee;
 import com.solvd.domain.exceptions.EmailAlreadyExistsException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
 import com.solvd.persistence.EmployeeRepository;
 import com.solvd.persistence.impl.EmployeeRepositoryMybatisImpl;
@@ -29,7 +30,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void create(Employee employee) throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException {
+    public void create(Employee employee) throws EmailAlreadyExistsException, PhoneNumberAlreadyExistsException, FieldValidationException {
         validate(employee);
         checkEmailAndPhoneNumber(employee);
 
@@ -42,7 +43,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void update(Employee employee) throws EmailAlreadyExistsException, EntityNotFoundException, PhoneNumberAlreadyExistsException {
+    public void update(Employee employee) throws EmailAlreadyExistsException, EntityNotFoundException, PhoneNumberAlreadyExistsException, FieldValidationException {
         if (employeeRepository.findById(employee.getId()).isEmpty()) {
             throw new EntityNotFoundException("Employee", employee.getId());
         }
@@ -67,7 +68,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findById(id).isPresent();
     }
 
-    private void validate(Employee employee) {
+    private void validate(Employee employee) throws FieldValidationException {
         Validator<Object> objectValidator = new NotNullObjectValidator();
         objectValidator.validate("employee", employee);
 

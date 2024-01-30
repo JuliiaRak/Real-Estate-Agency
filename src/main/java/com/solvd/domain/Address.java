@@ -13,4 +13,10 @@ public class Address {
     private String street;
     private String building;
     private String apartment;
+
+    @Override
+    public String toString() {
+        return String.format("%s, %s %s, %s %s %s",
+                country, region, city, street, building, apartment);
+    }
 }

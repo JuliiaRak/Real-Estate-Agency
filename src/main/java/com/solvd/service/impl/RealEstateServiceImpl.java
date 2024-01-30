@@ -1,18 +1,14 @@
 package com.solvd.service.impl;
 
 import com.solvd.domain.Client;
-import com.solvd.domain.Photo;
 import com.solvd.domain.RealEstate;
-import com.solvd.domain.Tag;
 import com.solvd.domain.enums.RealEstateType;
 import com.solvd.domain.exceptions.EntityNotFoundException;
-import com.solvd.domain.exceptions.LinkAlreadyExistsException;
+import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.persistence.RealEstateRepository;
 import com.solvd.persistence.impl.RealEstateRepositoryMybatisImpl;
 import com.solvd.service.AddressService;
-import com.solvd.service.PhotoService;
 import com.solvd.service.RealEstateService;
-import com.solvd.service.TagService;
 import com.solvd.service.validators.Validator;
 import com.solvd.service.validators.bigint.MaxLongValidator;
 import com.solvd.service.validators.bigint.MinLongValidator;
@@ -31,27 +27,17 @@ import java.util.stream.Collectors;
 public class RealEstateServiceImpl implements RealEstateService {
     private final RealEstateRepository realEstateRepository;
     private final AddressService addressService;
-    private final PhotoService photoService;
-    private final TagService tagService;
 
     public RealEstateServiceImpl() {
         this.realEstateRepository = new RealEstateRepositoryMybatisImpl();
         this.addressService = new AddressServiceImpl();
-        this.photoService = new PhotoServiceImpl();
-        this.tagService = new TagServiceImpl();
     }
 
     @Override
-    public void create(RealEstate realEstate, long clientId) throws EntityNotFoundException, LinkAlreadyExistsException {
+    public void create(RealEstate realEstate, long clientId) throws FieldValidationException {
         validate(realEstate);
         addressService.create(realEstate.getAddress());
         realEstateRepository.create(realEstate, clientId);
-        for (Photo photo : realEstate.getPhotos()) {
-            photoService.create(photo, realEstate.getId());
-        }
-        for (Tag tag : realEstate.getTags()) {
-            tagService.assignToRealEstate(tag, realEstate.getId());
-        }
     }
 
     @Override
@@ -60,7 +46,7 @@ public class RealEstateServiceImpl implements RealEstateService {
     }
 
     @Override
-    public void update(RealEstate realEstate) throws EntityNotFoundException {
+    public void update(RealEstate realEstate) throws EntityNotFoundException, FieldValidationException {
         if (realEstateRepository.findById(realEstate.getId()).isEmpty()) {
             throw new EntityNotFoundException("Real Estate", realEstate.getId());
         }
@@ -69,14 +55,24 @@ public class RealEstateServiceImpl implements RealEstateService {
     }
 
     @Override
-    public RealEstate getById(long realEstateId) throws EntityNotFoundException {
-        return realEstateRepository.findById(realEstateId).orElseThrow(() -> new EntityNotFoundException("RealEstate", realEstateId));
+    public RealEstate getAvailableById(long realEstateId) throws EntityNotFoundException {
+        return realEstateRepository.findById(realEstateId)
+                .filter(RealEstate::isAvailable)
+                .orElseThrow(() -> new EntityNotFoundException("RealEstate", realEstateId));
     }
 
     @Override
     public List<RealEstate> getAll() {
         return realEstateRepository.findAll();
     }
+
+    @Override
+    public List<RealEstate> getAllAvailable() {
+        return  realEstateRepository.findAll().stream()
+                .filter(RealEstate::isAvailable)
+                .collect(Collectors.toList());
+    }
+
     @Override
     public List<RealEstate> getAllBySeller(Client seller) {
         return realEstateRepository.findAll().stream()
@@ -84,25 +80,26 @@ public class RealEstateServiceImpl implements RealEstateService {
                 .collect(Collectors.toList());
     }
     @Override
-    public List<RealEstate> getAllByType(RealEstateType realEstateType){
+    public List<RealEstate> getAllAvailableByType(RealEstateType realEstateType){
         return realEstateRepository.findAll().stream()
+                .filter(RealEstate::isAvailable)
                 .filter(realEstate -> realEstate.getRealEstateType() == realEstateType)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public boolean existsById(long id) {
-        return realEstateRepository.findById(id).isPresent();
+    public boolean existsAvailableById(long id) {
+        return realEstateRepository.findById(id).filter(RealEstate::isAvailable).isPresent();
     }
 
     @Override
     public void hideById(long id) throws EntityNotFoundException {
-        RealEstate realEstate = getById(id);
+        RealEstate realEstate = getAvailableById(id);
         realEstate.setAvailable(false);
-        update(realEstate);
+        realEstateRepository.update(realEstate);
     }
 
-    public void validate(RealEstate realEstate) {
+    public void validate(RealEstate realEstate) throws FieldValidationException {
         Validator<Object> objectValidator = new NotNullObjectValidator();
         objectValidator.validate("real estate", realEstate);
         objectValidator.validate("price", realEstate.getPrice());
@@ -114,5 +111,6 @@ public class RealEstateServiceImpl implements RealEstateService {
         longValidator.validate("price", realEstate.getPrice().longValue());
         Validator<Integer> intValidator = new MinIntegerValidator(1, new NotNegativeIntegerValidator());
         intValidator.validate("rooms", realEstate.getRooms());
+
     }
 }

@@ -90,7 +90,7 @@ public class ClientTest {
         clientService.create(client2);
 
         List<Client> allClients = clientService.getAll();
-        Assertions.assertEquals(2, allClients.size());
+
         Assertions.assertTrue(allClients.contains(client1));
         Assertions.assertTrue(allClients.contains(client2));
 

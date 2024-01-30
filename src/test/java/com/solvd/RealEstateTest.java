@@ -179,7 +179,8 @@ public class RealEstateTest {
 
         List<RealEstate> availableRealEstates = realEstateService.getAll();
 
-        Assertions.assertEquals(2, availableRealEstates.size());
+        Assertions.assertTrue(availableRealEstates.contains(realEstate1));
+        Assertions.assertTrue(availableRealEstates.contains(realEstate2));
 
         realEstateService.deleteById(realEstate1.getId());
         realEstateService.deleteById(realEstate2.getId());

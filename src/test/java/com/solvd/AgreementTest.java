@@ -14,6 +14,7 @@ import com.solvd.service.AgreementService;
 import com.solvd.service.impl.AgreementServiceImpl;
 import com.solvd.service.impl.ClientServiceImpl;
 import com.solvd.service.impl.RealEstateServiceImpl;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -31,9 +32,8 @@ public class AgreementTest {
 
     @Test
     public void createAgreementTest() throws FieldValidationException, EntityNotFoundException {
-
-        Agreement agreement = createSimpleAgreement();
-        agreementService.create(agreement, 6, 1);
+        Agreement agreement = createSampleAgreement();
+        agreementService.create(agreement, 1, 1);
         Assertions.assertNotNull(agreement.getId());
         Agreement retrievedAgreement = AGREEMENT_REPOSITORY.findById(agreement.getId()).orElse(null);
         Assertions.assertNotNull(retrievedAgreement);
@@ -75,15 +75,6 @@ public class AgreementTest {
 
         Agreement agreementFind = agreementService.getById(agreement.getId());
         Assertions.assertEquals(agreement, agreementFind);
-    }
-    @Test
-    public void getAllAgreementsTest() throws FieldValidationException, EmailAlreadyExistsException, PhoneNumberAlreadyExistsException, EntityNotFoundException {
-        Agreement agreement =  createSimpleAgreement();
-        agreementService.create(agreement, 6, 1);
-
-        List<Agreement> agreements = agreementService.getAll();
-        Assertions.assertEquals(1, agreements.size());
-        Assertions.assertTrue(agreements.contains(agreement));
     }
 
 

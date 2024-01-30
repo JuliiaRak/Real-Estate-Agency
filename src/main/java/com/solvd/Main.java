@@ -360,7 +360,7 @@ public class Main {
         List<Meeting> meetings = MEETING_SERVICE.getByClient(client);
 
         if (meetings.isEmpty()) {
-            System.out.println("You have no agreements yet");
+            System.out.println("You have no meetings yet");
         } else {
             System.out.println("All your meetings");
             System.out.println(Meeting.getTableHeader());

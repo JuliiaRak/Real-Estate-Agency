@@ -90,7 +90,7 @@ public class RealEstateTest {
         realEstate.setMetrics("100 square meters");
         realEstate.setRooms(3);
         realEstateService.update(realEstate);
-        System.out.println(realEstateService.getById(realEstate.getId()));
+        System.out.println(realEstateService.getAvailableById(realEstate.getId()));
         System.out.println(realEstateService.getAll());
 
         realEstateService.deleteById(realEstate.getId());

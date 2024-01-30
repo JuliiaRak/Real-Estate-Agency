@@ -47,7 +47,7 @@ public class MeetingServiceImpl implements MeetingService {
         checkBuyer(buyerId);
         checkEmployee(employeeId);
 
-        if (meeting.getBuyer().equals(realEstateService.getById(realEstateId).getSeller())) {
+        if (meeting.getBuyer().equals(realEstateService.getAvailableById(realEstateId).getSeller())) {
             throw new FieldValidationException(" You cannot set up meeting on your real estate");
         } else {
             meetingRepository.create(meeting, realEstateId, buyerId, employeeId);
@@ -110,7 +110,7 @@ public class MeetingServiceImpl implements MeetingService {
 
 
     private void checkRealEstate(Long realEstateId) throws EntityNotFoundException {
-        if (!realEstateService.existsById(realEstateId)) {
+        if (!realEstateService.existsAvailableById(realEstateId)) {
             throw new EntityNotFoundException("Real estate", realEstateId);
         }
     }

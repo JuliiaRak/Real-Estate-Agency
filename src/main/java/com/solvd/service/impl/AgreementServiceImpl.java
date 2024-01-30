@@ -38,7 +38,7 @@ public class AgreementServiceImpl implements AgreementService {
         checkRealEstate(realEstateId);
         checkClient(clientId);
 
-        if (agreement.getClient().equals(realEstateService.getById(realEstateId).getSeller())) {
+        if (agreement.getClient().equals(realEstateService.getAvailableById(realEstateId).getSeller())) {
             throw new FieldValidationException("You cannot order your real estate");
         } else {
             agreementRepository.create(agreement, realEstateId, clientId);
@@ -48,7 +48,7 @@ public class AgreementServiceImpl implements AgreementService {
     }
 
     private void checkRealEstate(long realEstateId) throws EntityNotFoundException {
-        if (!realEstateService.existsById(realEstateId)) {
+        if (!realEstateService.existsAvailableById(realEstateId)) {
             throw new EntityNotFoundException("Real estate", realEstateId);
         }
     }

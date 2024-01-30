@@ -39,7 +39,6 @@ public class AddressRepositoryMybatisImpl implements AddressRepository {
             AddressRepository addressRepository = sqlSession.getMapper(AddressRepository.class);
             return addressRepository.findById(id);
         }
-
     }
 
     @Override

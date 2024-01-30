@@ -71,7 +71,7 @@ public class RealEstateTest {
 
         RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
 
-        RealEstateService realEstateService = new RealEstateServiceImpl(realEstateRepository, addressService);
+        RealEstateService realEstateService = new RealEstateServiceImpl();
 
         realEstate.setSeller(client);
         realEstate.setAddress(address);

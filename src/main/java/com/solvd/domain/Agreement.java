@@ -28,6 +28,6 @@ public class Agreement {
 
     public static String getTableHeader() {
         return String.format("\033[1m| %-11s | %-10s | %-12s | %-8s | %-28s |\033[0m",
-                "AgreementID", "Amount", "RealEstateID", "ClientID", "Date");
+                "AgreementID", "Amount", "RealEstateID", "ClientID", "Date of creation");
     }
 }

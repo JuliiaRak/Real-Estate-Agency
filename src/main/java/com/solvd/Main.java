@@ -358,62 +358,67 @@ public class Main {
 
     private static void viewClientsMeetings(Scanner scanner, Client client) throws EntityNotFoundException, FieldValidationException {
         List<Meeting> meetings = MEETING_SERVICE.getByClient(client);
-        System.out.println("All your meetings");
-        System.out.println(Meeting.getTableHeader());
-        for (Meeting meeting : meetings) {
-            System.out.println(meeting);
-        }
 
-        System.out.println("Do you want to change any of the meetings?");
-        System.out.println("1. YES");
-        System.out.println("2. Exit");
-        System.out.print("Your choice: ");
-        String whetherToChangeMeeting = scanner.nextLine();
-        switch (whetherToChangeMeeting) {
-            case "1":
-                System.out.println("Input the id of the meeting you want to change");
-                String meetingId = scanner.nextLine();
-                Meeting meeting = MEETING_SERVICE.getById(parseLong(meetingId));
-                System.out.println("If you need, you can change the date of the meeting, or employee\n" +
-                        "1. Change date \n" +
-                        "2. Change employee\n" +
-                        "3. Exit");
-                String choiceMeeting = scanner.nextLine();
-                switch (choiceMeeting) {
-                    case "1":
-                        System.out.println("Input the new date");
-                        String dateString = scanner.nextLine();
+        if (meetings.isEmpty()) {
+            System.out.println("You have no agreements yet");
+        } else {
+            System.out.println("All your meetings");
+            System.out.println(Meeting.getTableHeader());
+            for (Meeting meeting : meetings) {
+                System.out.println(meeting);
+            }
 
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        Date utilDate = null;
-                        try {
-                            utilDate = dateFormat.parse(dateString);
-                        } catch (ParseException e) {
-                            System.out.println("Enter your date in the yyyy-MM-dd format");
-                        }
-                        java.sql.Date date = new java.sql.Date(utilDate.getTime());
+            System.out.println("Do you want to change any of the meeting?");
+            System.out.println("1. YES");
+            System.out.println("2. Exit");
+            System.out.print("Your choice: ");
+            String whetherToChangeMeeting = scanner.nextLine();
+            switch (whetherToChangeMeeting) {
+                case "1":
+                    System.out.println("Input the id of the meeting you want to change");
+                    String meetingId = scanner.nextLine();
+                    Meeting meeting = MEETING_SERVICE.getById(parseLong(meetingId));
+                    System.out.println("If you need, you can change the date of the meeting, or employee\n" +
+                            "1. Change date \n" +
+                            "2. Change employee\n" +
+                            "3. Exit");
+                    String choiceMeeting = scanner.nextLine();
+                    switch (choiceMeeting) {
+                        case "1":
+                            System.out.println("Input the new date");
+                            String dateString = scanner.nextLine();
 
-                        meeting.setMeetingDateTime(date);
-                        MEETING_SERVICE.update(meeting, meeting.getRealEstate().getId(),
-                                client.getId(), meeting.getEmployee().getId());
-                        break;
-                    case "2":
-                        Employee employee = chooseEmployee(scanner);
-                        meeting.setEmployee(employee);
-                        MEETING_SERVICE.update(meeting, meeting.getRealEstate().getId(),
-                                client.getId(), meeting.getEmployee().getId());
-                        break;
-                    case "3":
-                        break;
-                    default:
-                        System.out.println("Invalid option");
-                }
-                MEETING_SERVICE.update(meeting, meeting.getRealEstate().getId(),
-                        client.getId(), meeting.getEmployee().getId());
-            case "2":
-                return;
-            default:
-                System.out.println("Invalid option");
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                            Date utilDate = null;
+                            try {
+                                utilDate = dateFormat.parse(dateString);
+                            } catch (ParseException e) {
+                                System.out.println("Enter your date in the yyyy-MM-dd format");
+                            }
+                            java.sql.Date date = new java.sql.Date(utilDate.getTime());
+
+                            meeting.setMeetingDateTime(date);
+                            MEETING_SERVICE.update(meeting, meeting.getRealEstate().getId(),
+                                    client.getId(), meeting.getEmployee().getId());
+                            break;
+                        case "2":
+                            Employee employee = chooseEmployee(scanner);
+                            meeting.setEmployee(employee);
+                            MEETING_SERVICE.update(meeting, meeting.getRealEstate().getId(),
+                                    client.getId(), meeting.getEmployee().getId());
+                            break;
+                        case "3":
+                            break;
+                        default:
+                            System.out.println("Invalid option");
+                    }
+                    MEETING_SERVICE.update(meeting, meeting.getRealEstate().getId(),
+                            client.getId(), meeting.getEmployee().getId());
+                case "2":
+                    return;
+                default:
+                    System.out.println("Invalid option");
+            }
         }
     }
 
@@ -431,13 +436,11 @@ public class Main {
             System.out.println(realEstate);
         }
 
-        System.out.println("Enter the id of Real Estate you want to buy");
+        System.out.print("Enter the id of Real Estate you want to buy: ");
         String choice = scanner.nextLine();
 
         RealEstate realEstate;
         realEstate = REAL_ESTATE_SERVICE.getAvailableById(parseLong(choice));
-
-        System.out.println("The price of Real Estate " + realEstate.getPrice());
 
         Agreement agreement = new Agreement();
         agreement.setRealEstate(realEstate);
@@ -446,6 +449,10 @@ public class Main {
         agreement.setAmount(realEstate.getPrice());
         agreement.setClient(client);
         agreement.setStatus("unpaid");
+
+        if (agreement.getClient().equals(REAL_ESTATE_SERVICE.getAvailableById(realEstate.getId()).getSeller())) {
+            throw new FieldValidationException("You cannot order your real estate");
+        } else System.out.println("The price of Real Estate " + realEstate.getPrice());
 
         try {
             AGREEMENT_SERVICE.create(agreement, realEstate.getId(), client.getId());
@@ -458,7 +465,6 @@ public class Main {
         }
 
         askForPayment(scanner, client);
-        System.out.println(agreement);
     }
 
     private static void askForPayment(Scanner scanner, Client client) {
@@ -488,7 +494,6 @@ public class Main {
         } else {
             System.out.println("Thank you for paying for agreement");
             RealEstate realEstate = agreement.get().getRealEstate();
-            REAL_ESTATE_SERVICE.hideById(realEstate.getId());
             AGREEMENT_SERVICE.deleteById(agreement.get().getId());
             for (Meeting meetingToDelete : MEETING_SERVICE.getByRealEstate(realEstate)) {
                 MEETING_SERVICE.deleteById(meetingToDelete.getId());

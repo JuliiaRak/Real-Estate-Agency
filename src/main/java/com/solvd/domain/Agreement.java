@@ -19,4 +19,15 @@ public class Agreement {
     private String status;
     private RealEstate realEstate;
     private Client client;
+
+    @Override
+    public String toString() {
+        return String.format("| %-11d | %-10s | %-12s | %-8s | %-28s |",
+                id, amount, realEstate.getId(), client.getId(), date);
+    }
+
+    public static String getTableHeader() {
+        return String.format("\033[1m| %-11s | %-10s | %-12s | %-8s | %-28s |\033[0m",
+                "AgreementID", "Amount", "RealEstateID", "ClientID", "Date");
+    }
 }

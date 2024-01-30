@@ -34,6 +34,7 @@ public class Main {
             System.out.println("\nEnter '0' to register as a new client");
             System.out.println("Enter '1' to login and confirm your identity.");
             System.out.println("Enter '2' to Exit.");
+            System.out.print("Your choice: ");
 
             String input = scanner.nextLine();
 
@@ -114,7 +115,7 @@ public class Main {
             return;
         }
 
-        System.out.println("\n" + "You've successfully Logged In. Hello " + client.getFirstName() + " ! ");
+        System.out.println("\n" + "You've successfully Logged In. Hello " + client.getFirstName() + "!");
 
         try {
             userActions(scanner, client);
@@ -126,14 +127,14 @@ public class Main {
     public static void userActions(Scanner scanner, Client client) throws EntityNotFoundException {
         boolean exitLoop = false;
         while (!exitLoop) {
-            System.out.println("\nNow choose an action (write a number):");
+            System.out.println("\nNow choose an action:");
             System.out.println("1. Put new real estate up for sale.");
             System.out.println("2. View real estate by type.");
             System.out.println("3. View all real estates.");
             System.out.println("4. View my real estates");
             System.out.println("5. Order real estate");
             System.out.println("6. Delete account.");
-            System.out.println("7. View my ordered.");
+            System.out.println("7. View my agreements.");
             System.out.println("8. View my meetings.");
             System.out.println("9. Pay for agreement.");
             System.out.println("10. Settings.");
@@ -158,14 +159,17 @@ public class Main {
                         System.out.println("You do not have real estates");
                         break;
                     }
-                    for (RealEstate rlSt : allRealEstates) {
-                        System.out.println(rlSt);
+                    System.out.println(RealEstate.getTableHeader());
+                    for (RealEstate realEstate : allRealEstates) {
+                        System.out.println(realEstate);
                     }
                     break;
                 case "5":
                     System.out.println("You want to create a meet to view Real Estate or you ready to buy?\n" +
                             "1. Create a meeting\n" +
                             "2. Create a order");
+                    System.out.print("Your choice: ");
+
                     String choose = scanner.nextLine();
                     try {
                         switch (choose) {
@@ -185,7 +189,14 @@ public class Main {
                     deleteAccount(scanner, client);
                     break;
                 case "7":
-                    System.out.println(AGREEMENT_SERVICE.getByClientId(client.getId()));
+                    Optional<Agreement> agreement = AGREEMENT_SERVICE.getByClientId(client.getId());
+                    if (agreement.isPresent()) {
+                        System.out.println(Agreement.getTableHeader());
+                        System.out.println(agreement);
+                        System.out.println();
+                    } else {
+                        System.out.println("You have no agreements yet");
+                    }
                     break;
                 case "8":
                     try {
@@ -210,8 +221,6 @@ public class Main {
                 default:
                     System.out.println("Invalid option.");
             }
-
-            // Add more cases for other actions as needed
         }
     }
 
@@ -252,6 +261,7 @@ public class Main {
             System.out.println("Choose type of Real Estate. Enter 1 or 2.\n" +
                     "\t1. Apartament\n" +
                     "\t2. Building");
+            System.out.print("\tEnter your choice:");
             String apartmentType = scanner.nextLine();
             switch (apartmentType) {
                 case "1":
@@ -267,7 +277,6 @@ public class Main {
             }
         } while (badType);
 
-
         System.out.print("4. Enter real estate metrics: ");
         String metrics = scanner.nextLine();
         System.out.print("5. Enter rooms: ");
@@ -282,7 +291,9 @@ public class Main {
             realEstate.setSeller(client);
             realEstate.setAddress(address);
             REAL_ESTATE_SERVICE.create(realEstate, client.getId());
-            System.out.println("\n" + "Thanks! You've successfully created a real estate! ");
+            System.out.println("\n" + "Thanks! You've successfully created a real estate! Here it is:");
+            System.out.println(RealEstate.getTableHeader());
+            System.out.println(realEstate);
         } catch (FieldValidationException e) {
             System.out.println("\n" + e.getMessage());
             System.out.println("Please try again.");
@@ -310,6 +321,7 @@ public class Main {
         if (realEstates.isEmpty()) {
             System.out.println("\nNo real estates by this type");
         } else {
+            System.out.println(RealEstate.getTableHeader());
             for (RealEstate rlSt : realEstates) {
                 System.out.println(rlSt);
             }
@@ -318,8 +330,9 @@ public class Main {
 
     private static void viewAllRealEstates() {
         List<RealEstate> realEstates = REAL_ESTATE_SERVICE.getAllAvailable();
+        System.out.println(RealEstate.getTableHeader());
         for (RealEstate item : realEstates) {
-            System.out.println(item + "\n");
+            System.out.println(item);
         }
     }
 
@@ -345,49 +358,63 @@ public class Main {
 
     private static void viewClientsMeetings(Scanner scanner, Client client) throws EntityNotFoundException, FieldValidationException {
         List<Meeting> meetings = MEETING_SERVICE.getByClient(client);
-        System.out.println("All your meetings \n");
+        System.out.println("All your meetings");
+        System.out.println(Meeting.getTableHeader());
         for (Meeting meeting : meetings) {
             System.out.println(meeting);
         }
-        System.out.println("Input the id of the meeting you want to change");
-        String meetingId = scanner.nextLine();
-        Meeting meeting = MEETING_SERVICE.getById(parseLong(meetingId));
-        System.out.println("If you need, you can change the date of the meeting, or employee\n" +
-                "1. Change date \n" +
-                "2. Change employee\n" +
-                "3. Exit");
-        String choiceMeeting = scanner.nextLine();
-        switch (choiceMeeting) {
+
+        System.out.println("Do you want to change any of the meetings?");
+        System.out.println("1. YES");
+        System.out.println("2. Exit");
+        System.out.print("Your choice: ");
+        String whetherToChangeMeeting = scanner.nextLine();
+        switch (whetherToChangeMeeting) {
             case "1":
-                System.out.println("Input the new date");
-                String dateString = scanner.nextLine();
+                System.out.println("Input the id of the meeting you want to change");
+                String meetingId = scanner.nextLine();
+                Meeting meeting = MEETING_SERVICE.getById(parseLong(meetingId));
+                System.out.println("If you need, you can change the date of the meeting, or employee\n" +
+                        "1. Change date \n" +
+                        "2. Change employee\n" +
+                        "3. Exit");
+                String choiceMeeting = scanner.nextLine();
+                switch (choiceMeeting) {
+                    case "1":
+                        System.out.println("Input the new date");
+                        String dateString = scanner.nextLine();
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Date utilDate = null;
-                try {
-                    utilDate = dateFormat.parse(dateString);
-                } catch (ParseException e) {
-                    System.out.println("Enter your date in the yyyy-MM-dd format");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        Date utilDate = null;
+                        try {
+                            utilDate = dateFormat.parse(dateString);
+                        } catch (ParseException e) {
+                            System.out.println("Enter your date in the yyyy-MM-dd format");
+                        }
+                        java.sql.Date date = new java.sql.Date(utilDate.getTime());
+
+                        meeting.setMeetingDateTime(date);
+                        MEETING_SERVICE.update(meeting, meeting.getRealEstate().getId(),
+                                client.getId(), meeting.getEmployee().getId());
+                        break;
+                    case "2":
+                        Employee employee = chooseEmployee(scanner);
+                        meeting.setEmployee(employee);
+                        MEETING_SERVICE.update(meeting, meeting.getRealEstate().getId(),
+                                client.getId(), meeting.getEmployee().getId());
+                        break;
+                    case "3":
+                        break;
+                    default:
+                        System.out.println("Invalid option");
                 }
-                java.sql.Date date = new java.sql.Date(utilDate.getTime());
-
-                meeting.setMeetingDateTime(date);
                 MEETING_SERVICE.update(meeting, meeting.getRealEstate().getId(),
                         client.getId(), meeting.getEmployee().getId());
-                break;
             case "2":
-                Employee employee = chooseEmployee(scanner);
-                meeting.setEmployee(employee);
-                MEETING_SERVICE.update(meeting, meeting.getRealEstate().getId(),
-                        client.getId(), meeting.getEmployee().getId());
-                break;
-            case "3":
-                break;
+                return;
             default:
                 System.out.println("Invalid option");
         }
-        MEETING_SERVICE.update(meeting, meeting.getRealEstate().getId(),
-                client.getId(), meeting.getEmployee().getId());
     }
 
     public static void orderRealEstate(Scanner scanner, Client client) throws EntityNotFoundException, FieldValidationException {
@@ -395,6 +422,13 @@ public class Main {
             System.out.println("You cannot have more than one Real Estate AGREEMENT open. Please pay for your agreement");
             askForPayment(scanner, client);
             return;
+        }
+
+        List<RealEstate> realEstates = REAL_ESTATE_SERVICE.getAllAvailable();
+        System.out.println("Here is a list of all available Real Estates:");
+        System.out.println(RealEstate.getTableHeader());
+        for (RealEstate realEstate : realEstates) {
+            System.out.println(realEstate);
         }
 
         System.out.println("Enter the id of Real Estate you want to buy");
@@ -416,6 +450,8 @@ public class Main {
         try {
             AGREEMENT_SERVICE.create(agreement, realEstate.getId(), client.getId());
             System.out.println("Your agreement is ready ");
+
+            System.out.println(Agreement.getTableHeader());
             System.out.println(agreement);
         } catch (FieldValidationException e) {
             System.out.println(e.getMessage());
@@ -447,14 +483,16 @@ public class Main {
 
     private static void payForAgreement(Client client) throws EntityNotFoundException {
         Optional<Agreement> agreement = AGREEMENT_SERVICE.getByClientId(client.getId());
-
-        System.out.println("Thank you for paying for agreement");
-
-        RealEstate realEstate = agreement.get().getRealEstate();
-        REAL_ESTATE_SERVICE.hideById(realEstate.getId());
-        AGREEMENT_SERVICE.deleteById(agreement.get().getId());
-        for (Meeting meetingToDelete : MEETING_SERVICE.getByRealEstate(realEstate)) {
-            MEETING_SERVICE.deleteById(meetingToDelete.getId());
+        if (agreement.isEmpty()) {
+            System.out.println("Sorry, you have no agreement to pay for");
+        } else {
+            System.out.println("Thank you for paying for agreement");
+            RealEstate realEstate = agreement.get().getRealEstate();
+            REAL_ESTATE_SERVICE.hideById(realEstate.getId());
+            AGREEMENT_SERVICE.deleteById(agreement.get().getId());
+            for (Meeting meetingToDelete : MEETING_SERVICE.getByRealEstate(realEstate)) {
+                MEETING_SERVICE.deleteById(meetingToDelete.getId());
+            }
         }
     }
 
@@ -498,10 +536,17 @@ public class Main {
         Meeting meeting = new Meeting();
         RealEstate realEstate = null;
 
-        System.out.println("Input what date you want to make a view");
-        String dateString = scanner.nextLine();
-        System.out.println("Enter the id of Real Estate you want to view");
+        System.out.println("\nHere list of all available Real Estates");
+        List<RealEstate> realEstates = REAL_ESTATE_SERVICE.getAllAvailable();
+        System.out.println(RealEstate.getTableHeader());
+        for (RealEstate availableRealEstate : realEstates) {
+            System.out.println(availableRealEstate);
+        }
+        System.out.print("Enter the id of Real Estate you want to view: ");
         String realEstateString = scanner.nextLine();
+
+        System.out.println("Enter date in the yyyy-MM-dd format when you want to make a view");
+        String dateString = scanner.nextLine();
 
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -519,7 +564,7 @@ public class Main {
 
             MEETING_SERVICE.create(meeting, realEstate.getId(), client.getId(), employee.getId());
 
-            System.out.println("Your meeting will be at " + date + " with " + employee.getFirstName() + " " + employee.getLastName());
+            System.out.println("\nYour meeting will be at " + date + " with " + employee.getFirstName() + " " + employee.getLastName());
 
         } catch (ParseException e) {
             System.out.println("Enter your date in the yyyy-MM-dd format");
@@ -530,12 +575,15 @@ public class Main {
     }
 
     public static Employee chooseEmployee(Scanner scanner) throws EntityNotFoundException, FieldValidationException {
-        System.out.println("Here the list of employees, choose the one");
+        System.out.println("Here the list of employees, choose one to show you the property");
         List<Employee> employees = EMPLOYEE_SERVICE.getAll();
+
+        System.out.println(Employee.getTableHeader());
         for (Employee empl : employees) {
-            System.out.println(empl + "\n");
+            System.out.println(empl);
         }
-        System.out.println("Input the id of employee ");
+
+        System.out.print("Input the id of employee ");
         String emplId = scanner.nextLine();
         return EMPLOYEE_SERVICE.getById(parseLong(emplId));
     }

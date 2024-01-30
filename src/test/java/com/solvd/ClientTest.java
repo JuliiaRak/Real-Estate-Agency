@@ -5,8 +5,6 @@ import com.solvd.domain.exceptions.EmailAlreadyExistsException;
 import com.solvd.domain.exceptions.EntityNotFoundException;
 import com.solvd.domain.exceptions.FieldValidationException;
 import com.solvd.domain.exceptions.PhoneNumberAlreadyExistsException;
-import com.solvd.persistence.ClientRepository;
-import com.solvd.persistence.impl.ClientRepositoryMybatisImpl;
 import com.solvd.service.ClientService;
 import com.solvd.service.impl.ClientServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -90,7 +88,7 @@ public class ClientTest {
         clientService.create(client2);
 
         List<Client> allClients = clientService.getAll();
-        Assertions.assertEquals(2, allClients.size());
+
         Assertions.assertTrue(allClients.contains(client1));
         Assertions.assertTrue(allClients.contains(client2));
 

@@ -441,8 +441,6 @@ public class Main {
                 }
                 break;
         }
-
-
     }
 
     public static void createMeeting(Scanner scanner, Client client, Employee employee) {

@@ -70,7 +70,9 @@ public class RealEstateTest {
         AddressService addressService = new AddressServiceImpl(addressRepository);
 
         RealEstateRepository realEstateRepository = new RealEstateRepositoryMybatisImpl();
+
         RealEstateService realEstateService = new RealEstateServiceImpl();
+
         realEstate.setSeller(client);
         realEstate.setAddress(address);
         realEstateService.create(realEstate, client.getId());

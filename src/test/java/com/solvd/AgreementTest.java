@@ -149,7 +149,7 @@ public class AgreementTest {
 
                 //check the validation
                 agreementService.create(agreement2, realEstate.getId(), client.getId());
-                System.out.println(realEstateService.getAvailableById(realEstate.getId()));
+                System.out.println(realEstateService.getById(realEstate.getId()));
 
                 System.out.println(agreement2);
 

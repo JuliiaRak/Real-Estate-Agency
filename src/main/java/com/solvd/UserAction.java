@@ -139,7 +139,7 @@ public class UserAction {
                     System.out.println("You want to create a meet to view Real Estate or you ready to buy?\n" +
                             "1. Create a meeting\n" +
                             "2. Create a order");
-                    System.out.print("Your choice: ");
+                    System.out.print("Enter your choice: ");
 
                     String choose = scanner.nextLine();
                     try {
@@ -202,6 +202,7 @@ public class UserAction {
         System.out.println("Choose an action (enter 1 or 2):");
         System.out.println("1. YES");
         System.out.println("2. Exit");
+        System.out.print("Enter your choice: ");
 
         String userInput = scanner.nextLine();
 
@@ -222,6 +223,7 @@ public class UserAction {
         System.out.println("SETTINGS\n" +
                 "1. Change phone  number\n" +
                 "2. Change email");
+        System.out.print("Enter your choice: ");
         String choice = scanner.nextLine();
         switch (choice) {
             case "1":

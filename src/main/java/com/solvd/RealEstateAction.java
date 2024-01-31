@@ -101,6 +101,8 @@ public class RealEstateAction {
         System.out.println("Choose what type of Real Estate you are looking for (enter 1 or 2)\n" +
                 "\t1. Apartment\n" +
                 "\t2. Building");
+        System.out.print("\tEnter your choice: ");
+
         RealEstateType realEstateType;
         String typeChoice = scanner.nextLine();
         switch (typeChoice) {

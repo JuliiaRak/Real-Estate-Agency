@@ -34,7 +34,7 @@ public class MeetingAction {
         System.out.print("Enter the id of Real Estate you want to view: ");
         String realEstateString = scanner.nextLine();
 
-        System.out.println("Enter date in the yyyy-MM-dd format when you want to make a view");
+        System.out.print("Enter date in the yyyy-MM-dd format when you want to make a view: ");
         String dateString = scanner.nextLine();
 
         try {
@@ -78,7 +78,7 @@ public class MeetingAction {
             System.out.println("Do you want to change any of the meeting?");
             System.out.println("1. YES");
             System.out.println("2. Exit");
-            System.out.print("Your choice: ");
+            System.out.print("Enter your choice: ");
             String whetherToChangeMeeting = scanner.nextLine();
             switch (whetherToChangeMeeting) {
                 case "1":
@@ -89,6 +89,8 @@ public class MeetingAction {
                             "1. Change date \n" +
                             "2. Change employee\n" +
                             "3. Exit");
+                    System.out.print("Enter your choice: ");
+
                     String choiceMeeting = scanner.nextLine();
                     switch (choiceMeeting) {
                         case "1":

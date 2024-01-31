@@ -21,7 +21,7 @@ public class EmployeeAction {
             System.out.println(empl);
         }
 
-        System.out.print("Input the id of employee ");
+        System.out.print("Input the id of employee: ");
         String emplId = scanner.nextLine();
         return EMPLOYEE_SERVICE.getById(parseLong(emplId));
     }

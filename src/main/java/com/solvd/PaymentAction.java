@@ -20,6 +20,8 @@ public class PaymentAction {
     public static void askForPayment(Scanner scanner, Client client) {
         System.out.println("Please pay for your agreement");
         System.out.println("Enter 1 to pay, or 0 to exit");
+        System.out.print("Your choice: ");
+
         String choiceToPay = scanner.nextLine();
         switch (choiceToPay) {
             case "1":

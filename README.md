@@ -4,6 +4,9 @@ This project is a small console application for managing real estate information
 ## Description
 A real estate agency allows users to add, edit, and view real estate information, as well as transact with clients and agreements.
 
+## DB scheme
+<img width="500" alt="Real estate agency DB scheme" src="https://github.com/JuliiaRak/Real-Estate-Agency/blob/jrak2/src/main/resources/db_scheme.jpg">
+
 ## Installation requirements
 * Java SDK
 * MySQL

@@ -157,7 +157,9 @@ public class UserAction {
                     }
                     break;
                 case "6":
-                    deleteAccount(scanner, client);
+                    if(deleteAccount(scanner, client)) {
+                        return;
+                    }
                     break;
                 case "7":
                     Optional<Agreement> agreement = AGREEMENT_SERVICE.getByClientId(client.getId());
@@ -195,7 +197,7 @@ public class UserAction {
         }
     }
 
-    public static void deleteAccount(Scanner scanner, Client client) {
+    public static boolean deleteAccount(Scanner scanner, Client client) {
         System.out.println("Do you really want to delete your account?");
         System.out.println("Choose an action (enter 1 or 2):");
         System.out.println("1. YES");
@@ -206,13 +208,14 @@ public class UserAction {
         switch (userInput) {
             case "1":
                 CLIENT_SERVICE.deleteById(client.getId());
-                break;
+                return true;
             case "2":
-                break;
+                return false;
             default:
                 System.out.println("Invalid option.");
                 break;
         }
+        return false;
     }
 
     public static void settings(Scanner scanner, Client client) {
